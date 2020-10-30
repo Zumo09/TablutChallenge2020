@@ -5,33 +5,27 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
-import java.util.function.ToDoubleFunction;
 
 import it.unibo.ai.didattica.competition.tablut.domain.State;
-import it.unibo.ai.didattica.competition.tablut.domain.State.Pawn;
-import it.unibo.ai.didattica.competition.tablut.domain.State.Turn;
 
-public class KernelLSTM implements Serializable {
+public class KernelLSTM implements KernelDeep {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	@SuppressWarnings("unused")
 	private Random rnd;
 	private double mutationProb;
 	private double mutationScale;
 	private int depth;
 	
-	private KernelLSTM(double mutationProb, double mutationScale) {
+	public KernelLSTM(double mutationProb, double mutationScale) {
 		this.mutationProb = mutationProb;
 		this.mutationScale = mutationScale;
 		this.rnd = new Random();
@@ -47,15 +41,18 @@ public class KernelLSTM implements Serializable {
 	//==============================================================
 	// Getter and Setters
 	//==============================================================
-		
-	private double getMutationProb() {
+	
+	@Override
+	public double getMutationProb() {
 		return mutationProb;
 	}
 	
-	private double getMutationScale() {
+	@Override
+	public double getMutationScale() {
 		return mutationScale;
 	}
 	
+	@Override
 	public int getDepth() {
 		return depth;
 	}	
@@ -64,7 +61,8 @@ public class KernelLSTM implements Serializable {
 	// Private Functions
 	//==============================================================
 	
-	private KernelLSTM mutate() {
+	@Override
+	public KernelLSTM mutate() {
 		// TODO
 		return this;
 	}
@@ -73,6 +71,7 @@ public class KernelLSTM implements Serializable {
 	// Public Functions
 	//==============================================================
 	
+	@Override
 	public KernelLSTM copy() {
 		// TODO
 		return new KernelLSTM(mutationProb, mutationScale);
@@ -83,7 +82,8 @@ public class KernelLSTM implements Serializable {
 		// TODO
 		return ev;
 	}
-
+	
+	@Override
 	public void save(String name) {
 		Path p = Paths.get("kernels_genetic" + File.separator + name);
 		String path = p.toAbsolutePath().toString();
@@ -105,34 +105,14 @@ public class KernelLSTM implements Serializable {
 		return "";
 	}
 	
-	//==============================================================
-	// Static Functions
-	//==============================================================
-	
-	public static List<KernelLSTM> nextGeneration(KernelLSTM par1, KernelLSTM par2, int populationSize) {
-		Random rnd = new Random();
-		List<KernelLSTM> ret = new ArrayList<>();
-		
-		ret.add(par1.copy());
-		ret.add(par2.copy());
-		
-		// TODO: Cross
-		
-		KernelLSTM child1 = new KernelLSTM(par1.getMutationProb(), par1.getMutationScale());
-		KernelLSTM child2 = new KernelLSTM(par1.getMutationProb(), par1.getMutationScale());
-		
-		ret.add(child1.copy());
-		ret.add(child2.copy());
-		
-		while(ret.size() < populationSize) {
-			ret.add(child1.copy().mutate());
-			ret.add(child2.copy().mutate());
-		}
-		
-		return ret;
-	}
+//	@Override
+//	public double evaluateStateTrace(List<Node> trace) {
+//		// TODO Auto-generated method stub
+//		return 0;
+//	}
 
-	public static KernelLSTM load() {
+	@Override
+	public List<KernelDeep> crossover(KernelDeep other) {
 		// TODO Auto-generated method stub
 		return null;
 	}

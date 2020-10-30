@@ -23,7 +23,7 @@ import org.apache.commons.cli.ParseException;
 
 import giordani.tabzai.player.brain.BrainDeepGen;
 import giordani.tabzai.player.brain.NoActionFoundException;
-import giordani.tabzai.player.brain.kernel.KernelLSTM;
+import giordani.tabzai.player.brain.kernel.KernelDeep;
 import it.unibo.ai.didattica.competition.tablut.domain.Action;
 import it.unibo.ai.didattica.competition.tablut.domain.Game;
 
@@ -389,9 +389,10 @@ public class TrainingGeneticAlgorithm {
 	
 	public void train() {
 		List<TournamentResult> history = new ArrayList<>();
-		List<List<KernelLSTM>> kernelHistory = new ArrayList<>();
-		KernelLSTM par1 = null;
-		KernelLSTM par2 = null;
+		List<List<KernelDeep>> kernelHistory = new ArrayList<>();
+		KernelDeep par1 = null;
+		KernelDeep par2 = null;
+		List<KernelDeep> parents = new ArrayList<>();
 		
 		int matchCounter = 0;
 		long start = System.nanoTime();
@@ -412,12 +413,13 @@ public class TrainingGeneticAlgorithm {
 			loggSys.fine(results.toString());
 			System.out.println(results.toString());
 			List<Standing> ranking = results.getRanking();
+			parents.clear();
 			par1 = population.get(ranking.get(0).getPlayer()).getKernel().copy();
 			par2 = population.get(ranking.get(1).getPlayer()).getKernel().copy();
 			loggSys.fine("Par1:\n" + par1 + "\nPar2:\n" + par2);
-			
-			List<KernelLSTM> newGen = KernelLSTM.nextGeneration(par1.copy(), par2.copy(), population.size());
-			List<KernelLSTM> kh = new ArrayList<>();
+			parents.add(par1.copy()); parents.add(par2.copy());
+			List<KernelDeep> newGen = KernelDeep.nextGeneration(parents, population.size());
+			List<KernelDeep> kh = new ArrayList<>();
 			for(int i=0; i<population.size(); i++) {
 				kh.add(population.get(i).getKernel().copy());
 				population.get(i).setKernel(newGen.get(i));

@@ -1,16 +1,15 @@
-package giordani.tabzai.player.brain;
+package giordani.tabzai.garbage;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
-import giordani.tabzai.player.brain.kernel.KernelDeep;
+import giordani.tabzai.player.brain.BrainAbs;
+import giordani.tabzai.player.brain.NoActionFoundException;
 import it.unibo.ai.didattica.competition.tablut.domain.Action;
 import it.unibo.ai.didattica.competition.tablut.domain.State;
 import it.unibo.ai.didattica.competition.tablut.domain.State.Pawn;
@@ -26,141 +25,88 @@ import it.unibo.ai.didattica.competition.tablut.exceptions.PawnException;
 import it.unibo.ai.didattica.competition.tablut.exceptions.StopException;
 import it.unibo.ai.didattica.competition.tablut.exceptions.ThroneException;
 
-public class BrainDeepGen extends BrainAbs {
+public class BrainGenetic extends BrainAbs {
+	private KernelGen kernel;
+	private SortedMap<Double, Action> actions;
+	private Turn player;
 
-	private KernelDeep kernel;
-	private int depth;
-	private Node root;
-	private Set<Node> leafs;
-	private Map<Action, Double> actions;
-
-	public BrainDeepGen(int timeout, int gametype, double mutationProb, double mutationScale, int depth) {
-		// Constructor for training phase
+	public BrainGenetic(int timeout, int gametype, double mutationProb, double mutationScale) {
 		super(timeout, gametype);
-		this.kernel = KernelDeep.of(mutationProb, mutationScale, depth);
-		init();
+		this.kernel = new KernelGen(mutationProb, mutationScale);
+		this.actions = new TreeMap<>();
 	}
 
-	public BrainDeepGen(double mutationProb, double mutationScale, int depth) {
-		this(60, 1, mutationProb, mutationScale, depth);
+	public BrainGenetic(double mutationProb, double mutationScale) {
+		this(60, 1, mutationProb, mutationScale);
 	}
 	
-	public BrainDeepGen(String path, int timeout, int gametype) {
-		// The constructor for the runtime player
+	public BrainGenetic(int timeout, int gametype) {
 		super(timeout, gametype);
-		this.kernel = KernelDeep.load(path);
-		init();
-	}
-	
-	private void init() {
-		this.depth = kernel.getDepth();
-		this.root = new Node(null, null, getState());
-		this.leafs = new HashSet<>();
-		this.actions = new HashMap<>();
+		this.kernel = new KernelGen();
+		this.actions = new TreeMap<>();
 	}
 
-	public KernelDeep getKernel() {
+	public KernelGen getKernel() {
 		return kernel;
 	}
 
-	public void setKernel(KernelDeep kernel) {
+	public void setKernel(KernelGen kernel) {
 		this.kernel = kernel;
 	}
-		
+	
 	@Override
 	protected Action getBestAction(Turn player) throws NoActionFoundException {
 		if(actions.size()<1) {
 			throw new NoActionFoundException("No pawn found");
 		}
-		Action ret = null;
-		double best = 0;
-		for(Action a : actions.keySet())
-			if(player.equals(Turn.WHITE)) {
-				if(actions.get(a) >= best) {
-					ret = a;
-					best = actions.get(a);
-				}
-			} else {
-				if(actions.get(a) <= best) {
-					ret = a;
-					best = actions.get(a);
-				}
-			}
-		return ret;
+		if(player.equals(Turn.WHITE))
+			return actions.get(actions.lastKey());
+		else return actions.get(actions.firstKey());
 	}
 
 	@Override
 	protected Action findAction(State state) throws NoActionFoundException {
-		update(state);
-		this.leafs.clear();
-		this.actions.clear();
+//		System.out.println("\n\t\t\tWhite "+ state.getNumberOf(Pawn.WHITE));
+//		System.out.println("\t\t\tBlack "+ state.getNumberOf(Pawn.BLACK));
+		player = state.getTurn();
+		List<int[]> pawns;
+		if(player.equals(Turn.WHITE))
+			pawns = getPawns(state, Pawn.WHITE);
+		else if(player.equals(Turn.BLACK))
+			pawns = getPawns(state, Pawn.BLACK);
+		else throw new IllegalArgumentException("No action allowed: Endgame or wrong player");
 		
-		expand(root, 0);
+		Collections.shuffle(pawns);
 		
-		System.out.println(leafs.size());
-						
-		return getBestAction(state.getTurn());		
+//		else System.out.println("Found " + pawns.size() + " pawns");
+		actions.clear();
+		for(int[] pos : pawns)
+			tryAllAction(pos[0], pos[1], state);
+		
+//		System.out.println("\n\nMoves Found : " + this.actions.size() + "\n\n");
+		
+		return getBestAction(player);		
 	}
 	
-	@Override
-	public void update(State state) {
-		for(Node child : this.root.getChildren())
-			if(child.getState().equals(state)) {
-				this.root = child;
-				child.setRoot(true);
-				return;
-			}
-		this.root = new Node(null, null, state);
-	}
-	
-	// depth first with maximum depth
-	private void expand(Node node, int depth) {
-		System.out.println(depth);
-		if(depth == this.depth) return;
-		
-		if(node.getChildren().isEmpty()) {
-			State state = node.getState();
-			Turn player = state.getTurn();
-			List<int[]> pawns;
-			if(player.equals(Turn.WHITE))
-				pawns = getPawns(state, Pawn.WHITE);
-			else if(player.equals(Turn.BLACK))
-				pawns = getPawns(state, Pawn.BLACK);
-			else {
-				leafs.add(node);
-				return;
-			}
-			
-			Collections.shuffle(pawns);
-			
-			for(int[] pos : pawns) {
-				Set<Node> set = tryAllAction(pos[0], pos[1], state, node);
-				node.addAllChild(set);
-				leafs.addAll(set);
-			}
-		}
-		for(Node n : node.getChildren())
-			expand(n, depth+1);
-		return;		
-	}
-
 	private List<int[]> getPawns(State state, Pawn turn) {
 		List<int[]> ret = new ArrayList<>();
+//		System.out.println("\t\t\t\tTurn "+ turn);
 		for(int i=0; i<state.getBoard().length; i++)
 			for(int j=0; j<state.getBoard()[0].length; j++) {
 				Pawn p = state.getPawn(i, j);
 				int[] pos = {i, j};
 				if(p.equals(turn)) {
 					ret.add(pos);
+//					System.out.println("add "+ p);
 				} else if(p.equals(Pawn.KING) && turn.equals(Pawn.WHITE)) {
 					ret.add(pos);
+//					System.out.println("add "+ p);
 				}
 			}
 		return ret;
 	}
 
-	private Set<Node> tryAllAction(int row, int col, State state, Node parent) {
-		Set<Node> children = new HashSet<Node>();
+	private void tryAllAction(int row, int col, State state) {
 //		System.out.println("Next Pawn:");
 		for(int i=state.getBoard().length; i>0; i--) {
 			//System.out.println("\ti = "+i);
@@ -177,10 +123,14 @@ public class BrainDeepGen extends BrainAbs {
 					try {
 						Action a = new Action(state.getBox(row, col), state.getBox(pos[0], pos[1]), state.getTurn());
 						State newState = this.getRules().checkMove(state.clone(), a);
-						
+						// evaluate the new state: The best move will be that one that have the best evaluation
+						// Positive favorites White
+						// Negative favorites Black
+						// 0 favorites draw
+						double ev = kernel.evaluateState(newState);
 //						System.out.println("\t\t" + a + " (" + ev + ")");
 						
-						children.add(new Node(parent, a, newState));
+						actions.put(ev, a);
 					} catch(ActionException | BoardException | CitadelException | 
 							ClimbingCitadelException | ClimbingException | 
 							DiagonalException | OccupitedException | PawnException | 
@@ -192,7 +142,18 @@ public class BrainDeepGen extends BrainAbs {
 				}
 			}
 		}
-		return children;
+	}
+
+	public static BrainAbs load(int timeout, int gametype) {
+		BrainAbs brain = new BrainGenetic(timeout, gametype);
+		brain.setTimeout(timeout);
+		return brain;
+	}
+
+	@Override
+	public void update(State state) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
