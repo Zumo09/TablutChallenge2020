@@ -440,8 +440,8 @@ public class TrainingGeneticAlgorithm {
 				+ ":" + d.toSecondsPart() + "." + d.toMillisPart()
 				+ "\n" + d.toMillis()/matchCounter + " ms/match");
 		
-//		par1.save("Kernel_1");
-//		par2.save("Kernel_2");
+		par1.save("Kernel_1");
+		par2.save("Kernel_2");
 	}
 
 	private Turn match(String id, BrainDeepGen white, BrainDeepGen black) {

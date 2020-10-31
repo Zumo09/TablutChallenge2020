@@ -19,12 +19,7 @@ public abstract class KernelAbs implements Kernel {
 	private double mutationProb;
 	private double mutationScale;
 	private int depth;
-	
-	public KernelAbs(double mutationProb, double mutationScale) {
-		this(mutationProb, mutationScale, 1);
 		
-	}
-	
 	public KernelAbs(double mutationProb, double mutationScale, int depth) {
 		this.mutationProb = mutationProb;
 		this.mutationScale = mutationScale;
@@ -55,6 +50,7 @@ public abstract class KernelAbs implements Kernel {
 	public void save(String name) {
 		Path p = Paths.get(Kernel.PATH + File.separator + name);
 		String path = p.toAbsolutePath().toString();
+		new File(Kernel.PATH).mkdirs();
 		try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(path))){
 			oos.writeObject(this);
 			System.out.println("Saved " + name);

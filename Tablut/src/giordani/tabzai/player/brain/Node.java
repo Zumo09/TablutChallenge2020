@@ -14,6 +14,7 @@ public class Node {
 	private Action action;
 	private State state;
 	private Set<Node> children;
+	private double val;
 	
 	public Node(Node parent, Action action, State state) {
 		super();
@@ -64,5 +65,11 @@ public class Node {
 	}
 	public String toString() {
 		return state.toString();		
+	}
+	public double getVal() {
+		return val;
+	}
+	public void setVal(double val) {
+		this.val = val;
 	}
 }

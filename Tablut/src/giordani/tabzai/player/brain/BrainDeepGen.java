@@ -4,10 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import giordani.tabzai.player.brain.kernel.Kernel;
@@ -32,7 +30,6 @@ public class BrainDeepGen extends BrainAbs {
 	private int depth;
 	private Node root;
 	private Set<Node> leafs;
-	private Map<Action, Double> actions;
 
 	public BrainDeepGen(int timeout, int gametype, double mutationProb, double mutationScale, int depth) {
 		// Constructor for training phase
@@ -56,7 +53,6 @@ public class BrainDeepGen extends BrainAbs {
 		this.depth = kernel.getDepth();
 		this.root = new Node(null, null, getState());
 		this.leafs = new HashSet<>();
-		this.actions = new HashMap<>();
 	}
 
 	public Kernel getKernel() {
@@ -69,21 +65,19 @@ public class BrainDeepGen extends BrainAbs {
 		
 	@Override
 	protected Action getBestAction(Turn player) throws NoActionFoundException {
-		if(actions.size()<1) {
-			throw new NoActionFoundException("No pawn found");
-		}
+		
 		Action ret = null;
 		double best = 0;
-		for(Action a : actions.keySet())
+		for(Node node : root.getChildren())
 			if(player.equals(Turn.WHITE)) {
-				if(actions.get(a) >= best) {
-					ret = a;
-					best = actions.get(a);
+				if(node.getVal() >= best) {
+					ret = node.getAction();
+					best = node.getVal();
 				}
 			} else {
-				if(actions.get(a) <= best) {
-					ret = a;
-					best = actions.get(a);
+				if(node.getVal() <= best) {
+					ret = node.getAction();
+					best = node.getVal();
 				}
 			}
 		return ret;
@@ -93,11 +87,15 @@ public class BrainDeepGen extends BrainAbs {
 	protected Action findAction(State state) throws NoActionFoundException {
 		update(state);
 		this.leafs.clear();
-		this.actions.clear();
+		boolean maximize;
 		
-		expandDeep(root, 0);
+		if(state.getTurn().equals(Turn.WHITE))
+			maximize = true;
+		else maximize = false;
 		
-		System.out.println(leafs.size());
+		double val = alphaBeta(this.root, this.depth, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, maximize);
+		
+		System.out.println("Valutation : " + val);
 						
 		return getBestAction(state.getTurn());		
 	}
@@ -110,6 +108,7 @@ public class BrainDeepGen extends BrainAbs {
 				child.setRoot(true);
 				return;
 			}
+		// Should never reach that: If no child of the root has the given state create a new root
 		this.root = new Node(null, null, state);
 	}
 	
@@ -131,6 +130,7 @@ public class BrainDeepGen extends BrainAbs {
 	}
 	
 	// depth first with maximum depth
+	@SuppressWarnings("unused")
 	private void expandDeep(Node node, int depth) {
 		System.out.println(depth);
 		if(depth == this.depth) return;
@@ -192,19 +192,28 @@ public class BrainDeepGen extends BrainAbs {
 		}
 		return children;
 	}
-	
-	@SuppressWarnings("unused")
+
 	private double alphaBeta(Node node, int depth, double alpha, double beta, boolean maximize) {
+		// If the maximum depth is reached
+		if(depth == 0)
+			return kernel.evaluate(node);
+		
+		// Try to expand that node
 		expand(node);
 		
-		if(depth == 0 || node.isLeaf())
+		// If no other action are allowed from that node
+		if(node.isLeaf())
 			return kernel.evaluate(node);
+		
 		
 		if(maximize) {
 			double v = Double.NEGATIVE_INFINITY;
 			for(Node child : node.getChildren()) {
-				v = Math.max(v, alphaBeta(child, depth-1, alpha, beta, false));
+				double val = alphaBeta(child, depth-1, alpha, beta, false);
+				child.setVal(val);
+				v = Math.max(v, val);
 				alpha = Math.max(alpha, v);
+				child.setVal(v);
 				if(beta <= alpha)
 					break;
 			}
@@ -212,7 +221,9 @@ public class BrainDeepGen extends BrainAbs {
 		} else {
 			double v = Double.POSITIVE_INFINITY;
 			for(Node child : node.getChildren()) {
-				v = Math.min(v, alphaBeta(child, depth-1, alpha, beta, true));
+				double val = alphaBeta(child, depth-1, alpha, beta, true);
+				child.setVal(val);
+				v = Math.min(v, val);
 				beta = Math.min(beta, v);
 				if(beta <= alpha)
 					break;

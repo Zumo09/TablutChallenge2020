@@ -1,35 +1,23 @@
 package giordani.tabzai.player.brain.kernel;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.function.ToDoubleFunction;
 
+import giordani.tabzai.player.brain.Node;
 import it.unibo.ai.didattica.competition.tablut.domain.State;
 import it.unibo.ai.didattica.competition.tablut.domain.State.Pawn;
 import it.unibo.ai.didattica.competition.tablut.domain.State.Turn;
 
-public class KernelGen implements Serializable {
+public class KernelGen extends KernelAbs {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	private Map<String, Double> params;
-	private Random rnd;
-	private double mutationProb;
-	private double mutationScale;
 	private Map<String, ToDoubleFunction<State>> paramFun = Map.of(
 			"black pawns", this::blackPawns,
 			"white pawns", this::whitePawns,
@@ -39,23 +27,20 @@ public class KernelGen implements Serializable {
 			"turn", this::turn
 			);
 	
-	private KernelGen(Map<String, Double> params, double mutationProb, double mutationScale) {
-		this.mutationProb = mutationProb;
-		this.mutationScale = mutationScale;
-		this.rnd = new Random();
+	private KernelGen(Map<String, Double> params, double mutationProb, double mutationScale, int depth) {
+		super(mutationProb, mutationScale, depth);
 		this.params = new HashMap<>(params);
 	}
 	
-	public KernelGen(double mutationProb, double mutationScale) {
-		this.mutationProb = mutationProb;
-		this.mutationScale = mutationScale;
-		this.rnd = new Random();
+	public KernelGen(double mutationProb, double mutationScale, int depth) {
+		super(mutationProb, mutationScale, depth);
 		this.params = new HashMap<>();
 		for(String key : paramFun.keySet())	
-			params.put(key, 2*rnd.nextDouble() - 1); //random weight between -1 and 1
+			params.put(key, 2*getRandom().nextDouble() - 1); //random weight between -1 and 1
 	}
 	
 	public KernelGen() {
+		super(0,0, 1);
 		this.params = Map.of("king position", 20.579720069300826, 
 							"black pawns", -7.6624105876364474, 
 							"white pawns", -10.829288637073532, 
@@ -64,22 +49,7 @@ public class KernelGen implements Serializable {
 							"white pawns near king", -5.229963655418505);
 	}
 	
-	//==============================================================
-	// Getter and Setters
-	//==============================================================
-	
-	private Map<String, Double> getParams() {
-		return params;
-	}
-	
-	private double getMutationProb() {
-		return mutationProb;
-	}
-	
-	private double getMutationScale() {
-		return mutationScale;
-	}
-	
+		
 	//==============================================================
 	// Features Functions
 	//==============================================================
@@ -133,10 +103,11 @@ public class KernelGen implements Serializable {
 	// Private Functions
 	//==============================================================
 	
-	private KernelGen mutate() {
+	@Override
+	public KernelGen mutate() {
 		for(String p : params.keySet()) {
-			if(rnd.nextDouble() < mutationProb) {
-				double value = params.get(p) + mutationScale * 2 * (rnd.nextDouble() - 0.5);
+			if(getRandom().nextDouble() < getMutationProb()) {
+				double value = params.get(p) + getMutationScale() * 2 * (getRandom().nextDouble() - 0.5);
 				params.put(p, value);
 			}
 		}
@@ -177,7 +148,7 @@ public class KernelGen implements Serializable {
 	//==============================================================
 	
 	public KernelGen copy() {
-		return new KernelGen(params, mutationProb, mutationScale);
+		return new KernelGen(params, getMutationProb(), getMutationScale(), getDepth());
 	}
 
 	public double evaluateState(State state) {
@@ -187,57 +158,50 @@ public class KernelGen implements Serializable {
 		}
 		return ev;
 	}
-
-	public void save(String name) {
-		Path p = Paths.get("kernels_genetic" + File.separator + name);
-		String path = p.toAbsolutePath().toString();
-		try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(path))){
-			oos.writeObject(this);
-			System.out.println("Saved " + name);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			System.out.println("Not Saved " + name);
-		} catch (IOException e) {
-			e.printStackTrace();
-			System.out.println("Not Saved " + name);
-		}
-	}
 	
 	@Override
 	public String toString() {
 		return params.toString();
 	}
 	
-	public static List<KernelGen> nextGeneration(KernelGen par1, KernelGen par2, int populationSize) {
-		Random rnd = new Random();
-		List<KernelGen> ret = new ArrayList<>();
+	public Map<String, Double> getParams() {
+		return params;
+	}
+
+	@Override
+	public double evaluateStateTrace(List<Node> trace) {
+		return evaluate(trace.get(trace.size()-1));
+	}
+
+	@Override
+	public double evaluate(Node node) {
+		return evaluateState(node.getState());
+	}
+
+	@Override
+	public List<Kernel> crossover(Kernel parent) {
+		if(!(parent instanceof KernelGen))
+			throw new IllegalArgumentException("Kernel type mismatch");
 		
-		ret.add(par1.copy());
-		ret.add(par2.copy());
+		KernelGen other = (KernelGen) parent;
 		
+		List<Kernel> ret = new ArrayList<>();
+
 		Map<String, Double> cross1 = new HashMap<>();
 		Map<String, Double> cross2 = new HashMap<>();
 		
-		for(String key : par1.getParams().keySet()) {
-			if(rnd.nextDouble() < 0.5) {
-				cross1.put(key, par1.getParams().get(key));
-				cross2.put(key, par2.getParams().get(key));
+		for(String key : this.getParams().keySet()) {
+			if(getRandom().nextDouble() < 0.5) {
+				cross1.put(key, this.getParams().get(key));
+				cross2.put(key, other.getParams().get(key));
 			} else {
-				cross1.put(key, par2.getParams().get(key));
-				cross2.put(key, par1.getParams().get(key));
+				cross1.put(key, other.getParams().get(key));
+				cross2.put(key, this.getParams().get(key));
 			}
 		}
 		
-		KernelGen child1 = new KernelGen(cross1, par1.getMutationProb(), par1.getMutationScale());
-		KernelGen child2 = new KernelGen(cross2, par1.getMutationProb(), par1.getMutationScale());
-		
-		ret.add(child1.copy());
-		ret.add(child2.copy());
-		
-		while(ret.size() < populationSize) {
-			ret.add(child1.copy().mutate());
-			ret.add(child2.copy().mutate());
-		}
+		ret.add(new KernelGen(cross1, getMutationProb(), getMutationScale(), getDepth()));
+		ret.add(new KernelGen(cross2, getMutationProb(), getMutationScale(), getDepth()));
 		
 		return ret;
 	}

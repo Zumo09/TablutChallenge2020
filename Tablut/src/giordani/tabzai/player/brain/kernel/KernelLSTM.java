@@ -19,10 +19,6 @@ public class KernelLSTM extends KernelAbs {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	public KernelLSTM(double mutationProb, double mutationScale) {
-		super(mutationProb, mutationScale);
-	}
-	
 	public KernelLSTM(double mutationProb, double mutationScale, int depth) {
 		super(mutationProb, mutationScale, depth);
 	}
@@ -44,7 +40,7 @@ public class KernelLSTM extends KernelAbs {
 	@Override
 	public KernelLSTM copy() {
 		// TODO
-		return new KernelLSTM(getMutationProb(), getMutationScale());
+		return new KernelLSTM(getMutationProb(), getMutationScale(), getDepth());
 	}
 
 	public double evaluateState(State state) {
@@ -92,5 +88,4 @@ public class KernelLSTM extends KernelAbs {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-
 }

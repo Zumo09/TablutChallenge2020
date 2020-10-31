@@ -21,9 +21,9 @@ public interface Kernel extends Serializable {
 	public List<Kernel> crossover(Kernel other);
 	
 	public static List<Kernel> nextGeneration(List<Kernel> parents, int populationSize) {
-		if(parents.size() % 2 != 0)
+		if(parents.size() % 2 != 0 || parents.size() < 2)
 			throw new IllegalArgumentException("Must be an even number of parents");
-		
+				
 		List<Kernel> ret = new ArrayList<>();
 		
 		for(Kernel par : parents)
@@ -35,9 +35,11 @@ public interface Kernel extends Serializable {
 			for(Kernel child : children)
 				ret.add(child.copy());
 			
-			while(ret.size() < populationSize)
-				for(Kernel child : children)
+			while(ret.size() < (i+2)/parents.size() * populationSize)
+				for(Kernel child : children) {
 					ret.add(child.copy().mutate());
+					if(ret.size() == populationSize) return ret;
+				}
 		}
 		
 		return ret;
@@ -47,6 +49,6 @@ public interface Kernel extends Serializable {
 		return null;
 	}
 	public static Kernel of(double mutationProb, double mutationScale, int depth) {
-		return new KernelLSTM(mutationProb, mutationScale, depth);
+		return new KernelGen(mutationProb, mutationScale, depth);
 	}
 }
