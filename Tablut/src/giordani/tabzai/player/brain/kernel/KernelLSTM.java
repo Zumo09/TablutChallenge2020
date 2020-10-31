@@ -8,7 +8,6 @@ import java.io.ObjectOutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.Random;
 
 import giordani.tabzai.player.brain.Node;
 import it.unibo.ai.didattica.competition.tablut.domain.State;
