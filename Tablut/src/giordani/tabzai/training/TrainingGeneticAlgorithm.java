@@ -23,7 +23,7 @@ import org.apache.commons.cli.ParseException;
 
 import giordani.tabzai.player.brain.BrainDeepGen;
 import giordani.tabzai.player.brain.NoActionFoundException;
-import giordani.tabzai.player.brain.kernel.KernelDeep;
+import giordani.tabzai.player.brain.kernel.Kernel;
 import it.unibo.ai.didattica.competition.tablut.domain.Action;
 import it.unibo.ai.didattica.competition.tablut.domain.Game;
 
@@ -389,10 +389,10 @@ public class TrainingGeneticAlgorithm {
 	
 	public void train() {
 		List<TournamentResult> history = new ArrayList<>();
-		List<List<KernelDeep>> kernelHistory = new ArrayList<>();
-		KernelDeep par1 = null;
-		KernelDeep par2 = null;
-		List<KernelDeep> parents = new ArrayList<>();
+		List<List<Kernel>> kernelHistory = new ArrayList<>();
+		Kernel par1 = null;
+		Kernel par2 = null;
+		List<Kernel> parents = new ArrayList<>();
 		
 		int matchCounter = 0;
 		long start = System.nanoTime();
@@ -418,8 +418,8 @@ public class TrainingGeneticAlgorithm {
 			par2 = population.get(ranking.get(1).getPlayer()).getKernel().copy();
 			loggSys.fine("Par1:\n" + par1 + "\nPar2:\n" + par2);
 			parents.add(par1.copy()); parents.add(par2.copy());
-			List<KernelDeep> newGen = KernelDeep.nextGeneration(parents, population.size());
-			List<KernelDeep> kh = new ArrayList<>();
+			List<Kernel> newGen = Kernel.nextGeneration(parents, population.size());
+			List<Kernel> kh = new ArrayList<>();
 			for(int i=0; i<population.size(); i++) {
 				kh.add(population.get(i).getKernel().copy());
 				population.get(i).setKernel(newGen.get(i));

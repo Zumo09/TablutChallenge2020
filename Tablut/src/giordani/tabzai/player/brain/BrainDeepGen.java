@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import giordani.tabzai.player.brain.kernel.KernelDeep;
+import giordani.tabzai.player.brain.kernel.Kernel;
 import it.unibo.ai.didattica.competition.tablut.domain.Action;
 import it.unibo.ai.didattica.competition.tablut.domain.State;
 import it.unibo.ai.didattica.competition.tablut.domain.State.Pawn;
@@ -28,7 +28,7 @@ import it.unibo.ai.didattica.competition.tablut.exceptions.ThroneException;
 
 public class BrainDeepGen extends BrainAbs {
 
-	private KernelDeep kernel;
+	private Kernel kernel;
 	private int depth;
 	private Node root;
 	private Set<Node> leafs;
@@ -37,7 +37,7 @@ public class BrainDeepGen extends BrainAbs {
 	public BrainDeepGen(int timeout, int gametype, double mutationProb, double mutationScale, int depth) {
 		// Constructor for training phase
 		super(timeout, gametype);
-		this.kernel = KernelDeep.of(mutationProb, mutationScale, depth);
+		this.kernel = Kernel.of(mutationProb, mutationScale, depth);
 		init();
 	}
 
@@ -48,7 +48,7 @@ public class BrainDeepGen extends BrainAbs {
 	public BrainDeepGen(String path, int timeout, int gametype) {
 		// The constructor for the runtime player
 		super(timeout, gametype);
-		this.kernel = KernelDeep.load(path);
+		this.kernel = Kernel.load(path);
 		init();
 	}
 	
@@ -59,11 +59,11 @@ public class BrainDeepGen extends BrainAbs {
 		this.actions = new HashMap<>();
 	}
 
-	public KernelDeep getKernel() {
+	public Kernel getKernel() {
 		return kernel;
 	}
 
-	public void setKernel(KernelDeep kernel) {
+	public void setKernel(Kernel kernel) {
 		this.kernel = kernel;
 	}
 		
@@ -95,7 +95,7 @@ public class BrainDeepGen extends BrainAbs {
 		this.leafs.clear();
 		this.actions.clear();
 		
-		expand(root, 0);
+		expandDeep(root, 0);
 		
 		System.out.println(leafs.size());
 						
@@ -113,34 +113,32 @@ public class BrainDeepGen extends BrainAbs {
 		this.root = new Node(null, null, state);
 	}
 	
+	private void expand(Node node) {
+		State state = node.getState();
+		Turn player = state.getTurn();
+		List<int[]> pawns;
+		if(player.equals(Turn.WHITE))
+			pawns = getPawns(state, Pawn.WHITE);
+		else if(player.equals(Turn.BLACK))
+			pawns = getPawns(state, Pawn.BLACK);
+		else {
+			leafs.add(node);
+			return;
+		}
+		
+		for(int[] pos : pawns)
+			node.addAllChild(tryAllAction(pos[0], pos[1], state, node));
+	}
+	
 	// depth first with maximum depth
-	private void expand(Node node, int depth) {
+	private void expandDeep(Node node, int depth) {
 		System.out.println(depth);
 		if(depth == this.depth) return;
 		
-		if(node.getChildren().isEmpty()) {
-			State state = node.getState();
-			Turn player = state.getTurn();
-			List<int[]> pawns;
-			if(player.equals(Turn.WHITE))
-				pawns = getPawns(state, Pawn.WHITE);
-			else if(player.equals(Turn.BLACK))
-				pawns = getPawns(state, Pawn.BLACK);
-			else {
-				leafs.add(node);
-				return;
-			}
-			
-			Collections.shuffle(pawns);
-			
-			for(int[] pos : pawns) {
-				Set<Node> set = tryAllAction(pos[0], pos[1], state, node);
-				node.addAllChild(set);
-				leafs.addAll(set);
-			}
-		}
+		if(node.isLeaf()) expand(node);
+		
 		for(Node n : node.getChildren())
-			expand(n, depth+1);
+			expandDeep(n, depth+1);
 		return;		
 	}
 
@@ -194,5 +192,32 @@ public class BrainDeepGen extends BrainAbs {
 		}
 		return children;
 	}
-
+	
+	@SuppressWarnings("unused")
+	private double alphaBeta(Node node, int depth, double alpha, double beta, boolean maximize) {
+		expand(node);
+		
+		if(depth == 0 || node.isLeaf())
+			return kernel.evaluate(node);
+		
+		if(maximize) {
+			double v = Double.NEGATIVE_INFINITY;
+			for(Node child : node.getChildren()) {
+				v = Math.max(v, alphaBeta(child, depth-1, alpha, beta, false));
+				alpha = Math.max(alpha, v);
+				if(beta <= alpha)
+					break;
+			}
+			return v;
+		} else {
+			double v = Double.POSITIVE_INFINITY;
+			for(Node child : node.getChildren()) {
+				v = Math.min(v, alphaBeta(child, depth-1, alpha, beta, true));
+				beta = Math.min(beta, v);
+				if(beta <= alpha)
+					break;
+			}
+			return v;
+		}
+	}
 }

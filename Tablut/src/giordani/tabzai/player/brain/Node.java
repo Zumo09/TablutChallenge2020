@@ -1,5 +1,6 @@
 package giordani.tabzai.player.brain;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -35,6 +36,9 @@ public class Node {
 	public Action getAction() {
 		return action;
 	}
+	public boolean isLeaf() {
+		return this.getChildren().isEmpty();
+	}
 	public boolean isRoot() {
 		return root;
 	}
@@ -47,11 +51,15 @@ public class Node {
 	public void addAllChild(Set<Node> child) {
 		children.addAll(child);
 	}
-	public List<Node> getTrace(List<Node> upTo) {
+	public List<Node> getTrace() {
+		List<Node> ret = new ArrayList<>();
+		this.getTrace(ret);
+		return ret;
+	}
+	private void getTrace(List<Node> upTo) {
 		if(!this.isRoot())
-			upTo = getParent().getTrace(upTo);
+			getParent().getTrace(upTo);
 		upTo.add(this);
-		return upTo;
 		
 	}
 	public String toString() {

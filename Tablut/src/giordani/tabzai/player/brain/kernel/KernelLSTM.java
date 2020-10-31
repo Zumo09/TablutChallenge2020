@@ -10,52 +10,23 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Random;
 
+import giordani.tabzai.player.brain.Node;
 import it.unibo.ai.didattica.competition.tablut.domain.State;
 
-public class KernelLSTM implements KernelDeep {
+public class KernelLSTM extends KernelAbs {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	@SuppressWarnings("unused")
-	private Random rnd;
-	private double mutationProb;
-	private double mutationScale;
-	private int depth;
-	
 	public KernelLSTM(double mutationProb, double mutationScale) {
-		this.mutationProb = mutationProb;
-		this.mutationScale = mutationScale;
-		this.rnd = new Random();
+		super(mutationProb, mutationScale);
 	}
 	
 	public KernelLSTM(double mutationProb, double mutationScale, int depth) {
-		this.mutationProb = mutationProb;
-		this.mutationScale = mutationScale;
-		this.depth = depth;
-		this.rnd = new Random();
+		super(mutationProb, mutationScale, depth);
 	}
-	
-	//==============================================================
-	// Getter and Setters
-	//==============================================================
-	
-	@Override
-	public double getMutationProb() {
-		return mutationProb;
-	}
-	
-	@Override
-	public double getMutationScale() {
-		return mutationScale;
-	}
-	
-	@Override
-	public int getDepth() {
-		return depth;
-	}	
 	
 	//==============================================================
 	// Private Functions
@@ -74,7 +45,7 @@ public class KernelLSTM implements KernelDeep {
 	@Override
 	public KernelLSTM copy() {
 		// TODO
-		return new KernelLSTM(mutationProb, mutationScale);
+		return new KernelLSTM(getMutationProb(), getMutationScale());
 	}
 
 	public double evaluateState(State state) {
@@ -105,16 +76,22 @@ public class KernelLSTM implements KernelDeep {
 		return "";
 	}
 	
-//	@Override
-//	public double evaluateStateTrace(List<Node> trace) {
-//		// TODO Auto-generated method stub
-//		return 0;
-//	}
+	@Override
+	public double evaluateStateTrace(List<Node> trace) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 
 	@Override
-	public List<KernelDeep> crossover(KernelDeep other) {
+	public List<Kernel> crossover(Kernel other) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public double evaluate(Node node) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }
