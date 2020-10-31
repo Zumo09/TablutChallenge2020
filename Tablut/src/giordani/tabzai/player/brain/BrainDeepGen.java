@@ -30,6 +30,7 @@ public class BrainDeepGen extends BrainAbs {
 	private int depth;
 	private Node root;
 	private Set<Node> leafs;
+	private int cont;
 
 	public BrainDeepGen(int timeout, int gametype, double mutationProb, double mutationScale, int depth) {
 		// Constructor for training phase
@@ -80,6 +81,12 @@ public class BrainDeepGen extends BrainAbs {
 					best = node.getVal();
 				}
 			}
+		if(ret == null) {
+			System.out.println("Error");
+			return List.copyOf(root.getChildren()).get(0).getAction();
+		}
+		
+		
 		return ret;
 	}
 
@@ -88,6 +95,7 @@ public class BrainDeepGen extends BrainAbs {
 		update(state);
 		this.leafs.clear();
 		boolean maximize;
+		cont = 0;
 		
 		if(state.getTurn().equals(Turn.WHITE))
 			maximize = true;
@@ -95,7 +103,7 @@ public class BrainDeepGen extends BrainAbs {
 		
 		double val = alphaBeta(this.root, this.depth, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, maximize);
 		
-		System.out.println("Valutation : " + val);
+		System.out.println("\nValutation : " + val);
 						
 		return getBestAction(state.getTurn());		
 	}
@@ -113,6 +121,8 @@ public class BrainDeepGen extends BrainAbs {
 	}
 	
 	private void expand(Node node) {
+		cont++;
+		System.out.print("\rExpansions : " + cont);
 		State state = node.getState();
 		Turn player = state.getTurn();
 		List<int[]> pawns;

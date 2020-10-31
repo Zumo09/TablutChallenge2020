@@ -7,10 +7,10 @@ import it.unibo.ai.didattica.competition.tablut.domain.StateTablut;
 public class Test {
 
 	public static void main(String[] args) {
-		BrainDeepGen brain = new BrainDeepGen(0.5,0.5, 2);
+		BrainDeepGen brain = new BrainDeepGen(0.5,0.5, 4);
 		
 		try {
-			brain.getAction(new StateTablut());
+			System.out.println(brain.getAction(new StateTablut()));
 		} catch (NoActionFoundException e) {
 		}
 
