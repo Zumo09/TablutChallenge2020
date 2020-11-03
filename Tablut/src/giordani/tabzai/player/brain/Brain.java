@@ -13,8 +13,7 @@ public interface Brain {
 	public Game getRules();
 	
 	public static Brain of(int timeout, int gametype) {
-		// TODO Auto-generated method stub
-		return null;
+		return new BrainAlphaBeta(timeout, gametype, 5);
 	}
 
 }

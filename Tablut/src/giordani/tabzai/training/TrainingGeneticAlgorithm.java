@@ -22,7 +22,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
 import giordani.tabzai.player.brain.Brain;
-import giordani.tabzai.player.brain.BrainDeepGen;
+import giordani.tabzai.player.brain.BrainAlphaBeta;
 import giordani.tabzai.player.brain.kernel.Kernel;
 import it.unibo.ai.didattica.competition.tablut.domain.Action;
 import it.unibo.ai.didattica.competition.tablut.domain.Game;
@@ -45,7 +45,7 @@ import it.unibo.ai.didattica.competition.tablut.exceptions.ThroneException;
 import it.unibo.ai.didattica.competition.tablut.domain.StateBrandub;
 
 public class TrainingGeneticAlgorithm {
-	List<BrainDeepGen> population;
+	List<BrainAlphaBeta> population;
 	int matches;
 	int gameChosen;
 	boolean enableGui;
@@ -55,7 +55,7 @@ public class TrainingGeneticAlgorithm {
 		this.enableGui = enableGui;
 		this.population = new ArrayList<>();
 		while(this.population.size()<population)
-			this.population.add(new BrainDeepGen(mutationProb, mutationScale, depth));
+			this.population.add(new BrainAlphaBeta(mutationProb, mutationScale, depth));
 		this.matches = matches;
 		this.gameChosen = gameChosen;
 		

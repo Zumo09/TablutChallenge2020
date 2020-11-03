@@ -19,8 +19,8 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </interface>  
-  <class id="3" language="java" name="giordani.tabzai.player.brain.BrainDeepGen.Node" project="Tablut2020" 
-    file="/Tablut2020/src/giordani/tabzai/player/brain/BrainDeepGen.java" binary="false" corner="BOTTOM_RIGHT">    
+  <class id="3" language="java" name="giordani.tabzai.player.brain.BrainAlphaBeta.Node" project="Tablut2020" 
+    file="/Tablut2020/src/giordani/tabzai/player/brain/BrainAlphaBeta.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="334" y="757"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
@@ -28,8 +28,8 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="4" language="java" name="giordani.tabzai.player.brain.BrainDeepGen" project="Tablut2020" 
-    file="/Tablut2020/src/giordani/tabzai/player/brain/BrainDeepGen.java" binary="false" corner="BOTTOM_RIGHT">    
+  <class id="4" language="java" name="giordani.tabzai.player.brain.BrainAlphaBeta" project="Tablut2020" 
+    file="/Tablut2020/src/giordani/tabzai/player/brain/BrainAlphaBeta.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="780" y="646"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
@@ -129,14 +129,10 @@
     <display labels="true" multiplicity="true"/>  
   </association>  
   <realization id="23">    
-    <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="2"/>  
-  </realization>  
-  <realization id="24">    
     <end type="SOURCE" refId="6"/>    
     <end type="TARGET" refId="5"/>  
   </realization>  
-  <nesting id="25">    
+  <nesting id="24">    
     <end type="SOURCE" refId="8"/>    
     <end type="TARGET" refId="9"/>  
   </nesting>  

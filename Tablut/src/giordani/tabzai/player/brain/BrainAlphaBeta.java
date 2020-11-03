@@ -33,65 +33,27 @@ import it.unibo.ai.didattica.competition.tablut.exceptions.PawnException;
 import it.unibo.ai.didattica.competition.tablut.exceptions.StopException;
 import it.unibo.ai.didattica.competition.tablut.exceptions.ThroneException;
 
-public class BrainDeepGen implements Brain {
+public class BrainAlphaBeta extends BrainAbs {
 
 	private Kernel kernel;
 	private Node root;
-	private Action bestAction;
-	private Duration timeout;
-	private Game rules;
-	private Action selected;
-	private int depth;
 
-	public BrainDeepGen(int timeout, int gametype, double mutationProb, double mutationScale, int depth) {
+	public BrainAlphaBeta(int timeout, int gametype, double mutationProb, double mutationScale, int depth) {
 		// Constructor for training phase
-		this(timeout, gametype, depth);
+		super(timeout, gametype, depth);
 		this.kernel = Kernel.of(mutationProb, mutationScale);
+		this.root = new Node(new StateTablut());
 	}
 
-	public BrainDeepGen(double mutationProb, double mutationScale, int depth) {
+	public BrainAlphaBeta(double mutationProb, double mutationScale, int depth) {
 		this(60, 1, mutationProb, mutationScale, depth);
 	}
 	
-	public BrainDeepGen(String name, int timeout, int gametype, int depth) {
+	public BrainAlphaBeta(String name, int timeout, int gametype, int depth) {
 		// The constructor for the runtime player
-		this(timeout, gametype, depth);
+		super(timeout, gametype, depth);
 		this.kernel = Kernel.load(name);
-	}
-	
-	private BrainDeepGen(int timeout, int gametype, int depth) {
-		State state = null;
-		this.depth = depth;
-		this.timeout = Duration.ofSeconds(timeout-1);
-		switch (gametype) {
-		case 1:
-			rules = new GameAshtonTablutNoLog(0, 0);
-			state = new StateTablut();
-			break;
-		case 2:
-			rules = new GameModernTablut();
-			state = new StateTablut();
-			break;
-		case 3:
-			rules = new GameTablut();
-			state = new StateTablut();
-			break;
-		case 4:
-			rules = new GameAshtonTablutNoLog(0, 0);
-			state = new StateTablut();
-			break;
-			
-		default:
-			System.out.println("Error in game selection");
-			System.exit(4);
-		}
-		this.root = new Node(state);
-	}
-	
-	@Override
-	public Action getAction(State state) {
-		selected = findAction(state);
-		return this.selected;
+		this.root = new Node(new StateTablut());
 	}
 	
 	@Override
@@ -105,21 +67,14 @@ public class BrainDeepGen implements Brain {
 		this.root = new Node(state);
 	}
 	
-	@Override
-	public int getTimeout() { return (int) timeout.toSeconds();}
-	@Override
-	public void setTimeout(int timeout) { this.timeout = Duration.ofSeconds(timeout-1);}
-	@Override
-	public Game getRules() { return rules;}
-	
-	public int getDepth() { return this.depth;}
-	public void setDepth(int depth) { this.depth = depth;}
 	public Kernel getKernel() { return kernel;}
 	public void setKernel(Kernel kernel) { this.kernel = kernel;}
 	public Node getRoot() { return this.root;}
 	
-	private Action getBestAction() { return this.bestAction;}
-
+	@Override
+	protected Action getBestAction() { return root.getBest();}
+	
+	@Override
 	protected Action findAction(State state) {
 		update(state);
 		
