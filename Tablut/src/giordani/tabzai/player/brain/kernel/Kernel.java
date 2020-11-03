@@ -1,19 +1,23 @@
 package giordani.tabzai.player.brain.kernel;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import giordani.tabzai.player.brain.Node;
+import it.unibo.ai.didattica.competition.tablut.domain.State;
 
 
 public interface Kernel extends Serializable {
 	public final String PATH = "kernels";
 	
-	public int getDepth();
 	public Kernel copy();
-	public double evaluateStateTrace(List<Node> trace);
-	public double evaluate(Node node);
+	public double evaluate(State state);
 	public void save(String name);
 	public double getMutationScale();
 	public double getMutationProb();
@@ -45,10 +49,19 @@ public interface Kernel extends Serializable {
 		return ret;
 	}
 	
-	public static Kernel load(String Name) {
+	public static Kernel load(String name) {
+		Path p = Paths.get(Kernel.PATH + File.separator + name);
+		String path = p.toAbsolutePath().toString();
+		try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(path))) {
+			return (KernelGen) ois.readObject();
+		} catch (IOException | ClassNotFoundException e) {
+			System.out.println("NOT LOADED");
+			e.printStackTrace();
+			System.exit(1);
+		} 
 		return null;
 	}
-	public static Kernel of(double mutationProb, double mutationScale, int depth) {
-		return new KernelGen(mutationProb, mutationScale, depth);
+	public static Kernel of(double mutationProb, double mutationScale) {
+		return new KernelGen(mutationProb, mutationScale);
 	}
 }

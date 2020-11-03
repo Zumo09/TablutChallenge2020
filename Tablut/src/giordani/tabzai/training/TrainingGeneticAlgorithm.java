@@ -21,8 +21,8 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
+import giordani.tabzai.player.brain.Brain;
 import giordani.tabzai.player.brain.BrainDeepGen;
-import giordani.tabzai.player.brain.NoActionFoundException;
 import giordani.tabzai.player.brain.kernel.Kernel;
 import it.unibo.ai.didattica.competition.tablut.domain.Action;
 import it.unibo.ai.didattica.competition.tablut.domain.Game;
@@ -444,7 +444,7 @@ public class TrainingGeneticAlgorithm {
 		par2.save("Kernel_2");
 	}
 
-	private Turn match(String id, BrainDeepGen white, BrainDeepGen black) {
+	private Turn match(String id, Brain white, Brain black) {
 		Game game = null;
 		State state = null;
 		switch (this.gameChosen) {
@@ -478,58 +478,37 @@ public class TrainingGeneticAlgorithm {
 		State newState;
 		// GAME CYCLE
 		while (moves < 1000) {
+			// RECEIVE MOVE
+//			System.out.println("=================\nMove " + moves + ". Turn: " + state.getTurn());
+			if(state.getTurn().equals(Turn.WHITE)) {
+				move = white.getAction(state.clone());
+//				System.out.println("-----------------\nWhite (" + move + ")");
+			}
+			else if(state.getTurn().equals(Turn.BLACK)) {
+				move = black.getAction(state.clone());
+//				System.out.println("-----------------\nBlack (" + move + ")");
+			}
+			else {
+				loggSys.fine("==================\nEndgame: " + state.getTurn());
+//				System.out.println("-----------------\nENDGAME (" + state.getTurn() + ")");
+				return state.getTurn();
+			}
+			moves++;
 			try {
-				// RECEIVE MOVE
-	//			System.out.println("=================\nMove " + moves + ". Turn: " + state.getTurn());
-				if(state.getTurn().equals(Turn.WHITE)) {
-					move = white.getAction(state.clone());
-	//				System.out.println("-----------------\nWhite (" + move + ")");
-				}
-				else if(state.getTurn().equals(Turn.BLACK)) {
-					move = black.getAction(state.clone());
-	//				System.out.println("-----------------\nBlack (" + move + ")");
-				}
-				else {
-					loggSys.fine("==================\nEndgame: " + state.getTurn());
-	//				System.out.println("-----------------\nENDGAME (" + state.getTurn() + ")");
-					return state.getTurn();
-				}
-				moves++;
-				try {
-					newState = game.checkMove(state.clone(), move);
-				} catch (BoardException | ActionException | StopException | 
-						PawnException | DiagonalException | ClimbingException |
-						ThroneException | OccupitedException |
-						ClimbingCitadelException | CitadelException e) {
-					//System.out.println(e.getMessage());
-					if(state.getTurn().equals(Turn.BLACK)) {
-						loggSys.fine("==================\nToo many error for Black");
-//						System.out.println("=================\nToo many error for Black");
-						return Turn.WHITEWIN;
-					}
-					else if(state.getTurn().equals(Turn.WHITE)) {
-						loggSys.fine("==================\nToo many error for White");
-//						System.out.println("=================\nToo many error for White");
-						return Turn.BLACKWIN;
-					}
-					else {
-						// should never reach this code
-						loggSys.fine("=*=*=*=*=*=*=*=*=*=*\nENDGAME ERROR");
-						System.out.println("=*=*=*=*=*=*=*=*=*=*\nENDGAME ERROR");
-						return Turn.DRAW;
-					}
-				}
-				state = newState;
-			} catch(NoActionFoundException e) {
+				newState = game.checkMove(state.clone(), move);
+			} catch (BoardException | ActionException | StopException | 
+					PawnException | DiagonalException | ClimbingException |
+					ThroneException | OccupitedException |
+					ClimbingCitadelException | CitadelException e) {
 				//System.out.println(e.getMessage());
 				if(state.getTurn().equals(Turn.BLACK)) {
-					loggSys.fine("==================\nBLACK RUN OUT OF MOVES");
-//					System.out.println("=================\nBLACK RUN OUT OF MOVES");
+					loggSys.fine("==================\nToo many error for Black");
+//						System.out.println("=================\nToo many error for Black");
 					return Turn.WHITEWIN;
 				}
 				else if(state.getTurn().equals(Turn.WHITE)) {
-					loggSys.fine("==================\nWHITE RUN OUT OF MOVES");
-//					System.out.println("=================\nWHITE RUN OUT OF MOVES");
+					loggSys.fine("==================\nToo many error for White");
+//						System.out.println("=================\nToo many error for White");
 					return Turn.BLACKWIN;
 				}
 				else {
@@ -539,6 +518,8 @@ public class TrainingGeneticAlgorithm {
 					return Turn.DRAW;
 				}
 			}
+			state = newState;
+			
 		}
 		
 		loggSys.fine("==================\nGame ended for too many moves ("+moves+")");

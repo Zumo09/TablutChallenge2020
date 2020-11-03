@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.ToDoubleFunction;
 
-import giordani.tabzai.player.brain.Node;
 import it.unibo.ai.didattica.competition.tablut.domain.State;
 import it.unibo.ai.didattica.competition.tablut.domain.State.Pawn;
 import it.unibo.ai.didattica.competition.tablut.domain.State.Turn;
@@ -22,31 +21,31 @@ public class KernelGen extends KernelAbs {
 			"black pawns", this::blackPawns,
 			"white pawns", this::whitePawns,
 			"king position", this::kingPosition,
-			"black pawns near king", this::blackNearKing,
-			"white pawns near king", this::whiteNearKing,
+			"black near king", this::blackNearKing,
+			"white near king", this::whiteNearKing,
 			"turn", this::turn
 			);
 	
-	private KernelGen(Map<String, Double> params, double mutationProb, double mutationScale, int depth) {
-		super(mutationProb, mutationScale, depth);
+	private KernelGen(Map<String, Double> params, double mutationProb, double mutationScale) {
+		super(mutationProb, mutationScale);
 		this.params = new HashMap<>(params);
 	}
 	
-	public KernelGen(double mutationProb, double mutationScale, int depth) {
-		super(mutationProb, mutationScale, depth);
+	public KernelGen(double mutationProb, double mutationScale) {
+		super(mutationProb, mutationScale);
 		this.params = new HashMap<>();
 		for(String key : paramFun.keySet())	
 			params.put(key, 2*getRandom().nextDouble() - 1); //random weight between -1 and 1
 	}
 	
 	public KernelGen() {
-		super(0,0, 1);
+		super(0,0);
 		this.params = Map.of("king position", 20.579720069300826, 
 							"black pawns", -7.6624105876364474, 
 							"white pawns", -10.829288637073532, 
-							"black pawns near king", 1.8824658618107062,
+							"black near king", 1.8824658618107062,
 							"turn", 6.949590191093299,
-							"white pawns near king", -5.229963655418505);
+							"white near king", -5.229963655418505);
 	}
 	
 		
@@ -148,15 +147,7 @@ public class KernelGen extends KernelAbs {
 	//==============================================================
 	
 	public KernelGen copy() {
-		return new KernelGen(params, getMutationProb(), getMutationScale(), getDepth());
-	}
-
-	public double evaluateState(State state) {
-		double ev = 0;
-		for(String key : params.keySet()) {
-			ev += params.get(key) * paramFun.get(key).applyAsDouble(state);
-		}
-		return ev;
+		return new KernelGen(params, getMutationProb(), getMutationScale());
 	}
 	
 	@Override
@@ -168,14 +159,14 @@ public class KernelGen extends KernelAbs {
 		return params;
 	}
 
+	
 	@Override
-	public double evaluateStateTrace(List<Node> trace) {
-		return evaluate(trace.get(trace.size()-1));
-	}
-
-	@Override
-	public double evaluate(Node node) {
-		return evaluateState(node.getState());
+	public double evaluate(State state) {
+		double ev = 0;
+		for(String key : params.keySet()) {
+			ev += params.get(key) * paramFun.get(key).applyAsDouble(state);
+		}
+		return ev;
 	}
 
 	@Override
@@ -200,8 +191,8 @@ public class KernelGen extends KernelAbs {
 			}
 		}
 		
-		ret.add(new KernelGen(cross1, getMutationProb(), getMutationScale(), getDepth()));
-		ret.add(new KernelGen(cross2, getMutationProb(), getMutationScale(), getDepth()));
+		ret.add(new KernelGen(cross1, getMutationProb(), getMutationScale()));
+		ret.add(new KernelGen(cross2, getMutationProb(), getMutationScale()));
 		
 		return ret;
 	}

@@ -18,12 +18,10 @@ public abstract class KernelAbs implements Kernel {
 	private Random rnd;
 	private double mutationProb;
 	private double mutationScale;
-	private int depth;
 		
-	public KernelAbs(double mutationProb, double mutationScale, int depth) {
+	public KernelAbs(double mutationProb, double mutationScale) {
 		this.mutationProb = mutationProb;
 		this.mutationScale = mutationScale;
-		this.depth = depth;
 		this.rnd = new Random();
 	}
 	
@@ -39,11 +37,6 @@ public abstract class KernelAbs implements Kernel {
 	@Override
 	public double getMutationScale() {
 		return mutationScale;
-	}
-	
-	@Override
-	public int getDepth() {
-		return depth;
 	}	
 	
 	@Override

@@ -6,7 +6,7 @@ import it.unibo.ai.didattica.competition.tablut.domain.State;
 
 public interface Brain {
 
-	public Action getAction(State state) throws NoActionFoundException;
+	public Action getAction(State state);
 	public abstract void update(State state);
 	public int getTimeout();
 	public void setTimeout(int timeout);
