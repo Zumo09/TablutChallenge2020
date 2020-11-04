@@ -1,7 +1,6 @@
 package giordani.tabzai.player.brain;
 
 import java.io.IOException;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -13,11 +12,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import giordani.tabzai.player.brain.kernel.Kernel;
-import giordani.tabzai.training.GameAshtonTablutNoLog;
 import it.unibo.ai.didattica.competition.tablut.domain.Action;
-import it.unibo.ai.didattica.competition.tablut.domain.Game;
-import it.unibo.ai.didattica.competition.tablut.domain.GameModernTablut;
-import it.unibo.ai.didattica.competition.tablut.domain.GameTablut;
 import it.unibo.ai.didattica.competition.tablut.domain.State;
 import it.unibo.ai.didattica.competition.tablut.domain.StateTablut;
 import it.unibo.ai.didattica.competition.tablut.domain.State.Pawn;
@@ -42,7 +37,7 @@ public class BrainAlphaBeta extends BrainAbs {
 		// Constructor for training phase
 		super(timeout, gametype, depth);
 		this.kernel = Kernel.of(mutationProb, mutationScale);
-		this.root = new Node(new StateTablut());
+		init();
 	}
 
 	public BrainAlphaBeta(double mutationProb, double mutationScale, int depth) {
@@ -53,26 +48,34 @@ public class BrainAlphaBeta extends BrainAbs {
 		// The constructor for the runtime player
 		super(timeout, gametype, depth);
 		this.kernel = Kernel.load(name);
-		this.root = new Node(new StateTablut());
+		init();
+	}
+	
+	private void init() {
+		State state = new StateTablut();
+		state.setTurn(Turn.WHITE);
+		setRoot(new Node(state));
 	}
 	
 	@Override
 	public void update(State state) {
-		for(Node child : this.root.getChildren())
+		for(Node child : getRoot().getChildren())
 			if(child.getState().equals(state)) {
-				this.root = child;
+				setRoot(child);
 				return;
 			}
 		// If no child of the root has the given state create a new root
-		this.root = new Node(state);
+		setRoot(new Node(state));
 	}
 	
 	public Kernel getKernel() { return kernel;}
 	public void setKernel(Kernel kernel) { this.kernel = kernel;}
 	public Node getRoot() { return this.root;}
 	
+	private void setRoot(Node newRoot) { this.root = newRoot;}
+	
 	@Override
-	protected Action getBestAction() { return root.getBest();}
+	protected Action getBestAction() { return root.getBestChild().getAction();}
 	
 	@Override
 	protected Action findAction(State state) {
@@ -85,6 +88,13 @@ public class BrainAlphaBeta extends BrainAbs {
 		System.out.println("\nState evaluation : " + root.getVal() + " [depth = " + this.getDepth() + "]");
 						
 		return getBestAction();		
+	}
+	
+	public int countNodes(Node root) {
+		int cont=1;
+		for(Node child : root.getChildren())
+			cont += countNodes(child);
+		return cont;
 	}
 	
 	/*
@@ -106,10 +116,12 @@ public class BrainAlphaBeta extends BrainAbs {
 			this.parent = parent;
 			this.children = new TreeSet<>();
 			this.turn = (this.getState().getTurn().equals(Turn.WHITE)) ? Pawn.WHITE : Pawn.BLACK;
+			this.val = Double.NaN;
 		}
 		public Node(State state) {
 			this(null, null, state);
 		}
+		
 		public SortedSet<Node> getChildren() {return children;}
 		public State getState() {return state;}
 		public Node getParent() {return parent;}
@@ -117,26 +129,27 @@ public class BrainAlphaBeta extends BrainAbs {
 		public boolean isLeaf() {return this.getChildren().isEmpty();}
 		public void addChild(Node child) {children.add(child);}
 		public void addAllChild(Collection<Node> child) {children.addAll(child);}
-		public String toString() {return state.toString();}
 		public double getVal() {return val;}
+		private void setVal(double val) { this.val = val;}
 		
 		@Override
 		public int compareTo(Node o) {
 			return Double.compare(this.getVal(), o.getVal());
 		}
 		
-		public Action getBest() {
-			if(this.getState().getTurn().equals(Turn.BLACK))
-				return this.getChildren().first().getAction();
-			else return this.getChildren().last().getAction();
+		@Override
+		public String toString() {
+			if(this.action == null)
+				return "root\n" + this.state.toString() + 
+						"\nState evaluation : " + this.getVal() + " [depth = " + getDepth() + "]";
+			return this.action.toString() + "\n" + this.state.toString() + 
+					"\nState evaluation : " + this.getVal() + " [depth = " + getDepth() + "]";
 		}
 		
-		private void expand(Node node) {
-			State state = node.getState();
-			List<int[]> pawns = getPawns();
-			
-			for(int[] pos : pawns)
-				node.addAllChild(tryAllAction(pos[0], pos[1], state, node));
+		public Node getBestChild() {
+			if(this.getState().getTurn().equals(Turn.BLACK))
+				return this.getChildren().first();
+			else return this.getChildren().last();
 		}
 		
 		private List<int[]> getPawns() {
@@ -154,7 +167,8 @@ public class BrainAlphaBeta extends BrainAbs {
 			return ret;
 		}
 		
-		private Set<Node> tryAllAction(int row, int col, State state, Node parent) {
+		private Set<Node> tryAllAction(int row, int col, Node parent) {
+			State state = parent.getState();
 			Set<Node> children = new HashSet<Node>();
 //			System.out.println("Next Pawn:");
 			for(int i=state.getBoard().length; i>0; i--) {
@@ -190,27 +204,29 @@ public class BrainAlphaBeta extends BrainAbs {
 			return children;
 		}
 		
-		public void expandAlphaBeta(int depth) {
-			
+		private void expand(Node node) {		
+			for(int[] pos : node.getPawns())
+				node.addAllChild(tryAllAction(pos[0], pos[1], node));
 		}
 		
-		private double alphaBeta(Node node, int depth, double alpha, double beta, boolean maximize) {
+		public void expandAlphaBeta(int depth) {
+			this.setVal(alphaBeta(this, depth, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY));
+		}
+		
+		private double alphaBeta(Node node, int depth, double alpha, double beta) {
 			// If the maximum depth is reached
-			if(depth == 0)
-				return kernel.evaluate(node.getState());
+			if(depth == 0 || node.getState().getTurn().equals(Turn.DRAW) ||
+					node.getState().getTurn().equals(Turn.BLACKWIN) || node.getState().getTurn().equals(Turn.WHITEWIN))
+				return getKernel().evaluate(node.getState());
 			
 			// Try to expand that node
-			expand(node);
-			
-			// If no other action are allowed from that node
-			if(node.isLeaf())
-				return kernel.evaluate(node.getState());
-			
-			
-			if(maximize) {
+			expand(node);		
+			System.out.println(node.getChildren().size());
+			if(node.getState().getTurn().equals(Turn.WHITE)) {
 				double v = Double.NEGATIVE_INFINITY;
 				for(Node child : node.getChildren()) {
-					double val = alphaBeta(child, depth-1, alpha, beta, false);
+					double val = alphaBeta(child, depth-1, alpha, beta);
+					child.setVal(val);
 					v = Math.max(v, val);
 					alpha = Math.max(alpha, v);
 					if(beta <= alpha)
@@ -220,7 +236,8 @@ public class BrainAlphaBeta extends BrainAbs {
 			} else {
 				double v = Double.POSITIVE_INFINITY;
 				for(Node child : node.getChildren()) {
-					double val = alphaBeta(child, depth-1, alpha, beta, true);
+					double val = alphaBeta(child, depth-1, alpha, beta);
+					child.setVal(val);
 					v = Math.min(v, val);
 					beta = Math.min(beta, v);
 					if(beta <= alpha)

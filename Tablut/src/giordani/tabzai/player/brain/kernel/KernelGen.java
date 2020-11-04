@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.StringJoiner;
 import java.util.function.ToDoubleFunction;
 
 import it.unibo.ai.didattica.competition.tablut.domain.State;
@@ -23,7 +24,9 @@ public class KernelGen extends KernelAbs {
 			"king position", this::kingPosition,
 			"black near king", this::blackNearKing,
 			"white near king", this::whiteNearKing,
-			"turn", this::turn
+			"player turn", this::turn,
+			"white attacked", this::whiteAttacked,
+			"black attacked", this::blackAttacked
 			);
 	
 	private KernelGen(Map<String, Double> params, double mutationProb, double mutationScale) {
@@ -38,15 +41,15 @@ public class KernelGen extends KernelAbs {
 			params.put(key, 2*getRandom().nextDouble() - 1); //random weight between -1 and 1
 	}
 	
-	public KernelGen() {
-		super(0,0);
-		this.params = Map.of("king position", 20.579720069300826, 
-							"black pawns", -7.6624105876364474, 
-							"white pawns", -10.829288637073532, 
-							"black near king", 1.8824658618107062,
-							"turn", 6.949590191093299,
-							"white near king", -5.229963655418505);
-	}
+//	public KernelGen() {
+//		super(0,0);
+//		this.params = Map.of("king position", 20.579720069300826, 
+//							"black pawns", -7.6624105876364474, 
+//							"white pawns", -10.829288637073532, 
+//							"black near king", 1.8824658618107062,
+//							"turn", 6.949590191093299,
+//							"white near king", -5.229963655418505);
+//	}
 	
 		
 	//==============================================================
@@ -98,6 +101,20 @@ public class KernelGen extends KernelAbs {
 		else return 0;
 	}
 	
+	private double whiteAttacked(State s) {
+		int cont = 0;
+		for(int[] pos : getPawns(s, Pawn.WHITE))
+			cont += countClose(s, pos[0], pos[1], Pawn.BLACK);
+		return cont;
+	}
+	
+	private double blackAttacked(State s) {
+		int cont = 0;
+		for(int[] pos : getPawns(s, Pawn.BLACK))
+			cont += countClose(s, pos[0], pos[1], Pawn.WHITE);
+		return cont;
+	}
+	
 	//==============================================================
 	// Private Functions
 	//==============================================================
@@ -133,13 +150,28 @@ public class KernelGen extends KernelAbs {
 	/*
 	 * Count the Pawn of the passed color close to the position row,col, in the state state
 	 */
-	private double countClose(State state, int row, int col, Pawn black) {
+	private int countClose(State state, int row, int col, Pawn color) {
 		List<Pawn> close = getCloserPawn(state, row, col);
 		int cont = 0;
 		for(Pawn p : close)
-			if(p.equals(Pawn.WHITE))
+			if(p.equals(color))
 				cont++;
 		return cont;
+	}
+	
+	private List<int[]> getPawns(State state, Pawn turn) {
+		List<int[]> ret = new ArrayList<>();
+		for(int i=0; i<state.getBoard().length; i++)
+			for(int j=0; j<state.getBoard()[0].length; j++) {
+				Pawn p = state.getPawn(i, j);
+				int[] pos = {i, j};
+				if(p.equals(turn)) {
+					ret.add(pos);
+				} else if(p.equals(Pawn.KING) && turn.equals(Pawn.WHITE)) {
+					ret.add(pos);
+				}
+			}
+		return ret;
 	}
 	
 	//==============================================================
@@ -152,7 +184,13 @@ public class KernelGen extends KernelAbs {
 	
 	@Override
 	public String toString() {
-		return params.toString();
+		StringJoiner sj = new StringJoiner(System.lineSeparator());
+		sj.add("_______________________________________");
+		sj.add("   Param name   |        Value");
+		sj.add("----------------|----------------------");
+		for(String key : this.getParams().keySet())
+			sj.add(key.subSequence(0, Math.min(15, key.length())) + "\t| " + this.getParams().get(key));
+		return sj.toString();
 	}
 	
 	public Map<String, Double> getParams() {
@@ -166,6 +204,7 @@ public class KernelGen extends KernelAbs {
 		for(String key : params.keySet()) {
 			ev += params.get(key) * paramFun.get(key).applyAsDouble(state);
 		}
+		System.out.println(ev);
 		return ev;
 	}
 
