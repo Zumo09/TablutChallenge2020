@@ -95,7 +95,7 @@ public class TrainingGeneticAlgorithm {
 		int population = 16;
 		int matches = 50;
 		int gameChosen = 4;
-		int depth = 3;
+		int depth = 2;
 		double mutationProb = 0.2;
 		double mutationScale = 1;
 		boolean enableGui = false;
@@ -475,7 +475,7 @@ public class TrainingGeneticAlgorithm {
 		}
 
 		Action move = null;
-//		System.out.println("\n%%%%%%%%%%%%%%%%\nNew Match " + id);
+		System.out.println("\n%%%%%%%%%%%%%%%%\nNew Match " + id);
 		loggSys.fine("==================\nMatch " + id);
 		int moves = 0;
 		State newState;
@@ -493,7 +493,7 @@ public class TrainingGeneticAlgorithm {
 			}
 			else {
 				loggSys.fine("==================\nEndgame: " + state.getTurn());
-//				System.out.println("-----------------\nENDGAME (" + state.getTurn() + ")");
+				System.out.println("-----------------\nENDGAME (" + state.getTurn() + ")");
 				return state.getTurn();
 			}
 			moves++;

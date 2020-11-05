@@ -16,7 +16,7 @@ import it.unibo.ai.didattica.competition.tablut.domain.State;
 
 public interface Kernel extends Serializable {
 	public final String PATH = "kernels";
-	public final String BEST = "dumb";
+	public final String BEST = "Kernel_149";
 	
 	public Kernel copy();
 	public double evaluate(State state);

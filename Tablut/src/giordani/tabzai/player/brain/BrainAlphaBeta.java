@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import giordani.tabzai.player.brain.kernel.Kernel;
@@ -190,10 +191,20 @@ public class BrainAlphaBeta extends BrainAbs {
 		}
 
 		public Node getBestChild() {
+			Optional<Node> opt;
 			Comparator<Node> comparator = Comparator.comparing(Node::getVal);
 			if(this.getState().getTurn().equals(Turn.BLACK))
-				return this.getChildren().stream().min(comparator).get();
-			else return this.getChildren().stream().max(comparator).get();
+				opt = this.getChildren().stream().min(comparator);
+			else opt = this.getChildren().stream().max(comparator);
+			if(opt.isEmpty()) {
+				try {
+					return new Node(this, new Action("a1", "a1", this.getState().getTurn()), this.getState());
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			return opt.get();
 		}
 		
 		private List<int[]> getPawns() {

@@ -1,0 +1,30 @@
+nov 05, 2020 11:14:29 PM it.unibo.ai.didattica.competition.tablut.server.Server run
+FINE: Accensione server
+nov 05, 2020 11:14:29 PM it.unibo.ai.didattica.competition.tablut.server.Server run
+FINE: Partita di Tablut
+nov 05, 2020 11:14:29 PM it.unibo.ai.didattica.competition.tablut.server.Server run
+FINE: Waiting for white connection..
+nov 05, 2020 11:14:33 PM it.unibo.ai.didattica.competition.tablut.server.Server run
+FINE: White player connected
+nov 05, 2020 11:14:33 PM it.unibo.ai.didattica.competition.tablut.server.Server run
+FINE: Lettura nome player bianco in corso..
+nov 05, 2020 11:14:34 PM it.unibo.ai.didattica.competition.tablut.server.Server run
+FINE: White player name:	random
+nov 05, 2020 11:14:34 PM it.unibo.ai.didattica.competition.tablut.server.Server run
+FINE: Waiting for Black connection..
+nov 05, 2020 11:14:37 PM it.unibo.ai.didattica.competition.tablut.server.Server run
+FINE: Accettata connessione con client giocatore Nero
+nov 05, 2020 11:14:37 PM it.unibo.ai.didattica.competition.tablut.server.Server run
+FINE: Lettura nome player nero in corso..
+nov 05, 2020 11:14:37 PM it.unibo.ai.didattica.competition.tablut.server.Server run
+FINE: Black player name:	TabZAI_BLACK
+nov 05, 2020 11:14:37 PM it.unibo.ai.didattica.competition.tablut.server.Server run
+FINE: Invio messaggio ai giocatori
+nov 05, 2020 11:14:37 PM it.unibo.ai.didattica.competition.tablut.server.Server run
+FINE: Lettura mossa player W in corso..
+nov 05, 2020 11:14:39 PM it.unibo.ai.didattica.competition.tablut.server.Server run
+FINE: Move received.	Turn: W Pawn from e3 to c3
+nov 05, 2020 11:14:39 PM it.unibo.ai.didattica.competition.tablut.server.Server run
+FINE: Invio messaggio ai client
+nov 05, 2020 11:14:39 PM it.unibo.ai.didattica.competition.tablut.server.Server run
+FINE: Lettura mossa player B in corso..

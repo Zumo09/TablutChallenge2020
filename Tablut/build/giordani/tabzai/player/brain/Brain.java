@@ -10,7 +10,7 @@ public interface Brain {
 	public abstract void update(State state);
 	
 	public static Brain of(int timeout, int gametype) {
-		return new BrainAlphaBeta(Kernel.BEST, timeout, gametype, 5);
+		return new BrainAlphaBeta(Kernel.BEST, timeout, gametype, 3);
 	}
 
 }
