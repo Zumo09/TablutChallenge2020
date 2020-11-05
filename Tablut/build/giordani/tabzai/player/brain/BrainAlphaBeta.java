@@ -84,7 +84,7 @@ public class BrainAlphaBeta extends BrainAbs {
 		
 		this.getRoot().expandAlphaBeta(this.getDepth());
 		
-		System.out.println("\nState evaluation : " + this.getRoot().getVal() + " [depth = " + this.getDepth() + "]");
+		//System.out.println("\nState evaluation : " + root.getVal() + " [depth = " + this.getDepth() + "]");
 						
 		return getBestAction();		
 	}

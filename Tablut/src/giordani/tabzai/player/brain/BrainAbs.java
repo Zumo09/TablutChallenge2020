@@ -38,24 +38,27 @@ public abstract class BrainAbs implements Brain {
 		}
 		
 	}
+
+	@Override
+	public Action getAction(State state) {
+		/*
+		 * Gestire la crescita e la diminuzione della depth in funzione del timeout
+		 * Trovare un modo per partire con una certa profondità e nel caso incrementarla o diminuirla
+		 */
+		selected = findAction(state);
+		return this.selected;
+	}
+	
+	@Override
+	public abstract void update(State state);
 	
 	protected abstract Action findAction(State state);
 	protected abstract Action getBestAction();
 
-	@Override
-	public Action getAction(State state) {
-		selected = findAction(state);
-		return this.selected;
-	}
-
-	@Override
-	public int getTimeout() { return (int) timeout.toSeconds();}
-	@Override
+	public int getTimeout() 			{ return (int) timeout.toSeconds();}
 	public void setTimeout(int timeout) { this.timeout = Duration.ofSeconds(timeout-1);}
-	@Override
-	public Game getRules() { return rules;}
-	
-	public int getDepth() { return this.depth;}
-	public void setDepth(int depth) { this.depth = depth;}
+	public Game getRules() 				{ return rules;}
+	public int getDepth() 				{ return this.depth;}
+	public void setDepth(int depth) 	{ this.depth = depth;}
 
 }

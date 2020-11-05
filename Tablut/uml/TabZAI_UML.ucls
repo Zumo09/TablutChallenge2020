@@ -21,7 +21,7 @@
   </interface>  
   <class id="3" language="java" name="giordani.tabzai.player.brain.BrainAlphaBeta.Node" project="Tablut2020" 
     file="/Tablut2020/src/giordani/tabzai/player/brain/BrainAlphaBeta.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="334" y="757"/>    
+    <position height="-1" width="-1" x="336" y="817"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -46,16 +46,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </interface>  
-  <class id="6" language="java" name="giordani.tabzai.player.brain.kernel.KernelAbs" project="Tablut2020" 
-    file="/Tablut2020/src/giordani/tabzai/player/brain/kernel/KernelAbs.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1644" y="1075"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="7" language="java" name="giordani.tabzai.player.brain.kernel.KernelGen" project="Tablut2020" 
+  <class id="6" language="java" name="giordani.tabzai.player.brain.kernel.KernelGen" project="Tablut2020" 
     file="/Tablut2020/src/giordani/tabzai/player/brain/kernel/KernelGen.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="2189" y="1053"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -64,7 +55,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="8" language="java" name="giordani.tabzai.training.TrainingGeneticAlgorithm" project="Tablut2020" 
+  <class id="7" language="java" name="giordani.tabzai.training.TrainingGeneticAlgorithm" project="Tablut2020" 
     file="/Tablut2020/src/giordani/tabzai/training/TrainingGeneticAlgorithm.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="1953" y="178"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -73,7 +64,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="9" language="java" name="giordani.tabzai.training.TrainingGeneticAlgorithm.Standing" project="Tablut2020" 
+  <class id="8" language="java" name="giordani.tabzai.training.TrainingGeneticAlgorithm.Standing" project="Tablut2020" 
     file="/Tablut2020/src/giordani/tabzai/training/TrainingGeneticAlgorithm.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="1801" y="484"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -82,7 +73,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="10" language="java" name="giordani.tabzai.training.TrainingGeneticAlgorithm.TournamentResult" 
+  <class id="9" language="java" name="giordani.tabzai.training.TrainingGeneticAlgorithm.TournamentResult" 
     project="Tablut2020" file="/Tablut2020/src/giordani/tabzai/training/TrainingGeneticAlgorithm.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="2066" y="494"/>    
@@ -92,7 +83,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="11" language="java" name="giordani.tabzai.player.brain.BrainAbs" project="Tablut2020" 
+  <class id="10" language="java" name="giordani.tabzai.player.brain.BrainAbs" project="Tablut2020" 
     file="/Tablut2020/src/giordani/tabzai/player/brain/BrainAbs.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="1063" y="287"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -101,57 +92,61 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <association id="12">    
-    <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="13" name="population"/>      
-      <multiplicity id="14" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="4" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <nesting id="15">    
-    <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="3"/>  
-  </nesting>  
-  <realization id="16">    
-    <end type="SOURCE" refId="11"/>    
-    <end type="TARGET" refId="2"/>  
-  </realization>  
-  <generalization id="17">    
-    <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="11"/>  
-  </generalization>  
-  <nesting id="18">    
-    <end type="SOURCE" refId="8"/>    
-    <end type="TARGET" refId="10"/>  
-  </nesting>  
-  <generalization id="19">    
-    <end type="SOURCE" refId="7"/>    
-    <end type="TARGET" refId="6"/>  
-  </generalization>  
-  <association id="20">    
+  <association id="11">    
     <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="21" name="brain"/>      
-      <multiplicity id="22" minimum="0" maximum="1"/>    
+      <attribute id="12" name="brain">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="13" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
     </end>    
     <end type="TARGET" refId="2" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="23">    
+  <association id="14">    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="15" name="population">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="16" minimum="0" maximum="2147483647">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="17">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="10"/>  
+  </generalization>  
+  <association id="18">    
     <end type="SOURCE" refId="4" navigable="false">      
-      <attribute id="24" name="kernel"/>      
-      <multiplicity id="25" minimum="0" maximum="1"/>    
+      <attribute id="19" name="kernel">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="20" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
     </end>    
     <end type="TARGET" refId="5" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <realization id="26">    
-    <end type="SOURCE" refId="6"/>    
-    <end type="TARGET" refId="5"/>  
+  <realization id="21">    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="2"/>  
   </realization>  
-  <nesting id="27">    
-    <end type="SOURCE" refId="8"/>    
+  <nesting id="22">    
+    <end type="SOURCE" refId="7"/>    
     <end type="TARGET" refId="9"/>  
+  </nesting>  
+  <nesting id="23">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="3"/>  
+  </nesting>  
+  <nesting id="24">    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="8"/>  
   </nesting>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
     sort-features="false" accessors="true" visibility="true">    

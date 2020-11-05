@@ -1,9 +1,17 @@
 package giordani.tabzai.player.brain.kernel;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.StringJoiner;
 import java.util.function.ToDoubleFunction;
 
@@ -11,46 +19,46 @@ import it.unibo.ai.didattica.competition.tablut.domain.State;
 import it.unibo.ai.didattica.competition.tablut.domain.State.Pawn;
 import it.unibo.ai.didattica.competition.tablut.domain.State.Turn;
 
-public class KernelGen extends KernelAbs {
+public class KernelGen implements Kernel {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	private Map<String, Double> params;
-	private Map<String, ToDoubleFunction<State>> paramFun = Map.of(
-			"black pawns", this::blackPawns,
-			"white pawns", this::whitePawns,
-			"king position", this::kingPosition,
-			"black near king", this::blackNearKing,
-			"white near king", this::whiteNearKing,
-			"player turn", this::turn,
-			"white attacked", this::whiteAttacked,
-			"black attacked", this::blackAttacked
-			);
-	
+	private Map<String, ToDoubleFunction<State>> paramFun;
+	private Random rnd;
+	private double mutationProb;
+	private double mutationScale;
+			
 	private KernelGen(Map<String, Double> params, double mutationProb, double mutationScale) {
-		super(mutationProb, mutationScale);
+		this(mutationProb, mutationScale);
+		this.params = new HashMap<>(params);
+	}
+	
+	public KernelGen(Map<String, Double> params) {
+		this(0, 0);
 		this.params = new HashMap<>(params);
 	}
 	
 	public KernelGen(double mutationProb, double mutationScale) {
-		super(mutationProb, mutationScale);
+		this.mutationProb = mutationProb;
+		this.mutationScale = mutationScale;
+		this.rnd = new Random();
+		this.paramFun  = Map.of(
+				"black pawns", this::blackPawns,
+				"white pawns", this::whitePawns,
+				"king position", this::kingPosition,
+				"black near king", this::blackNearKing,
+				"white near king", this::whiteNearKing,
+				"player turn", this::turn,
+				"white attacked", this::whiteAttacked,
+				"black attacked", this::blackAttacked
+				);
 		this.params = new HashMap<>();
 		for(String key : paramFun.keySet())	
 			params.put(key, 2*getRandom().nextDouble() - 1); //random weight between -1 and 1
 	}
-	
-//	public KernelGen() {
-//		super(0,0);
-//		this.params = Map.of("king position", 20.579720069300826, 
-//							"black pawns", -7.6624105876364474, 
-//							"white pawns", -10.829288637073532, 
-//							"black near king", 1.8824658618107062,
-//							"turn", 6.949590191093299,
-//							"white near king", -5.229963655418505);
-//	}
-	
 		
 	//==============================================================
 	// Features Functions
@@ -119,6 +127,10 @@ public class KernelGen extends KernelAbs {
 	// Private Functions
 	//==============================================================
 	
+	private Random getRandom() {
+		return rnd;
+	}
+	
 	@Override
 	public KernelGen mutate() {
 		for(String p : params.keySet()) {
@@ -177,6 +189,16 @@ public class KernelGen extends KernelAbs {
 	//==============================================================
 	// Public Functions
 	//==============================================================
+		
+	@Override
+	public double getMutationProb() {
+		return mutationProb;
+	}
+	
+	@Override
+	public double getMutationScale() {
+		return mutationScale;
+	}
 	
 	public KernelGen copy() {
 		return new KernelGen(params, getMutationProb(), getMutationScale());
@@ -196,7 +218,6 @@ public class KernelGen extends KernelAbs {
 	public Map<String, Double> getParams() {
 		return params;
 	}
-
 	
 	@Override
 	public double evaluate(State state) {
@@ -204,7 +225,7 @@ public class KernelGen extends KernelAbs {
 		for(String key : params.keySet()) {
 			ev += params.get(key) * paramFun.get(key).applyAsDouble(state);
 		}
-		System.out.println(ev);
+		
 		return ev;
 	}
 
@@ -234,5 +255,26 @@ public class KernelGen extends KernelAbs {
 		ret.add(new KernelGen(cross2, getMutationProb(), getMutationScale()));
 		
 		return ret;
+	}
+	
+	//==============================================================
+	// Input/Output
+	//==============================================================
+	
+	@Override
+	public void save(String name) {
+		Path p = Paths.get(Kernel.PATH + File.separator + name);
+		String path = p.toAbsolutePath().toString();
+		new File(Kernel.PATH).mkdirs();
+		try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(path))){
+			oos.writeObject(this.getParams());
+			System.out.println("Saved " + name);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			System.out.println("Not Saved " + name);
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("Not Saved " + name);
+		}
 	}
 }

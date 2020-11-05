@@ -89,12 +89,15 @@ public class TrainingGeneticAlgorithm {
 	}
 	
 	public static void main(String[] args) {
+		
+		System.out.println(args);
+		
 		int population = 16;
 		int matches = 50;
 		int gameChosen = 4;
-		int depth = 4;
+		int depth = 5;
 		double mutationProb = 0.2;
-		double mutationScale = 10;
+		double mutationScale = 1;
 		boolean enableGui = false;
 		
 		CommandLineParser parser = new DefaultParser();
@@ -106,7 +109,7 @@ public class TrainingGeneticAlgorithm {
 		options.addOption("d", "depth", true, "integer: number of moves that the brain watch ahead, default 4");
 		options.addOption("o","mutation_probability", true, "double: probabilty of changing a paramenter in the kernel (0<=x<=1)");
 		options.addOption("s", "mutation_scale", true, "double: scale of updating in kernel mutation");
-		options.addOption("r","game rules", true, "game rules must be an integer; 1 for Tablut, 2 for Modern, 3 for Brandub, 4 for Ashton; default: 4");
+		options.addOption("r","game_rules", true, "game rules must be an integer; 1 for Tablut, 2 for Modern, 3 for Brandub, 4 for Ashton; default: 4");
 		options.addOption("g","enable_GUI", false, "enableGUI if option is present (not implemented)");
 
 		HelpFormatter formatter = new HelpFormatter();
@@ -425,6 +428,8 @@ public class TrainingGeneticAlgorithm {
 				population.get(i).setKernel(newGen.get(i));
 			}
 			kernelHistory.add(kh);
+			par1.save("Kernel_1" + m);
+			par2.save("Kernel_2" + m);
 		}
 		
 		System.out.println("Par 1 =\n" + par1);
@@ -439,9 +444,6 @@ public class TrainingGeneticAlgorithm {
 				+ "\nin " + d.toHours() + ":" + d.toMinutesPart() 
 				+ ":" + d.toSecondsPart() + "." + d.toMillisPart()
 				+ "\n" + d.toMillis()/matchCounter + " ms/match");
-		
-		par1.save("Kernel_1");
-		par2.save("Kernel_2");
 	}
 
 	private Turn match(String id, Brain white, Brain black) {

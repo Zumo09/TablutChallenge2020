@@ -19,7 +19,7 @@ import it.unibo.ai.didattica.competition.tablut.exceptions.*;
  * REMOVED LOGGING
  *
  */
-public class GameAshtonTablut implements Game {
+public class GameAshtonTablutNoLog implements Game {
 
 	/**
 	 * Number of repeated states that can occur before a draw
@@ -39,11 +39,11 @@ public class GameAshtonTablut implements Game {
 	// private List<String> strangeCitadels;
 	private List<State> drawConditions;
 
-	public GameAshtonTablut(int repeated_moves_allowed, int cache_size) {
+	public GameAshtonTablutNoLog(int repeated_moves_allowed, int cache_size) {
 		this(new StateTablut(), repeated_moves_allowed, cache_size);
 	}
 
-	public GameAshtonTablut(State state, int repeated_moves_allowed, int cache_size) {
+	public GameAshtonTablutNoLog(State state, int repeated_moves_allowed, int cache_size) {
 		super();
 		this.repeated_moves_allowed = repeated_moves_allowed;
 		this.cache_size = cache_size;

@@ -106,11 +106,13 @@ public class TabZAI extends TablutClient {
 			System.exit(-1);
 		}
 		System.out.println("Selected " + args[0]);
-
+		System.out.println("GLHF");
+		
 		TablutClient client = new TabZAI(args[0], "TabZAI_" + args[0].toUpperCase());
 
 		client.run();
-
+		
+		System.out.println("GGWP");
 	}
 
 }
