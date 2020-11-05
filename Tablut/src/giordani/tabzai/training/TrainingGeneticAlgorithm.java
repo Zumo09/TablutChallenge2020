@@ -95,7 +95,7 @@ public class TrainingGeneticAlgorithm {
 		int population = 16;
 		int matches = 50;
 		int gameChosen = 4;
-		int depth = 5;
+		int depth = 3;
 		double mutationProb = 0.2;
 		double mutationScale = 1;
 		boolean enableGui = false;
@@ -203,6 +203,7 @@ public class TrainingGeneticAlgorithm {
 						"\nmutation scale = " + mutationScale + 
 						"\ngame rules = " + gameChosen + 
 						"\nGUI = " + enableGui +
+						"\nDepth = " + depth +
 						"\n==========================" );
 		
 		TrainingGeneticAlgorithm trainer = new TrainingGeneticAlgorithm(population, 

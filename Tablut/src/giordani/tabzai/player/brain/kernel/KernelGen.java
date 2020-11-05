@@ -103,9 +103,9 @@ public class KernelGen implements Kernel {
 		else if(s.getTurn().equals(Turn.BLACK))
 			return -1;
 		else if(s.getTurn().equals(Turn.WHITEWIN))
-			return 100;
+			return Double.POSITIVE_INFINITY;
 		else if(s.getTurn().equals(Turn.BLACKWIN))
-			return -100;
+			return Double.NEGATIVE_INFINITY;
 		else return 0;
 	}
 	
