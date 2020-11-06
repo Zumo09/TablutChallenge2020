@@ -17,6 +17,7 @@ import it.unibo.ai.didattica.competition.tablut.domain.State;
 public interface Kernel extends Serializable {
 	public final String PATH = "kernels";
 	public final String BEST = "Kernel_149";
+	public final String EXT = ".ker";
 	
 	public Kernel copy();
 	public double evaluate(State state);
@@ -52,7 +53,7 @@ public interface Kernel extends Serializable {
 	}
 	
 	public static Kernel load(String name) {
-		Path p = Paths.get(Kernel.PATH + File.separator + name);
+		Path p = Paths.get(Kernel.PATH + File.separator + name + Kernel.EXT);
 		String path = p.toAbsolutePath().toString();
 		try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(path))) {
 			@SuppressWarnings("unchecked")

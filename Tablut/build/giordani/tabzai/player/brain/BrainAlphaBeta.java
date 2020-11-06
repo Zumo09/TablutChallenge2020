@@ -76,12 +76,13 @@ public class BrainAlphaBeta extends BrainAbs {
 	@Override
 	protected Action findAction(State state) {
 		update(state);
-		
-		this.getRoot().expandAlphaBeta(this.getDepth());
-		
-		System.out.println("\nState evaluation : " + this.getRoot().getVal() + " [depth = " + this.getDepth() + "]");
-						
+		this.getRoot().expandAlphaBeta(this.getDepth());			
 		return getBestAction();		
+	}
+	
+	@Override
+	public String toString() {
+		return "State evaluation : " + this.getRoot().getVal() + " [depth = " + this.getDepth() + "]";
 	}
 	
 	public void resetRoot() {
@@ -123,7 +124,7 @@ public class BrainAlphaBeta extends BrainAbs {
 			this(null, null, state);
 		}
 		
-		public Set<Node> getChildren() {return children;}
+		public Set<Node> getChildren() 		{return children;}
 		public State getState() 			{return state;}
 		public Node getParent() 			{return parent;}
 		public Action getAction() 			{return action;}

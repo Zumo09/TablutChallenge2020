@@ -134,6 +134,7 @@
 		        <pathelement location="lib/commons-cli-1.4.jar"/>
                 <pathelement location="build"/>
             </classpath>
+            <arg line="-t Tr01 -p 8 -m 1 -d 2 -o 0.5 -s 1"/>
         </java>
     </target>
 

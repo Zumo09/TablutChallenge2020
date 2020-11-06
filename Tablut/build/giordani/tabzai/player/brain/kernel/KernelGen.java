@@ -263,7 +263,7 @@ public class KernelGen implements Kernel {
 	
 	@Override
 	public void save(String name) {
-		Path p = Paths.get(Kernel.PATH + File.separator + name);
+		Path p = Paths.get(Kernel.PATH + File.separator + name + Kernel.EXT);
 		String path = p.toAbsolutePath().toString();
 		new File(Kernel.PATH).mkdirs();
 		try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(path))){
