@@ -478,12 +478,23 @@ public class TrainingGeneticAlgorithm {
 		for(Kernel p : parents)
 			System.out.println(p);
 		
-		System.out.println("==========================\n"
+		long h = d.toHours();
+		int m = d.toMinutesPart();
+		int s = d.toSecondsPart();
+		int mill = d.toMillisPart();
+		
+		String msg = "==========================\n"
 				+ "==========================\n"
 				+ "Match simulated: " + matchCounter 
-				+ "\nin " + d.toHours() + ":" + d.toMinutesPart() 
-				+ ":" + d.toSecondsPart() + "." + d.toMillisPart()
-				+ "\n" + d.toMillis()/matchCounter + " ms/match");
+				+ "\nin " + (h<10?"0":"") + h + ":" 
+						  + (m<10?"0":"") + m + ":"
+						  + (s<10?"0":"") + s + "."
+						  + (mill<100?"0":"") 
+						  + (mill<10?"0":"") + mill
+				+ "\n" + d.toMillis()/matchCounter + " ms/match";
+		
+		System.out.println(msg);
+		loggSys.fine(msg);
 	}
 
 	private Turn match(String id, Brain white, Brain black) {

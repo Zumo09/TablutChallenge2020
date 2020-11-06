@@ -47,14 +47,19 @@ import it.unibo.ai.didattica.competition.tablut.domain.StateBrandub;
 public class TrainingGeneticAlgorithm {
 	private List<BrainAlphaBeta> population;
 	private int matches;
+	private int parents;
 	private int gameChosen;
 	private Logger loggSys;
 	private String date;
 	private String tag;
 	
-	public TrainingGeneticAlgorithm(String tag, int population, int matches, int gameChosen, double mutationProb, double mutationScale, int depth) {
+	public TrainingGeneticAlgorithm(String tag, int population, int matches, int parents, int gameChosen, double mutationProb, double mutationScale, int depth) {
 		if(population % 2 != 0 || population < 8)
 			population = Math.min(8, population + 1);
+		if(parents > population)
+			parents = population;
+		if(parents % 2 != 0 || parents < 2)
+			parents = Math.max(2, parents + 1);
 		if(matches<1)
 			matches = 1;
 		if(gameChosen<0 || gameChosen>4)
@@ -66,18 +71,23 @@ public class TrainingGeneticAlgorithm {
 		if(depth<1)
 			depth = 1;
 		
-		String msg = "==========================" +
+		String msg = 
+				"======================================\n" +
+				"          STARTING TRAINING\n" +
+				"======================================" + 
 				"\npopulation = " + population +
+				"\nparents = " + parents +
 				"\nmatches = " + matches + 
 				"\nmutation probablitiy = " + mutationProb + 
 				"\nmutation scale = " + mutationScale + 
 				"\ngame rules = " + gameChosen +
 				"\nDepth = " + depth +
-				"\n==========================\n";
+				"\n======================================\n";
 		
 		System.out.println(msg);
 		
 		this.tag = tag;
+		this.parents = parents;
 		this.population = new ArrayList<>();
 		while(this.population.size()<population)
 			this.population.add(new BrainAlphaBeta(mutationProb, mutationScale, depth));
@@ -103,9 +113,7 @@ public class TrainingGeneticAlgorithm {
 			loggSys.addHandler(fh);
 			fh.setFormatter(new SimpleFormatter());
 			loggSys.setLevel(Level.FINE);
-			loggSys.fine("======================================\n"
-					+ "\t\tSTARTING TRAINING\n"
-					+ "======================================\n" + msg);
+			loggSys.fine(msg);
 		} catch (Exception e) {
 			System.out.println("ERRORE");
 			e.printStackTrace();
@@ -121,6 +129,7 @@ public class TrainingGeneticAlgorithm {
 		int population = 16;
 		int matches = 1;
 		int gameChosen = 4;
+		int parents = 2;
 		int depth = 2;
 		double mutationProb = 0.5;
 		double mutationScale = 1;
@@ -132,6 +141,7 @@ public class TrainingGeneticAlgorithm {
 		
 		options.addOption("t","tag", true, "String: tag to recognize the training");
 		options.addOption("p","population", true, "integer: even number of population in each generation, min 4, default 100");
+		options.addOption("f","parents", true, "integer: even number of parents in each generation, min 4, default 100");
 		options.addOption("m", "match", true, "integer: number of match, default 100");
 		options.addOption("d", "depth", true, "integer: number of moves that the brain watch ahead, default 4");
 		options.addOption("o","mutation_probability", true, "double: probabilty of changing a paramenter in the kernel (0<=x<=1)");
@@ -157,7 +167,26 @@ public class TrainingGeneticAlgorithm {
 						System.exit(1);
 					}
 				} catch (NumberFormatException e) {
-					System.out.println("Number format is not correct! (c)" + cmd.getOptionValue("c"));
+					System.out.println("Number format is not correct! (p)" + cmd.getOptionValue("p"));
+					formatter.printHelp("Genetic Training", options);
+					System.exit(1);
+				}
+			}
+			if (cmd.hasOption("f")) {
+				try {
+					parents = Integer.parseInt(cmd.getOptionValue("f"));
+					if(parents < 2){
+						System.out.println("At least 2 parents");
+						formatter.printHelp("Genetic Training", options);
+						System.exit(1);
+					}
+					if(parents % 2 != 0){
+						System.out.println("Population must be even number");
+						formatter.printHelp("Genetic Training", options);
+						System.exit(1);
+					}
+				} catch (NumberFormatException e) {
+					System.out.println("Number format is not correct! (f)" + cmd.getOptionValue("f"));
 					formatter.printHelp("Genetic Training", options);
 					System.exit(1);
 				}
@@ -221,10 +250,10 @@ public class TrainingGeneticAlgorithm {
 			System.out.println( "Unexpected exception:" + exp.getMessage());
 			System.exit(2);
 		}
-				
-		TrainingGeneticAlgorithm trainer = new TrainingGeneticAlgorithm(tag, population, 
-				matches, gameChosen, mutationProb, mutationScale, depth);	
 		
+		TrainingGeneticAlgorithm trainer = new TrainingGeneticAlgorithm(tag, population, 
+				matches, parents, gameChosen, mutationProb, mutationScale, depth);	
+				
 		trainer.train();
 	}
 	
@@ -408,9 +437,7 @@ public class TrainingGeneticAlgorithm {
 	}
 	
 	public void train() {
-		List<TournamentResult> history = new ArrayList<>();
-		Kernel par1 = null;
-		Kernel par2 = null;
+		Kernel par;
 		List<Kernel> parents = new ArrayList<>();
 		
 		int matchCounter = 0;
@@ -428,36 +455,46 @@ public class TrainingGeneticAlgorithm {
 						matchCounter++;
 					}
 			
-			history.add(results);
 			loggSys.fine(results.toString());
 			System.out.println(results.toString());
 			List<Standing> ranking = results.getRanking();
 			parents.clear();
-			par1 = population.get(ranking.get(0).getPlayer()).getKernel().copy();
-			par2 = population.get(ranking.get(1).getPlayer()).getKernel().copy();
-			loggSys.fine("Par1:\n" + par1 + "\nPar2:\n" + par2);
-			parents.add(par1.copy()); parents.add(par2.copy());
+			for(int i=0; i<this.parents; i++) {
+				par = population.get(ranking.get(i).getPlayer()).getKernel().copy();
+				par.save(tag + i + "_" + m);
+				parents.add(par.copy());
+				loggSys.fine("Par1:\n" + par);
+			}
 			List<Kernel> newGen = Kernel.nextGeneration(parents, population.size());
 			for(int i=0; i<population.size(); i++) {
 				population.get(i).setKernel(newGen.get(i));
 				population.get(i).resetRoot();
 			}
-			par1.save(tag + "_K_1_" + m);
-			par2.save(tag + "_K_2_" + m);
 		}
-		
-		System.out.println("Par 1 =\n" + par1);
-		System.out.println("Par 2 =\n" + par2);
-		
+				
 		long stop = System.nanoTime();
 		Duration d = Duration.ofNanos(stop-start);
 		
-		System.out.println("==========================\n"
+		for(Kernel p : parents)
+			System.out.println(p);
+		
+		long h = d.toHours();
+		int m = d.toMinutesPart();
+		int s = d.toSecondsPart();
+		int mill = d.toMillisPart();
+		
+		String msg = "==========================\n"
 				+ "==========================\n"
 				+ "Match simulated: " + matchCounter 
-				+ "\nin " + d.toHours() + ":" + d.toMinutesPart() 
-				+ ":" + d.toSecondsPart() + "." + d.toMillisPart()
-				+ "\n" + d.toMillis()/matchCounter + " ms/match");
+				+ "\nin " + (h<10?"0":"") + h + ":" 
+						  + (m<10?"0":"") + m + ":"
+						  + (s<10?"0":"") + s + "."
+						  + (mill<100?"0":"") 
+						  + (mill<10?"0":"") + mill
+				+ "\n" + d.toMillis()/matchCounter + " ms/match";
+		
+		System.out.println(msg);
+		loggSys.fine(msg);
 	}
 
 	private Turn match(String id, Brain white, Brain black) {
