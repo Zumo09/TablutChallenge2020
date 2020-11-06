@@ -10,7 +10,7 @@ public class Graphics extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			MainPane root = new MainPane();
-			Scene scene = new Scene(root,500,500);
+			Scene scene = new Scene(root, 1000, 500);
 			primaryStage.setScene(scene);
 			primaryStage.show();
 		} catch(Exception e) {
