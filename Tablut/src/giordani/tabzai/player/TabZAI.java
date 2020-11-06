@@ -77,10 +77,12 @@ public class TabZAI extends TablutClient {
 
 				if (this.getCurrentState().getTurn().equals(this.getPlayer())) {
 					action = brain.getAction(this.getCurrentState());
+					System.out.println(brain);
 					System.out.println("From " + action.getFrom() + " to " + action.getTo());
 					this.write(action);
 				} else if (this.getCurrentState().getTurn().equals(other)) {
 					brain.update(this.getCurrentState());
+					System.out.println(brain);
 					System.out.println("Waiting for your opponent move... ");
 				} else if (this.getCurrentState().getTurn().equals(win)) {
 					System.out.println("YOU WIN!");

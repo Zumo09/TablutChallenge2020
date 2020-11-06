@@ -48,13 +48,34 @@ public class TrainingGeneticAlgorithm {
 	private List<BrainAlphaBeta> population;
 	private int matches;
 	private int gameChosen;
-	@SuppressWarnings("unused")
-	private boolean enableGui;
 	private Logger loggSys;
 	private String date;
+	private String tag;
 	
-	public TrainingGeneticAlgorithm(int population, int matches, int gameChosen, double mutationProb, double mutationScale, int depth, boolean enableGui) {
-		this.enableGui = enableGui;
+	public TrainingGeneticAlgorithm(String tag, int population, int matches, int gameChosen, double mutationProb, double mutationScale, int depth) {
+		if(population % 2 != 0 || population < 8)
+			population = Math.min(8, population + 1);
+		if(matches<1)
+			matches = 1;
+		if(gameChosen<0 || gameChosen>4)
+			gameChosen = 4;
+		if(mutationProb < 0 || mutationProb >= 1)
+			mutationProb = 0.99;
+		if(mutationScale<0)
+			mutationScale = 1;
+		if(depth<1)
+			depth = 1;
+		
+		System.out.println("==========================" +
+				"\npopulation = " + population +
+				"\nmatches = " + matches + 
+				"\nmutation probablitiy = " + mutationProb + 
+				"\nmutation scale = " + mutationScale + 
+				"\ngame rules = " + gameChosen +
+				"\nDepth = " + depth +
+				"\n==========================" );
+		
+		this.tag = tag;
 		this.population = new ArrayList<>();
 		while(this.population.size()<population)
 			this.population.add(new BrainAlphaBeta(mutationProb, mutationScale, depth));
@@ -65,11 +86,8 @@ public class TrainingGeneticAlgorithm {
 		this.date = ldt.getYear() + "_" + ldt.getMonth() + "_" + ldt.getDayOfMonth()
 					+ "_" + ldt.getHour() + "_" + ldt.getMinute() + "_" + ldt.getSecond();
 		
-		// gestire GUI
-		
-		
 		String logs_folder = "train_logs";
-		Path p = Paths.get(logs_folder + File.separator + date + "_train_log.txt");
+		Path p = Paths.get(logs_folder + File.separator + tag + "_" + date +".txt");
 		p = p.toAbsolutePath();
 		String sysLogName = p.toString();
 		loggSys = Logger.getLogger("SysLog");
@@ -105,7 +123,6 @@ public class TrainingGeneticAlgorithm {
 		int depth = 2;
 		double mutationProb = 0.2;
 		double mutationScale = 1;
-		boolean enableGui = false;
 		
 		CommandLineParser parser = new DefaultParser();
 
@@ -117,8 +134,7 @@ public class TrainingGeneticAlgorithm {
 		options.addOption("o","mutation_probability", true, "double: probabilty of changing a paramenter in the kernel (0<=x<=1)");
 		options.addOption("s", "mutation_scale", true, "double: scale of updating in kernel mutation");
 		options.addOption("r","game_rules", true, "game rules must be an integer; 1 for Tablut, 2 for Modern, 3 for Brandub, 4 for Ashton; default: 4");
-		options.addOption("g","enable_GUI", false, "enableGUI if option is present (not implemented)");
-
+		
 		HelpFormatter formatter = new HelpFormatter();
 		formatter.printHelp("Genetic Training", options);
 
@@ -194,27 +210,14 @@ public class TrainingGeneticAlgorithm {
 					System.exit(1);
 				}
 			}
-			if(cmd.hasOption("g")) {
-				enableGui=true;
-			}
 
 		} catch (ParseException exp) {
 			System.out.println( "Unexpected exception:" + exp.getMessage());
 			System.exit(2);
 		}
-		
-		System.out.println("==========================" +
-						"\npopulation = " + population +
-						"\nmatches = " + matches + 
-						"\nmutation probablitiy = " + mutationProb + 
-						"\nmutation scale = " + mutationScale + 
-						"\ngame rules = " + gameChosen + 
-						"\nGUI = " + enableGui +
-						"\nDepth = " + depth +
-						"\n==========================" );
-		
-		TrainingGeneticAlgorithm trainer = new TrainingGeneticAlgorithm(population, 
-				matches, gameChosen, mutationProb, mutationScale, depth, enableGui);	
+				
+		TrainingGeneticAlgorithm trainer = new TrainingGeneticAlgorithm("default", population, 
+				matches, gameChosen, mutationProb, mutationScale, depth);	
 		
 		trainer.train();
 	}
@@ -434,8 +437,8 @@ public class TrainingGeneticAlgorithm {
 				kh.add(population.get(i).getKernel().copy());
 				population.get(i).setKernel(newGen.get(i));
 			}
-			par1.save(date + "_K_1_" + m);
-			par2.save(date + "_K_2_" + m);
+			par1.save(tag + "_K_1_" + m);
+			par2.save(tag + "_K_2_" + m);
 		}
 		
 		System.out.println("Par 1 =\n" + par1);
@@ -481,7 +484,7 @@ public class TrainingGeneticAlgorithm {
 
 		Action move = null;
 		System.out.println("\n%%%%%%%%%%%%%%%%\nNew Match " + id);
-		loggSys.fine("==================\nMatch " + id);
+//		loggSys.fine("==================\nMatch " + id);
 		int moves = 0;
 		State newState;
 		// GAME CYCLE
@@ -490,14 +493,16 @@ public class TrainingGeneticAlgorithm {
 //			System.out.println("=================\nMove " + moves + ". Turn: " + state.getTurn());
 			if(state.getTurn().equals(Turn.WHITE)) {
 				move = white.getAction(state.clone());
-//				System.out.println("-----------------\nWhite (" + move + ")");
+				System.out.println("White:\n" + white);
+				loggSys.fine("White:\n" + white);
 			}
 			else if(state.getTurn().equals(Turn.BLACK)) {
 				move = black.getAction(state.clone());
-//				System.out.println("-----------------\nBlack (" + move + ")");
+				System.out.println("Black:\n" + black);
+				loggSys.fine("Black:\n" + black);
 			}
 			else {
-				loggSys.fine("==================\nEndgame: " + state.getTurn());
+//				loggSys.fine("==================\nEndgame: " + state.getTurn());
 				System.out.println("-----------------\nENDGAME (" + state.getTurn() + ")");
 				return state.getTurn();
 			}
@@ -510,19 +515,19 @@ public class TrainingGeneticAlgorithm {
 					ClimbingCitadelException | CitadelException e) {
 				//System.out.println(e.getMessage());
 				if(state.getTurn().equals(Turn.BLACK)) {
-					loggSys.fine("==================\nToo many error for Black");
+//					loggSys.fine("==================\nToo many error for Black");
 //						System.out.println("=================\nToo many error for Black");
 					return Turn.WHITEWIN;
 				}
 				else if(state.getTurn().equals(Turn.WHITE)) {
-					loggSys.fine("==================\nToo many error for White");
+//					loggSys.fine("==================\nToo many error for White");
 //						System.out.println("=================\nToo many error for White");
 					return Turn.BLACKWIN;
 				}
 				else {
 					// should never reach this code
-					loggSys.fine("=*=*=*=*=*=*=*=*=*=*\nENDGAME ERROR");
-					System.out.println("=*=*=*=*=*=*=*=*=*=*\nENDGAME ERROR");
+					loggSys.fine("=*=*=*=*=*=*=*=*=*=*\nENDGAME ERROR in " + id);
+					System.out.println("=*=*=*=*=*=*=*=*=*=*\nENDGAME ERROR in " + id);
 					return Turn.DRAW;
 				}
 			}
@@ -530,7 +535,7 @@ public class TrainingGeneticAlgorithm {
 			
 		}
 		
-		loggSys.fine("==================\nGame ended for too many moves ("+moves+")");
+		loggSys.fine("==================\nGame " + id + " ended for too many moves ("+moves+")");
 //		System.out.println("\nGame ended for too many moves ("+moves+")");
 		return Turn.DRAW;
 	}
