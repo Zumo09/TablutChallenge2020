@@ -35,7 +35,7 @@ public class BrainAlphaBeta extends BrainAbs {
 		// Constructor for training phase
 		super(timeout, gametype, depth);
 		this.kernel = Kernel.of(mutationProb, mutationScale);
-		init();
+		resetRoot();
 	}
 
 	public BrainAlphaBeta(double mutationProb, double mutationScale, int depth) {
@@ -46,17 +46,11 @@ public class BrainAlphaBeta extends BrainAbs {
 		// The constructor for the runtime player
 		super(timeout, gametype, depth);
 		this.kernel = Kernel.load(name);
-		init();
+		resetRoot();
 	}
 	
 	public BrainAlphaBeta(String name) {
 		this(name, 60, 1, 3);
-	}
-	
-	private void init() {
-		State state = new StateTablut();
-		state.setTurn(Turn.WHITE);
-		setRoot(new Node(state));
 	}
 	
 	@Override
@@ -88,6 +82,12 @@ public class BrainAlphaBeta extends BrainAbs {
 		System.out.println("\nState evaluation : " + this.getRoot().getVal() + " [depth = " + this.getDepth() + "]");
 						
 		return getBestAction();		
+	}
+	
+	public void resetRoot() {
+		State state = new StateTablut();
+		state.setTurn(Turn.WHITE);
+		setRoot(new Node(state));
 	}
 	
 	public int countNodes(Node root) {

@@ -4,10 +4,10 @@ import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -45,11 +45,13 @@ import it.unibo.ai.didattica.competition.tablut.exceptions.ThroneException;
 import it.unibo.ai.didattica.competition.tablut.domain.StateBrandub;
 
 public class TrainingGeneticAlgorithm {
-	List<BrainAlphaBeta> population;
-	int matches;
-	int gameChosen;
-	boolean enableGui;
-	Logger loggSys;
+	private List<BrainAlphaBeta> population;
+	private int matches;
+	private int gameChosen;
+	@SuppressWarnings("unused")
+	private boolean enableGui;
+	private Logger loggSys;
+	private String date;
 	
 	public TrainingGeneticAlgorithm(int population, int matches, int gameChosen, double mutationProb, double mutationScale, int depth, boolean enableGui) {
 		this.enableGui = enableGui;
@@ -59,10 +61,15 @@ public class TrainingGeneticAlgorithm {
 		this.matches = matches;
 		this.gameChosen = gameChosen;
 		
+		LocalDateTime ldt = LocalDateTime.now();
+		this.date = ldt.getYear() + "_" + ldt.getMonth() + "_" + ldt.getDayOfMonth()
+					+ "_" + ldt.getHour() + "_" + ldt.getMinute() + "_" + ldt.getSecond();
+		
 		// gestire GUI
 		
+		
 		String logs_folder = "train_logs";
-		Path p = Paths.get(logs_folder + File.separator + new Date().getTime() + "_training_systemLog.txt");
+		Path p = Paths.get(logs_folder + File.separator + date + "_train_log.txt");
 		p = p.toAbsolutePath();
 		String sysLogName = p.toString();
 		loggSys = Logger.getLogger("SysLog");
@@ -93,7 +100,7 @@ public class TrainingGeneticAlgorithm {
 		System.out.println(args);
 		
 		int population = 16;
-		int matches = 50;
+		int matches = 1;
 		int gameChosen = 4;
 		int depth = 2;
 		double mutationProb = 0.2;
@@ -393,7 +400,6 @@ public class TrainingGeneticAlgorithm {
 	
 	public void train() {
 		List<TournamentResult> history = new ArrayList<>();
-		List<List<Kernel>> kernelHistory = new ArrayList<>();
 		Kernel par1 = null;
 		Kernel par2 = null;
 		List<Kernel> parents = new ArrayList<>();
@@ -428,9 +434,8 @@ public class TrainingGeneticAlgorithm {
 				kh.add(population.get(i).getKernel().copy());
 				population.get(i).setKernel(newGen.get(i));
 			}
-			kernelHistory.add(kh);
-			par1.save("Kernel_1" + m);
-			par2.save("Kernel_2" + m);
+			par1.save(date + "_K_1_" + m);
+			par2.save(date + "_K_2_" + m);
 		}
 		
 		System.out.println("Par 1 =\n" + par1);
