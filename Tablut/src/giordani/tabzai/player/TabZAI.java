@@ -26,25 +26,13 @@ public class TabZAI extends TablutClient {
 	 * @throws UnknownHostException
 	 * @throws IOException
 	 */
-	public TabZAI(String player, String name, int timeout, String ipAddress, int gametype) throws UnknownHostException, IOException {
+	public TabZAI(String player, String name, String kernel, int timeout, String ipAddress, int gametype) throws UnknownHostException, IOException {
 		super(player, name, timeout, ipAddress);
-		this.brain = Brain.of(timeout, gametype);
+		this.brain = Brain.of(kernel, timeout, gametype);
 	}
 
-	public TabZAI(String player, String name, int timeout, String ipAddress) throws UnknownHostException, IOException {
-		this(player, name, timeout, ipAddress, 1);
-	}
-
-	public TabZAI(String player, String name, int timeout) throws UnknownHostException, IOException {
-		this(player, name, timeout, "localhost");
-	}
-
-	public TabZAI(String player, String name, String ipAddress) throws UnknownHostException, IOException {
-		this(player, name, 60, ipAddress);
-	}
-	
-	public TabZAI(String player, String name) throws UnknownHostException, IOException {
-		this(player, name, 60, "localhost");
+	public TabZAI(String player, String name, String kernel) throws UnknownHostException, IOException {
+		this(player, name, kernel, 60, "localhost", 1);
 	}
 
 	@Override
@@ -103,14 +91,16 @@ public class TabZAI extends TablutClient {
 	}
 
 	public static void main(String[] args) throws UnknownHostException, IOException {
-		if (args.length == 0) {
+		if (args.length != 3) {
 			System.out.println("You must specify which player you are (WHITE or BLACK)!");
+			System.out.println("You must specify the player name");
+			System.out.println("You must specify the kernel file name");
 			System.exit(-1);
-		}
+		} 
 		System.out.println("Selected " + args[0]);
 		System.out.println("GLHF");
 		
-		TablutClient client = new TabZAI(args[0], "TabZAI_" + args[0].toUpperCase());
+		TablutClient client = new TabZAI(args[0], args[1], args[2]);
 
 		client.run();
 		

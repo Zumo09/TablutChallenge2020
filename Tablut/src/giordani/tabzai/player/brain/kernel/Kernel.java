@@ -58,6 +58,7 @@ public interface Kernel extends Serializable {
 		try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(path))) {
 			@SuppressWarnings("unchecked")
 			Map<String, Double> params = (Map<String, Double>) ois.readObject();
+			System.out.println("Loading Kernel " + name);
 			return new KernelGen(params);
 		} catch (IOException | ClassNotFoundException e) {
 			System.out.println("NOT LOADED");

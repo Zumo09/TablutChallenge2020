@@ -105,25 +105,47 @@
         </java>
     </target>
 
-    <target name="tabzai_white">
+        <target name="white1">
         <java classname="giordani.tabzai.player.TabZAI" fork="true">
             <classpath>
                 <pathelement location="lib/gson-2.2.2.jar"/>
 		        <pathelement location="lib/commons-cli-1.4.jar"/>
                 <pathelement location="build"/>
             </classpath>
-            <arg value="white"/>
+            <arg value="white W1 Train_10_49"/>
         </java>
     </target>
 
-    <target name="tabzai_black">
+    <target name="black1">
         <java classname="giordani.tabzai.player.TabZAI" fork="true">
             <classpath>
                 <pathelement location="lib/gson-2.2.2.jar"/>
 		        <pathelement location="lib/commons-cli-1.4.jar"/>
                 <pathelement location="build"/>
             </classpath>
-            <arg value="black"/>
+            <arg value="black B1 Train_10_49"/>
+        </java>
+    </target>
+
+    <target name="white2">
+        <java classname="giordani.tabzai.player.TabZAI" fork="true">
+            <classpath>
+                <pathelement location="lib/gson-2.2.2.jar"/>
+		        <pathelement location="lib/commons-cli-1.4.jar"/>
+                <pathelement location="build"/>
+            </classpath>
+            <arg value="white W2 Train_20_49"/>
+        </java>
+    </target>
+
+    <target name="black2">
+        <java classname="giordani.tabzai.player.TabZAI" fork="true">
+            <classpath>
+                <pathelement location="lib/gson-2.2.2.jar"/>
+		        <pathelement location="lib/commons-cli-1.4.jar"/>
+                <pathelement location="build"/>
+            </classpath>
+            <arg line="black B2 Train_20_49"/>
         </java>
     </target>
 
