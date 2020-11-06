@@ -112,7 +112,7 @@
 		        <pathelement location="lib/commons-cli-1.4.jar"/>
                 <pathelement location="build"/>
             </classpath>
-            <arg value="white W1 Train_10_49"/>
+            <arg line="white W1 Train_10_49"/>
         </java>
     </target>
 
@@ -123,7 +123,7 @@
 		        <pathelement location="lib/commons-cli-1.4.jar"/>
                 <pathelement location="build"/>
             </classpath>
-            <arg value="black B1 Train_10_49"/>
+            <arg line="black B1 Train_10_49"/>
         </java>
     </target>
 
@@ -134,7 +134,7 @@
 		        <pathelement location="lib/commons-cli-1.4.jar"/>
                 <pathelement location="build"/>
             </classpath>
-            <arg value="white W2 Train_20_49"/>
+            <arg line="white W2 Train_20_49"/>
         </java>
     </target>
 
