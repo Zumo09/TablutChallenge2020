@@ -4,10 +4,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 import giordani.tabzai.player.brain.kernel.Kernel;
 import it.unibo.ai.didattica.competition.tablut.domain.Action;
@@ -55,7 +55,7 @@ public class BrainAlphaBeta extends BrainAbs {
 	
 	@Override
 	public void update(State state) {
-		for(Node child : getRoot().getChildren())
+		for(Node child : getRoot().getChildren().values())
 			if(child.getState().equals(state)) {
 				setRoot(child);
 				return;
@@ -93,7 +93,7 @@ public class BrainAlphaBeta extends BrainAbs {
 	
 	public int countNodes(Node root) {
 		int cont=1;
-		for(Node child : root.getChildren())
+		for(Node child : root.getChildren().values())
 			cont += countNodes(child);
 		return cont;
 	}
@@ -106,7 +106,7 @@ public class BrainAlphaBeta extends BrainAbs {
 		private Node parent;
 		private Action action;
 		private State state;
-		private Set<Node> children;
+		private Map<Action, Node> children;
 		private double val;
 		private Pawn turn;
 		
@@ -115,7 +115,7 @@ public class BrainAlphaBeta extends BrainAbs {
 			this.action = action;
 			this.state = state;
 			this.parent = parent;
-			this.children = new HashSet<>();
+			this.children = new HashMap<>();
 			this.turn = (this.getState().getTurn().equals(Turn.WHITE)) ? Pawn.WHITE : Pawn.BLACK;
 			this.val = Double.NaN;
 		}
@@ -124,15 +124,20 @@ public class BrainAlphaBeta extends BrainAbs {
 			this(null, null, state);
 		}
 		
-		public Set<Node> getChildren() 		{return children;}
 		public State getState() 			{return state;}
 		public Node getParent() 			{return parent;}
 		public Action getAction() 			{return action;}
-		public boolean isLeaf() 			{return this.getChildren().isEmpty();}
-		public void addAllChild(Collection<Node> child) {children.addAll(child);}
 		public double getVal() 				{return val;}
 		private void setVal(double val) 	{ this.val = val;}
-		public void addChild(Node child) 	{children.add(child);}
+		
+		public Map<Action, Node> getChildren() {return children;}
+		public boolean isLeaf() 			{return this.getChildren().isEmpty();}
+		public void addChild(Node child) 	{children.put(child.getAction(), child);}
+		
+		public void addAllChild(Collection<Node> children) {
+			for(Node child : children)
+				this.addChild(child);
+		}
 		
 		@Override
 		public String toString() {
@@ -195,13 +200,12 @@ public class BrainAlphaBeta extends BrainAbs {
 			Optional<Node> opt;
 			Comparator<Node> comparator = Comparator.comparing(Node::getVal);
 			if(this.getState().getTurn().equals(Turn.BLACK))
-				opt = this.getChildren().stream().min(comparator);
-			else opt = this.getChildren().stream().max(comparator);
+				opt = this.getChildren().values().stream().min(comparator);
+			else opt = this.getChildren().values().stream().max(comparator);
 			if(opt.isEmpty()) {
 				try {
 					return new Node(this, new Action("a1", "a1", this.getState().getTurn()), this.getState());
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -239,7 +243,10 @@ public class BrainAlphaBeta extends BrainAbs {
 			if(node.getState().getTurn().equals(Turn.WHITE)) {
 				best = Double.NEGATIVE_INFINITY;
 				for(Action action : node.getAllActions()) {
-					Node child = node.tryAndAdd(action);
+					Node child;
+					if(node.getChildren().containsKey(action))
+						child = node.getChildren().get(action);
+					else child = node.tryAndAdd(action);
 					if(child != null) {
 						child.setVal(alphaBeta(child, depth-1, alpha, beta));
 						best = Math.max(best, child.getVal());
@@ -251,7 +258,10 @@ public class BrainAlphaBeta extends BrainAbs {
 			} else {
 				best = Double.POSITIVE_INFINITY;
 				for(Action action : node.getAllActions()) {
-					Node child = node.tryAndAdd(action);
+					Node child;
+					if(node.getChildren().containsKey(action))
+						child = node.getChildren().get(action);
+					else child = node.tryAndAdd(action);
 					if(child != null) {
 						child.setVal(alphaBeta(child, depth-1, alpha, beta));
 						best = Math.min(best, child.getVal());
