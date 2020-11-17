@@ -63,7 +63,7 @@ public class BrainAlphaBeta extends BrainAbs {
 	
 	@Override
 	public String getInfo() {
-		return "State evaluation : " + this.getRoot().getVal() + " [depth = " + this.getDepth() + "]";
+		return "State evaluation : " + this.getRoot().getVal() + " [depth = " + this.getRoot().calcDepth() + "]";
 	}
 	
 	public Heuristic getHeuristic() { return kernel;}
@@ -76,7 +76,7 @@ public class BrainAlphaBeta extends BrainAbs {
 	protected Action getBestAction() { return root.getBestAction();}
 	
 	@Override
-	protected void searchAction() {
+	protected void searchAction() throws TimeOutException {
 		this.getRoot().expandAlphaBeta(this.getDepth());					
 	}
 	
@@ -103,27 +103,20 @@ public class BrainAlphaBeta extends BrainAbs {
 	 */
 	
 	public class Node {
-		private Node parent;
 		private State state;
 		private Map<Action, Node> children;
 		private List<Action> allActions;
 		private double val;
 		
-		public Node(Node parent, State state) {
+		public Node(State state) {
 			super();
 			this.state = state;
-			this.parent = parent;
 			this.children = new HashMap<>();
 			this.allActions = new ArrayList<>();
 			this.val = Double.NaN;
 		}
 		
-		public Node(State state) {
-			this(null, state);
-		}
-		
 		public State getState() 			{return state;}
-		public Node getParent() 			{return parent;}
 		public double getVal() 				{return val;}
 		private void setVal(double val) 	{ this.val = val;}
 		
@@ -133,7 +126,7 @@ public class BrainAlphaBeta extends BrainAbs {
 		
 		@Override
 		public String toString() {
-			return "State evaluation : " + this.getVal() + " [depth = " + getDepth() + "]\nChildren : " + this.getChildren().size();
+			return "State evaluation : " + this.getVal() + " [depth = " + this.calcDepth() + "]\nChildren : " + this.getChildren().size();
 		}
 		
 		@Override
@@ -142,7 +135,6 @@ public class BrainAlphaBeta extends BrainAbs {
 			int result = 1;
 			result = prime * result + getEnclosingInstance().hashCode();
 			result = prime * result + ((children == null) ? 0 : children.hashCode());
-			result = prime * result + ((parent == null) ? 0 : parent.hashCode());
 			result = prime * result + ((state == null) ? 0 : state.hashCode());
 			long temp;
 			temp = Double.doubleToLongBits(val);
@@ -165,11 +157,6 @@ public class BrainAlphaBeta extends BrainAbs {
 				if (other.children != null)
 					return false;
 			} else if (!children.equals(other.children))
-				return false;
-			if (parent == null) {
-				if (other.parent != null)
-					return false;
-			} else if (!parent.equals(other.parent))
 				return false;
 			if (state == null) {
 				if (other.state != null)
@@ -229,49 +216,50 @@ public class BrainAlphaBeta extends BrainAbs {
 			return ret;
 		}
 		
-		public void expandAlphaBeta(int depth) {
-			this.setVal(alphaBeta(this, depth, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY));
+		public void expandAlphaBeta(int depth) throws TimeOutException {
+			this.alphaBeta(depth, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
 		}
 		
-		private double alphaBeta(Node node, int depth, double alpha, double beta) {
+		private void alphaBeta(int depth, double alpha, double beta) throws TimeOutException {
+			// This check if the timeout occurred, the exception stops the loop of increasing depth in the BrainAbs method
+			checkTimeout();
 			// If the maximum depth is reached or the node is terminal
-			if(depth == 0 || node.isTerminal())
-				return getHeuristic().evaluate(node.getState());
+			if(depth == 0 || this.isTerminal())
+				this.setVal(getHeuristic().evaluate(this.getState()));
 			
-			double best;
-			
-			if(node.getState().getTurn().equals(Turn.WHITE)) {
-				best = Double.NEGATIVE_INFINITY;
-				for(Action action : node.getAllActions()) {
+			else if(this.getState().getTurn().equals(Turn.WHITE)) {
+				double best = Double.NEGATIVE_INFINITY;
+				for(Action action : this.getAllActions()) {
 					Node child;
-					if(node.getChildren().containsKey(action))
-						child = node.getChildren().get(action);
-					else child = node.tryAndAdd(action);
+					if(this.getChildren().containsKey(action))
+						child = this.getChildren().get(action);
+					else child = this.tryAndAdd(action);
 					if(child != null) {
-						child.setVal(alphaBeta(child, depth-1, alpha, beta));
+						child.alphaBeta(depth-1, alpha, beta);
 						best = Math.max(best, child.getVal());
 						alpha = Math.max(alpha, best);
 						if(beta <= alpha)
 							break;
 					}
 				}
+				this.setVal(best);
 			} else {
-				best = Double.POSITIVE_INFINITY;
-				for(Action action : node.getAllActions()) {
+				double best = Double.POSITIVE_INFINITY;
+				for(Action action : this.getAllActions()) {
 					Node child;
-					if(node.getChildren().containsKey(action))
-						child = node.getChildren().get(action);
-					else child = node.tryAndAdd(action);
+					if(this.getChildren().containsKey(action))
+						child = this.getChildren().get(action);
+					else child = this.tryAndAdd(action);
 					if(child != null) {
-						child.setVal(alphaBeta(child, depth-1, alpha, beta));
+						child.alphaBeta(depth-1, alpha, beta);
 						best = Math.min(best, child.getVal());
 						beta = Math.min(beta, best);
 						if(beta <= alpha)
 							break;
 					}
 				}
+				this.setVal(best);
 			}
-			return best;
 		}
 		
 		private boolean isTerminal() {
@@ -284,7 +272,7 @@ public class BrainAlphaBeta extends BrainAbs {
 		private Node tryAndAdd(Action action) {
 			try {
 				State newState = getRules().checkMove(this.getState().clone(), action);
-				Node n = new Node(this, newState);
+				Node n = new Node(newState);
 				this.addChild(action, n);
 				return n;
 			} catch(ActionException | BoardException | CitadelException | 
@@ -318,6 +306,16 @@ public class BrainAlphaBeta extends BrainAbs {
 			}
 			
 			return this.allActions;
+		}
+		
+		public int calcDepth() {
+			Node n = this;
+			int depth = 0;
+			while(!n.isLeaf()) {
+				n = n.getChildren().get(n.getBestAction());
+				depth++;
+			}
+			return depth;
 		}
 
 		private BrainAlphaBeta getEnclosingInstance() {
