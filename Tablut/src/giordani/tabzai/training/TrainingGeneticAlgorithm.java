@@ -23,7 +23,7 @@ import org.apache.commons.cli.ParseException;
 
 import giordani.tabzai.player.brain.Brain;
 import giordani.tabzai.player.brain.BrainAlphaBeta;
-import giordani.tabzai.player.brain.kernel.Kernel;
+import giordani.tabzai.player.brain.heuristic.Heuristic;
 import it.unibo.ai.didattica.competition.tablut.domain.Action;
 import it.unibo.ai.didattica.competition.tablut.domain.Game;
 
@@ -49,11 +49,13 @@ public class TrainingGeneticAlgorithm {
 	private int matches;
 	private int parents;
 	private int gameChosen;
+	private double mutationScale;
+	private double mutationProb;
 	private Logger loggSys;
 	private String date;
 	private String tag;
 	
-	public TrainingGeneticAlgorithm(String tag, int population, int matches, int parents, int gameChosen, double mutationProb, double mutationScale, int depth) {
+	public TrainingGeneticAlgorithm(String tag, int population, int matches, int parents, int gameChosen, double mutationProb, double mutationScale) {
 		if(population % 2 != 0 || population < 8)
 			population = Math.min(8, population + 1);
 		if(parents > population)
@@ -68,8 +70,6 @@ public class TrainingGeneticAlgorithm {
 			mutationProb = 0.99;
 		if(mutationScale<0)
 			mutationScale = 1;
-		if(depth<1)
-			depth = 1;
 		
 		String msg = 
 				"======================================\n" +
@@ -81,16 +81,17 @@ public class TrainingGeneticAlgorithm {
 				"\nmutation probablitiy = " + mutationProb + 
 				"\nmutation scale = " + mutationScale + 
 				"\ngame rules = " + gameChosen +
-				"\nDepth = " + depth +
 				"\n======================================\n";
 		
 		System.out.println(msg);
 		
 		this.tag = tag;
 		this.parents = parents;
+		this.mutationProb = mutationProb;
+		this.mutationScale = mutationScale;
 		this.population = new ArrayList<>();
 		while(this.population.size()<population)
-			this.population.add(new BrainAlphaBeta(mutationProb, mutationScale, depth));
+			this.population.add(new BrainAlphaBeta());
 		this.matches = matches;
 		this.gameChosen = gameChosen;
 		
@@ -130,7 +131,6 @@ public class TrainingGeneticAlgorithm {
 		int matches = 1;
 		int gameChosen = 4;
 		int parents = 2;
-		int depth = 2;
 		double mutationProb = 0.5;
 		double mutationScale = 1;
 		String tag = "Default";
@@ -143,7 +143,6 @@ public class TrainingGeneticAlgorithm {
 		options.addOption("p","population", true, "integer: even number of population in each generation, min 4, default 100");
 		options.addOption("f","parents", true, "integer: even number of parents in each generation, min 4, default 100");
 		options.addOption("m", "match", true, "integer: number of match, default 100");
-		options.addOption("d", "depth", true, "integer: number of moves that the brain watch ahead, default 4");
 		options.addOption("o","mutation_probability", true, "double: probabilty of changing a paramenter in the kernel (0<=x<=1)");
 		options.addOption("s", "mutation_scale", true, "double: scale of updating in kernel mutation");
 		options.addOption("r","game_rules", true, "game rules must be an integer; 1 for Tablut, 2 for Modern, 3 for Brandub, 4 for Ashton; default: 4");
@@ -252,7 +251,7 @@ public class TrainingGeneticAlgorithm {
 		}
 		
 		TrainingGeneticAlgorithm trainer = new TrainingGeneticAlgorithm(tag, population, 
-				matches, parents, gameChosen, mutationProb, mutationScale, depth);	
+				matches, parents, gameChosen, mutationProb, mutationScale);	
 				
 		trainer.train();
 	}
@@ -319,7 +318,7 @@ public class TrainingGeneticAlgorithm {
 		public double getPoints(int player) {
 			double points = 0;
 			for(int i=0; i<table.length; i++) 
-				if(player != i ) {
+				if(player != i) {
 					points += table[player][i];
 					points += 1 - table[i][player];
 				}
@@ -437,8 +436,8 @@ public class TrainingGeneticAlgorithm {
 	}
 	
 	public void train() {
-		Kernel par;
-		List<Kernel> parents = new ArrayList<>();
+		Heuristic par;
+		List<Heuristic> parents = new ArrayList<>();
 		
 		int matchCounter = 0;
 		long start = System.nanoTime();
@@ -460,14 +459,14 @@ public class TrainingGeneticAlgorithm {
 			List<Standing> ranking = results.getRanking();
 			parents.clear();
 			for(int i=0; i<this.parents; i++) {
-				par = population.get(ranking.get(i).getPlayer()).getKernel().copy();
+				par = population.get(ranking.get(i).getPlayer()).getHeuristic().copy();
 				par.save(tag + i + "_" + m);
 				parents.add(par.copy());
 				loggSys.fine("Par1:\n" + par);
 			}
-			List<Kernel> newGen = Kernel.nextGeneration(parents, population.size());
+			List<Heuristic> newGen = Heuristic.nextGeneration(parents, population.size(), this.mutationProb, this.mutationScale);
 			for(int i=0; i<population.size(); i++) {
-				population.get(i).setKernel(newGen.get(i));
+				population.get(i).setHeuristic(newGen.get(i));
 				population.get(i).resetRoot();
 			}
 		}
@@ -475,7 +474,7 @@ public class TrainingGeneticAlgorithm {
 		long stop = System.nanoTime();
 		Duration d = Duration.ofNanos(stop-start);
 		
-		for(Kernel p : parents)
+		for(Heuristic p : parents)
 			System.out.println(p);
 		
 		long h = d.toHours();
@@ -536,12 +535,12 @@ public class TrainingGeneticAlgorithm {
 			if(state.getTurn().equals(Turn.WHITE)) {
 				move = white.getAction(state.clone());
 //				System.out.println("White: " + white);
-				loggSys.fine("White:\n" + white);
+				loggSys.fine("White:\n" + white.getInfo());
 			}
 			else if(state.getTurn().equals(Turn.BLACK)) {
 				move = black.getAction(state.clone());
 //				System.out.println("Black: " + black);
-				loggSys.fine("Black:\n" + black);
+				loggSys.fine("Black:\n" + black.getInfo());
 			}
 			else {
 //				loggSys.fine("==================\nEndgame: " + state.getTurn());
