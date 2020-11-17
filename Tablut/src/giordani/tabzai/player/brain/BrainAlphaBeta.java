@@ -2,14 +2,12 @@ package giordani.tabzai.player.brain;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import java.util.Map.Entry;
 
-import giordani.tabzai.player.brain.kernel.Kernel;
+import giordani.tabzai.player.brain.heuristic.Heuristic;
 import it.unibo.ai.didattica.competition.tablut.domain.Action;
 import it.unibo.ai.didattica.competition.tablut.domain.State;
 import it.unibo.ai.didattica.competition.tablut.domain.StateTablut;
@@ -27,30 +25,29 @@ import it.unibo.ai.didattica.competition.tablut.exceptions.StopException;
 import it.unibo.ai.didattica.competition.tablut.exceptions.ThroneException;
 
 public class BrainAlphaBeta extends BrainAbs {
-
-	private Kernel kernel;
+	private Heuristic kernel;
 	private Node root;
 
-	public BrainAlphaBeta(int timeout, int gametype, double mutationProb, double mutationScale, int depth) {
+	public BrainAlphaBeta(int timeout, int gametype) {
 		// Constructor for training phase
-		super(timeout, gametype, depth);
-		this.kernel = Kernel.of(mutationProb, mutationScale);
+		super(timeout, gametype);
+		this.kernel = Heuristic.load("new");
 		resetRoot();
 	}
 
-	public BrainAlphaBeta(double mutationProb, double mutationScale, int depth) {
-		this(60, 1, mutationProb, mutationScale, depth);
+	public BrainAlphaBeta() {
+		this(60, 1);
 	}
 	
-	public BrainAlphaBeta(String name, int timeout, int gametype, int depth) {
+	public BrainAlphaBeta(String name, int timeout, int gametype) {
 		// The constructor for the runtime player
-		super(timeout, gametype, depth);
-		this.kernel = Kernel.load(name);
+		super(timeout, gametype);
+		this.kernel = Heuristic.load(name);
 		resetRoot();
 	}
 	
 	public BrainAlphaBeta(String name) {
-		this(name, 60, 1, 3);
+		this(name, 60, 1);
 	}
 	
 	@Override
@@ -64,20 +61,23 @@ public class BrainAlphaBeta extends BrainAbs {
 		setRoot(new Node(state));
 	}
 	
-	public Kernel getKernel() { return kernel;}
-	public void setKernel(Kernel kernel) { this.kernel = kernel;}
+	@Override
+	public String getInfo() {
+		return "State evaluation : " + this.getRoot().getVal() + " [depth = " + this.getDepth() + "]";
+	}
+	
+	public Heuristic getHeuristic() { return kernel;}
+	public void setHeuristic(Heuristic kernel) { this.kernel = kernel;}
 	public Node getRoot() { return this.root;}
 	
 	private void setRoot(Node newRoot) { this.root = newRoot;}
 	
 	@Override
-	protected Action getBestAction() { return root.getBestChild().getAction();}
+	protected Action getBestAction() { return root.getBestAction();}
 	
 	@Override
-	protected Action findAction(State state) {
-		update(state);
-		this.getRoot().expandAlphaBeta(this.getDepth());			
-		return getBestAction();		
+	protected void searchAction() {
+		this.getRoot().expandAlphaBeta(this.getDepth());					
 	}
 	
 	@Override
@@ -104,48 +104,36 @@ public class BrainAlphaBeta extends BrainAbs {
 	
 	public class Node {
 		private Node parent;
-		private Action action;
 		private State state;
 		private Map<Action, Node> children;
+		private List<Action> allActions;
 		private double val;
-		private Pawn turn;
 		
-		public Node(Node parent, Action action, State state) {
+		public Node(Node parent, State state) {
 			super();
-			this.action = action;
 			this.state = state;
 			this.parent = parent;
 			this.children = new HashMap<>();
-			this.turn = (this.getState().getTurn().equals(Turn.WHITE)) ? Pawn.WHITE : Pawn.BLACK;
+			this.allActions = new ArrayList<>();
 			this.val = Double.NaN;
 		}
 		
 		public Node(State state) {
-			this(null, null, state);
+			this(null, state);
 		}
 		
 		public State getState() 			{return state;}
 		public Node getParent() 			{return parent;}
-		public Action getAction() 			{return action;}
 		public double getVal() 				{return val;}
 		private void setVal(double val) 	{ this.val = val;}
 		
 		public Map<Action, Node> getChildren() {return children;}
 		public boolean isLeaf() 			{return this.getChildren().isEmpty();}
-		public void addChild(Node child) 	{children.put(child.getAction(), child);}
-		
-		public void addAllChild(Collection<Node> children) {
-			for(Node child : children)
-				this.addChild(child);
-		}
+		public void addChild(Action action, Node child) 	{children.put(action, child);}
 		
 		@Override
 		public String toString() {
-			if(this.action == null)
-				return "root\n" + this.state.toString() + 
-						"\nState evaluation : " + this.getVal() + " [depth = " + getDepth() + "]";
-			return this.action.toString() + "\n" + this.state.toString() + 
-					"\nState evaluation : " + this.getVal() + " [depth = " + getDepth() + "]";
+			return "State evaluation : " + this.getVal() + " [depth = " + getDepth() + "]\nChildren : " + this.getChildren().size();
 		}
 		
 		@Override
@@ -153,10 +141,9 @@ public class BrainAlphaBeta extends BrainAbs {
 			final int prime = 31;
 			int result = 1;
 			result = prime * result + getEnclosingInstance().hashCode();
-			result = prime * result + ((action == null) ? 0 : action.hashCode());
+			result = prime * result + ((children == null) ? 0 : children.hashCode());
 			result = prime * result + ((parent == null) ? 0 : parent.hashCode());
 			result = prime * result + ((state == null) ? 0 : state.hashCode());
-			result = prime * result + ((turn == null) ? 0 : turn.hashCode());
 			long temp;
 			temp = Double.doubleToLongBits(val);
 			result = prime * result + (int) (temp ^ (temp >>> 32));
@@ -174,10 +161,10 @@ public class BrainAlphaBeta extends BrainAbs {
 			Node other = (Node) obj;
 			if (!getEnclosingInstance().equals(other.getEnclosingInstance()))
 				return false;
-			if (action == null) {
-				if (other.action != null)
+			if (children == null) {
+				if (other.children != null)
 					return false;
-			} else if (!action.equals(other.action))
+			} else if (!children.equals(other.children))
 				return false;
 			if (parent == null) {
 				if (other.parent != null)
@@ -189,30 +176,45 @@ public class BrainAlphaBeta extends BrainAbs {
 					return false;
 			} else if (!state.equals(other.state))
 				return false;
-			if (turn != other.turn)
-				return false;
 			if (Double.doubleToLongBits(val) != Double.doubleToLongBits(other.val))
 				return false;
 			return true;
 		}
 
-		public Node getBestChild() {
-			Optional<Node> opt;
-			Comparator<Node> comparator = Comparator.comparing(Node::getVal);
-			if(this.getState().getTurn().equals(Turn.BLACK))
-				opt = this.getChildren().values().stream().min(comparator);
-			else opt = this.getChildren().values().stream().max(comparator);
-			if(opt.isEmpty()) {
+		public Action getBestAction() {
+			Action best = null;
+			
+			if(this.getState().getTurn().equals(Turn.BLACK)) {
+				double bestVal = Double.POSITIVE_INFINITY;
+				for(Entry<Action, Node> e : this.getChildren().entrySet()) {
+					if(e.getValue().getVal() <= bestVal) {
+						best = e.getKey();
+						bestVal = e.getValue().getVal();
+					}
+				}
+			}
+			else {
+				double bestVal = Double.NEGATIVE_INFINITY;
+				for(Entry<Action, Node> e : this.getChildren().entrySet()) {
+					if(e.getValue().getVal() >= bestVal) {
+						best = e.getKey();
+						bestVal = e.getValue().getVal();
+					}
+				}
+			}
+			if(best == null) {
 				try {
-					return new Node(this, new Action("a1", "a1", this.getState().getTurn()), this.getState());
+					System.out.println("\n\n\n\n========== NO ACTION FOUND!! ============\n\n\n");
+					best = new Action("a1", "a1", this.getState().getTurn());
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
-			return opt.get();
+			return best;
 		}
 		
 		private List<int[]> getPawns() {
+			Pawn turn = (this.getState().getTurn().equals(Turn.WHITE)) ? Pawn.WHITE : Pawn.BLACK;
 			List<int[]> ret = new ArrayList<>();
 			for(int i=0; i<state.getBoard().length; i++)
 				for(int j=0; j<state.getBoard()[0].length; j++) {
@@ -221,7 +223,7 @@ public class BrainAlphaBeta extends BrainAbs {
 					if(p.equals(turn)) {
 						ret.add(pos);
 					} else if(p.equals(Pawn.KING) && turn.equals(Pawn.WHITE)) {
-						ret.add(pos);
+						ret.add(0, pos);
 					}
 				}
 			return ret;
@@ -232,11 +234,9 @@ public class BrainAlphaBeta extends BrainAbs {
 		}
 		
 		private double alphaBeta(Node node, int depth, double alpha, double beta) {
-			// If the maximum depth is reached
-			if(depth == 0 || node.getState().getTurn().equals(Turn.DRAW) ||
-					node.getState().getTurn().equals(Turn.BLACKWIN) ||
-					node.getState().getTurn().equals(Turn.WHITEWIN))
-				return getKernel().evaluate(node.getState());
+			// If the maximum depth is reached or the node is terminal
+			if(depth == 0 || node.isTerminal())
+				return getHeuristic().evaluate(node.getState());
 			
 			double best;
 			
@@ -274,11 +274,18 @@ public class BrainAlphaBeta extends BrainAbs {
 			return best;
 		}
 		
+		private boolean isTerminal() {
+			Turn turn = this.getState().getTurn();
+			return turn.equals(Turn.DRAW) ||
+					turn.equals(Turn.BLACKWIN) ||
+					turn.equals(Turn.WHITEWIN);
+		}
+
 		private Node tryAndAdd(Action action) {
 			try {
 				State newState = getRules().checkMove(this.getState().clone(), action);
-				Node n = new Node(this, action, newState);
-				this.addChild(n);
+				Node n = new Node(this, newState);
+				this.addChild(action, n);
 				return n;
 			} catch(ActionException | BoardException | CitadelException | 
 					ClimbingCitadelException | ClimbingException | 
@@ -289,27 +296,28 @@ public class BrainAlphaBeta extends BrainAbs {
 		}
 
 		private List<Action> getAllActions() {
-			List<Action> ret = new ArrayList<>();
-			for(int[] pawn : this.getPawns()) {
-				int row = pawn[0];
-				int col = pawn[1];
+			if(this.allActions.isEmpty()) {
 				State state = this.getState();
+				List<int[]> pawns = this.getPawns();
 				for(int i=state.getBoard().length; i>0; i--) {
-					//System.out.println("\ti = "+i);
-					int[][] newPosList = {{row, col+i}, 
-										 {row, col-i}, 
-								         {row+i, col}, 
-								         {row-i, col}};
-					for(int[] pos : newPosList) {
-						if(pos[0]>=0 && pos[0]<state.getBoard().length && pos[1]>=0 && pos[1]<state.getBoard().length) {
-							try {
-								ret.add(new Action(state.getBox(row, col), state.getBox(pos[0], pos[1]), state.getTurn()));
-							} catch (IOException e) {}
-						}
+					for(int[] pawn : pawns) {
+						int row = pawn[0];
+						int col = pawn[1];
+						//System.out.println("\ti = "+i);
+						int[][] newPosList = {{row, col+i}, 
+											 {row, col-i}, 
+									         {row+i, col}, 
+									         {row-i, col}};
+						for(int[] pos : newPosList) 
+							if(pos[0]>=0 && pos[0]<state.getBoard().length && pos[1]>=0 && pos[1]<state.getBoard().length) 
+								try {
+									this.allActions.add(new Action(state.getBox(row, col), state.getBox(pos[0], pos[1]), state.getTurn()));
+								} catch (IOException e) {}
 					}
 				}
 			}
-			return ret;
+			
+			return this.allActions;
 		}
 
 		private BrainAlphaBeta getEnclosingInstance() {
