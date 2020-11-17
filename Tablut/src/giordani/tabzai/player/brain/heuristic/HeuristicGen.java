@@ -1,9 +1,11 @@
 package giordani.tabzai.player.brain.heuristic;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -257,5 +259,21 @@ public class HeuristicGen implements Heuristic {
 			e.printStackTrace();
 			System.out.println("Not Saved " + name);
 		}
+	}
+
+	public static Heuristic load(String filename) {
+		Path p = Paths.get(Heuristic.PATH + File.separator + filename + Heuristic.EXT);
+		String path = p.toAbsolutePath().toString();
+		try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(path))) {
+			@SuppressWarnings("unchecked")
+			Map<String, Double> params = (Map<String, Double>) ois.readObject();
+			System.out.println("Loading " + filename);
+			return new HeuristicGen(params);
+		} catch (IOException | ClassNotFoundException e) {
+			System.out.println("NOT LOADED");
+			e.printStackTrace();
+			System.exit(1);
+		} 
+		return null;
 	}
 }

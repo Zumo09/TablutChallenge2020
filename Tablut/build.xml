@@ -112,7 +112,7 @@
 		        <pathelement location="lib/commons-cli-1.4.jar"/>
                 <pathelement location="build"/>
             </classpath>
-            <arg line="white W1 new"/>
+            <arg line="white W1 new 30 localhost"/>
         </java>
     </target>
 
@@ -123,11 +123,11 @@
 		        <pathelement location="lib/commons-cli-1.4.jar"/>
                 <pathelement location="build"/>
             </classpath>
-            <arg line="black B1 new"/>
+            <arg line="black B1 new 30 localhost"/>
         </java>
     </target>
 
-    <target name="white2">
+    <!--target name="white2">
         <java classname="giordani.tabzai.player.TabZAI" fork="true">
             <classpath>
                 <pathelement location="lib/gson-2.2.2.jar"/>
@@ -147,7 +147,7 @@
             </classpath>
             <arg line="black B2 Train_20_49"/>
         </java>
-    </target>
+    </target-->
 
     <target name="tabzai_training">
         <java classname="giordani.tabzai.training.TrainingGeneticAlgorithm" fork="true">

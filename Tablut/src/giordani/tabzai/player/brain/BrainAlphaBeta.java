@@ -25,13 +25,13 @@ import it.unibo.ai.didattica.competition.tablut.exceptions.StopException;
 import it.unibo.ai.didattica.competition.tablut.exceptions.ThroneException;
 
 public class BrainAlphaBeta extends BrainAbs {
-	private Heuristic kernel;
+	private Heuristic heuristic;
 	private Node root;
 
 	public BrainAlphaBeta(int timeout, int gametype) {
 		// Constructor for training phase
 		super(timeout, gametype);
-		this.kernel = Heuristic.load("new");
+		this.heuristic = Heuristic.of("new");
 		resetRoot();
 	}
 
@@ -39,10 +39,10 @@ public class BrainAlphaBeta extends BrainAbs {
 		this(60, 1);
 	}
 	
-	public BrainAlphaBeta(String name, int timeout, int gametype) {
+	public BrainAlphaBeta(String filename, int timeout, int gametype) {
 		// The constructor for the runtime player
 		super(timeout, gametype);
-		this.kernel = Heuristic.load(name);
+		this.heuristic = Heuristic.of(filename);
 		resetRoot();
 	}
 	
@@ -66,8 +66,8 @@ public class BrainAlphaBeta extends BrainAbs {
 		return "State evaluation : " + this.getRoot().getVal() + " [depth = " + this.getRoot().calcDepth() + "]";
 	}
 	
-	public Heuristic getHeuristic() { return kernel;}
-	public void setHeuristic(Heuristic kernel) { this.kernel = kernel;}
+	public Heuristic getHeuristic() { return heuristic;}
+	public void setHeuristic(Heuristic heuristic) { this.heuristic = heuristic;}
 	public Node getRoot() { return this.root;}
 	
 	private void setRoot(Node newRoot) { this.root = newRoot;}
@@ -99,7 +99,7 @@ public class BrainAlphaBeta extends BrainAbs {
 	}
 	
 	/*
-	 * Private class Node use the methods of the brain to get the rules and the kernel
+	 * Private class Node use the methods of the brain to get the rules and the heuristic
 	 */
 	
 	public class Node {
@@ -229,36 +229,46 @@ public class BrainAlphaBeta extends BrainAbs {
 			
 			else if(this.getState().getTurn().equals(Turn.WHITE)) {
 				double best = Double.NEGATIVE_INFINITY;
-				for(Action action : this.getAllActions()) {
-					Node child;
-					if(this.getChildren().containsKey(action))
-						child = this.getChildren().get(action);
-					else child = this.tryAndAdd(action);
-					if(child != null) {
-						child.alphaBeta(depth-1, alpha, beta);
-						best = Math.max(best, child.getVal());
-						alpha = Math.max(alpha, best);
-						if(beta <= alpha)
-							break;
+				try {
+					for(Action action : this.getAllActions()) {
+						Node child;
+						if(this.getChildren().containsKey(action))
+							child = this.getChildren().get(action);
+						else child = this.tryAndAdd(action);
+						if(child != null) {
+							child.alphaBeta(depth-1, alpha, beta);
+							best = Math.max(best, child.getVal());
+							alpha = Math.max(alpha, best);
+							if(beta <= alpha)
+								break;
+						}
 					}
+					this.setVal(best);
+				} catch(TimeOutException e) {
+					this.setVal(best);
+					throw e;
 				}
-				this.setVal(best);
 			} else {
 				double best = Double.POSITIVE_INFINITY;
-				for(Action action : this.getAllActions()) {
-					Node child;
-					if(this.getChildren().containsKey(action))
-						child = this.getChildren().get(action);
-					else child = this.tryAndAdd(action);
-					if(child != null) {
-						child.alphaBeta(depth-1, alpha, beta);
-						best = Math.min(best, child.getVal());
-						beta = Math.min(beta, best);
-						if(beta <= alpha)
-							break;
+				try {
+					for(Action action : this.getAllActions()) {
+						Node child;
+						if(this.getChildren().containsKey(action))
+							child = this.getChildren().get(action);
+						else child = this.tryAndAdd(action);
+						if(child != null) {
+							child.alphaBeta(depth-1, alpha, beta);
+							best = Math.min(best, child.getVal());
+							beta = Math.min(beta, best);
+							if(beta <= alpha)
+								break;
+						}
 					}
+					this.setVal(best);
+				} catch(TimeOutException e) {
+					this.setVal(best);
+					throw e;
 				}
-				this.setVal(best);
 			}
 		}
 		
@@ -282,7 +292,14 @@ public class BrainAlphaBeta extends BrainAbs {
 				return null;
 			}
 		}
-
+		
+		/**
+		 * Get all the possible action deriving from this node.state.
+		 * Excluded only those Action.to goes out of the box
+		 * The moves goes from the maximum movement of the pawns to the move of one case.
+		 * The main part of this method is executed only once for each node
+		 * @return
+		 */
 		private List<Action> getAllActions() {
 			if(this.allActions.isEmpty()) {
 				State state = this.getState();
@@ -308,6 +325,10 @@ public class BrainAlphaBeta extends BrainAbs {
 			return this.allActions;
 		}
 		
+		/**
+		 * Calculate the depth of the best path find during search
+		 * @return
+		 */
 		public int calcDepth() {
 			Node n = this;
 			int depth = 0;

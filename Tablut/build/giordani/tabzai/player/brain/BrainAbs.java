@@ -15,7 +15,7 @@ public abstract class BrainAbs implements Brain {
 	
 	public BrainAbs(int timeout, int gametype) {
 		this.resetDepth();
-		this.timeout = (timeout-1) * 1000;
+		this.timeout = (timeout-10) * 1000;  // -1 not enough, it runs in server timeout
 		switch (gametype) {
 		case 1:
 			rules = new GameAshtonTablutNoLog(0, 0);

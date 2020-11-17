@@ -1,6 +1,3 @@
-/**
- * 
- */
 package giordani.tabzai.player;
 
 import java.io.IOException;
@@ -64,14 +61,15 @@ public class TabZAI extends TablutClient {
 				this.read();
 
 				if (this.getCurrentState().getTurn().equals(this.getPlayer())) {
+					System.out.println("\nEvaluating new position... ");
 					action = brain.getAction(this.getCurrentState());
 					System.out.println(brain.getInfo());
-					System.out.println("From " + action.getFrom() + " to " + action.getTo());
+					System.out.println("Move choosen: From " + action.getFrom() + " to " + action.getTo());
 					this.write(action);
 				} else if (this.getCurrentState().getTurn().equals(other)) {
+					System.out.println("Waiting for your opponent move... ");
 					brain.update(this.getCurrentState());
 					System.out.println(brain.getInfo());
-					System.out.println("Waiting for your opponent move... ");
 				} else if (this.getCurrentState().getTurn().equals(win)) {
 					System.out.println("YOU WIN!");
 					System.exit(0);
@@ -91,16 +89,20 @@ public class TabZAI extends TablutClient {
 	}
 
 	public static void main(String[] args) throws UnknownHostException, IOException {
-		if (args.length != 3) {
+		if (args.length < 5) {
 			System.out.println("You must specify which player you are (WHITE or BLACK)!");
 			System.out.println("You must specify the player name");
 			System.out.println("You must specify the kernel file name");
+			System.out.println("You must specify the timeout");
+			System.out.println("You must specify the ipAddress");
 			System.exit(-1);
 		} 
 		System.out.println("Selected " + args[0]);
 		System.out.println("GLHF");
 		
-		TablutClient client = new TabZAI(args[0], args[1], args[2]);
+		int timeout = Integer.parseInt(args[3].trim());
+		
+		TablutClient client = new TabZAI(args[0], args[1], args[2], timeout, args[4], 1);
 
 		client.run();
 		

@@ -11,11 +11,11 @@ public abstract class BrainAbs implements Brain {
 	private Game rules;
 	private int depth;
 	private long timeout;
-	private long startTime;
+	private long stopTime;
 	
 	public BrainAbs(int timeout, int gametype) {
 		this.resetDepth();
-		this.timeout = (timeout-10) * 1000;  // -1 not enough, it runs in server timeout
+		this.timeout = (long) ((0.75*timeout) * 1000);  // -1 not enough, it runs in server timeout
 		switch (gametype) {
 		case 1:
 			rules = new GameAshtonTablutNoLog(0, 0);
@@ -65,11 +65,15 @@ public abstract class BrainAbs implements Brain {
 	public void incrementDepth()	{ this.depth++;		}
 	
 	private void startTimer() {
-		this.startTime = System.currentTimeMillis() + this.timeout;
+		this.stopTime = System.currentTimeMillis() + this.timeout;
 	}	
 	
+	/**
+	 * Method to call to interrupt the search at the occurence of the timeout
+	 * @throws TimeOutException
+	 */
 	protected void checkTimeout() throws TimeOutException { 
-		if(this.startTime < System.currentTimeMillis())
+		if(this.stopTime < System.currentTimeMillis())
 			throw new TimeOutException();
 	}
 }
