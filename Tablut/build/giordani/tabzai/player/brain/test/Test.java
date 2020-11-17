@@ -1,51 +1,55 @@
 package giordani.tabzai.player.brain.test;
 
+import java.io.IOException;
+
 import giordani.tabzai.player.brain.BrainAlphaBeta;
 import giordani.tabzai.player.brain.BrainAlphaBeta.Node;
+import it.unibo.ai.didattica.competition.tablut.domain.Action;
 import it.unibo.ai.didattica.competition.tablut.domain.State;
 import it.unibo.ai.didattica.competition.tablut.domain.State.Turn;
 import it.unibo.ai.didattica.competition.tablut.domain.StateTablut;
 
 public class Test {
 
-	public static void main(String[] args) {
-		int depth = 2;
-		BrainAlphaBeta brain = new BrainAlphaBeta(60, 1, 0.5, 0.5, depth);
-		
+	public static void main(String[] args) throws IOException {
+		BrainAlphaBeta brain = new BrainAlphaBeta(30, 1);
 		System.out.println("Inizio");
 		State s = new StateTablut();
 		s.setTurn(Turn.WHITE);
-		brain.getAction(s);
-		System.out.println("\n\nFine\n\n");
-		
+		long start = System.currentTimeMillis();
+		Action a = brain.getAction(s);
+		long stop = (System.currentTimeMillis() - start);
+		System.out.println(a + "\n"+brain.getInfo()+"\nFine\n"+ stop/1000.0 + " s\n");
 		Node tree = brain.getRoot();
 		
-		System.out.println(brain.countNodes(tree));
+		System.out.println(brain.countNodes(tree));	
 		
-//		int cont = 0;
-//						
-//		while(! tree.getChildren().isEmpty()) {
-//			System.out.println(cont++ + System.lineSeparator() + tree);
-//			tree = tree.getBestChild();
-//		}
+		int cont = 0;
 		
-		System.out.println(brain.getKernel());
+		while(! tree.getChildren().isEmpty()) {
+			System.out.println(cont++ + System.lineSeparator() + tree);
+			tree = tree.getChildren().get(tree.getBestAction());
+		}
 		
-		brain.getKernel().save("pippo");
+		System.out.println("Inizio 2?");
+		System.in.read();
 		
-		BrainAlphaBeta newBrain = new BrainAlphaBeta("pippo", 60, 1, depth);
+		// s = brain.getRoot().getChildren().get(a).getState();
+		start = System.currentTimeMillis();
+		a = brain.getAction(s);
+		stop = (System.currentTimeMillis() - start);
+		System.out.println(a + "\n"+brain.getInfo()+"\nFine\n"+ stop/1000.0 + " s\n");
 		
-		System.out.println(newBrain.getKernel());
+		tree = brain.getRoot();
 		
-		System.out.println("Inizio");
-		State s2 = new StateTablut();
-		s2.setTurn(Turn.WHITE);
-		newBrain.getAction(s);
-		System.out.println("\n\nFine\n\n");
+		System.out.println(brain.countNodes(tree));	
 		
-		Node tree2 = newBrain.getRoot();
+		cont = 0;
 		
-		System.out.println(brain.countNodes(tree2));
+		while(! tree.getChildren().isEmpty()) {
+			System.out.println(cont++ + System.lineSeparator() + tree);
+			tree = tree.getChildren().get(tree.getBestAction());
+		}
 	}
 
 }

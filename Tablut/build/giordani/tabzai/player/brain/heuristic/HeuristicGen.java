@@ -1,4 +1,4 @@
-package giordani.tabzai.player.brain.kernel;
+package giordani.tabzai.player.brain.heuristic;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -19,7 +19,7 @@ import it.unibo.ai.didattica.competition.tablut.domain.State;
 import it.unibo.ai.didattica.competition.tablut.domain.State.Pawn;
 import it.unibo.ai.didattica.competition.tablut.domain.State.Turn;
 
-public class KernelGen implements Kernel {
+public class HeuristicGen implements Heuristic {
 
 	/**
 	 * 
@@ -28,22 +28,13 @@ public class KernelGen implements Kernel {
 	private Map<String, Double> params;
 	private Map<String, ToDoubleFunction<State>> paramFun;
 	private Random rnd;
-	private double mutationProb;
-	private double mutationScale;
 			
-	private KernelGen(Map<String, Double> params, double mutationProb, double mutationScale) {
-		this(mutationProb, mutationScale);
+	HeuristicGen(Map<String, Double> params) {
+		this();
 		this.params = new HashMap<>(params);
 	}
 	
-	public KernelGen(Map<String, Double> params) {
-		this(0, 0);
-		this.params = new HashMap<>(params);
-	}
-	
-	public KernelGen(double mutationProb, double mutationScale) {
-		this.mutationProb = mutationProb;
-		this.mutationScale = mutationScale;
+	public HeuristicGen() {
 		this.rnd = new Random();
 		this.paramFun  = Map.of(
 				"black pawns", this::blackPawns,
@@ -132,10 +123,10 @@ public class KernelGen implements Kernel {
 	}
 	
 	@Override
-	public KernelGen mutate() {
+	public HeuristicGen mutate(double mutationProb, double mutationScale) {
 		for(String p : params.keySet()) {
-			if(getRandom().nextDouble() < getMutationProb()) {
-				double value = params.get(p) + getMutationScale() * 2 * (getRandom().nextDouble() - 0.5);
+			if(getRandom().nextDouble() < mutationProb) {
+				double value = params.get(p) + mutationScale * 2 * (getRandom().nextDouble() - 0.5);
 				params.put(p, value);
 			}
 		}
@@ -189,19 +180,9 @@ public class KernelGen implements Kernel {
 	//==============================================================
 	// Public Functions
 	//==============================================================
-		
-	@Override
-	public double getMutationProb() {
-		return mutationProb;
-	}
 	
-	@Override
-	public double getMutationScale() {
-		return mutationScale;
-	}
-	
-	public KernelGen copy() {
-		return new KernelGen(params, getMutationProb(), getMutationScale());
+	public HeuristicGen copy() {
+		return new HeuristicGen(params);
 	}
 	
 	@Override
@@ -230,13 +211,13 @@ public class KernelGen implements Kernel {
 	}
 
 	@Override
-	public List<Kernel> crossover(Kernel parent) {
-		if(!(parent instanceof KernelGen))
+	public List<Heuristic> crossover(Heuristic parent) {
+		if(!(parent instanceof HeuristicGen))
 			throw new IllegalArgumentException("Kernel type mismatch");
 		
-		KernelGen other = (KernelGen) parent;
+		HeuristicGen other = (HeuristicGen) parent;
 		
-		List<Kernel> ret = new ArrayList<>();
+		List<Heuristic> ret = new ArrayList<>();
 
 		Map<String, Double> cross1 = new HashMap<>();
 		Map<String, Double> cross2 = new HashMap<>();
@@ -251,8 +232,8 @@ public class KernelGen implements Kernel {
 			}
 		}
 		
-		ret.add(new KernelGen(cross1, getMutationProb(), getMutationScale()));
-		ret.add(new KernelGen(cross2, getMutationProb(), getMutationScale()));
+		ret.add(new HeuristicGen(cross1));
+		ret.add(new HeuristicGen(cross2));
 		
 		return ret;
 	}
@@ -263,9 +244,9 @@ public class KernelGen implements Kernel {
 	
 	@Override
 	public void save(String name) {
-		Path p = Paths.get(Kernel.PATH + File.separator + name + Kernel.EXT);
+		Path p = Paths.get(Heuristic.PATH + File.separator + name + Heuristic.EXT);
 		String path = p.toAbsolutePath().toString();
-		new File(Kernel.PATH).mkdirs();
+		new File(Heuristic.PATH).mkdirs();
 		try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(path))){
 			oos.writeObject(this.getParams());
 			System.out.println("Saved " + name);
