@@ -51,7 +51,7 @@ public class BrainAlphaBeta implements Brain {
 		this.heuristic = Heuristic.of(filename);
 		resetRoot();
 		this.resetDepth();
-		this.timeout = (long) ((0.75*timeout) * 1000);  // -1 not enough, it runs in server timeout
+		this.timeout = (long) ((0.9*timeout) * 1000);  // -1 not enough, it runs in server timeout
 		switch (gametype) {
 		case 1:
 			rules = new GameAshtonTablutNoLog(0, 0);
@@ -218,9 +218,10 @@ public class BrainAlphaBeta implements Brain {
 
 		public Action getBestAction() {
 			Action best = null;
+			double bestVal;
 			
 			if(this.getState().getTurn().equals(Turn.BLACK)) {
-				double bestVal = Double.POSITIVE_INFINITY;
+				bestVal = Double.POSITIVE_INFINITY;
 				for(Entry<Action, Node> e : this.getChildren().entrySet()) {
 					if(e.getValue().getVal() <= bestVal) {
 						best = e.getKey();
@@ -229,7 +230,7 @@ public class BrainAlphaBeta implements Brain {
 				}
 			}
 			else {
-				double bestVal = Double.NEGATIVE_INFINITY;
+				bestVal = Double.NEGATIVE_INFINITY;
 				for(Entry<Action, Node> e : this.getChildren().entrySet()) {
 					if(e.getValue().getVal() >= bestVal) {
 						best = e.getKey();
@@ -241,10 +242,12 @@ public class BrainAlphaBeta implements Brain {
 				try {
 					System.out.println("\n\n\n\n========== NO ACTION FOUND!! ============\n\n\n");
 					best = new Action("a1", "a1", this.getState().getTurn());
+					bestVal = Double.NaN;
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
+			this.setVal(bestVal);
 			return best;
 		}
 		
@@ -277,35 +280,43 @@ public class BrainAlphaBeta implements Brain {
 			
 			else if(this.getState().getTurn().equals(Turn.WHITE)) {
 				double best = Double.NEGATIVE_INFINITY;
-				try {
-					for(Action action : this.getAllActions()) {
-						Node child;
-						if(this.getChildren().containsKey(action))
-							child = this.getChildren().get(action);
-						else child = this.tryAndAdd(action);
-						if(child != null) {
+				for(Action action : this.getAllActions()) {
+					Node child;
+					if(this.getChildren().containsKey(action))
+						child = this.getChildren().get(action);
+					else child = this.tryAndAdd(action);
+					if(child != null) {
+						try {
 							child.alphaBeta(depth-1, alpha, beta);
-							best = Math.max(best, child.getVal());
-							alpha = Math.max(alpha, best);
-							if(beta <= alpha)
-								break;
+						} catch(TimeOutException e) {
+								best = Math.max(best, child.getVal());
+								if(!Double.isNaN(best))
+									this.setVal(best);
+								throw e;
 						}
+						best = Math.max(best, child.getVal());
+						alpha = Math.max(alpha, best);
+						if(beta <= alpha)
+							break;
 					}
-					this.setVal(best);
-				} catch(TimeOutException e) {
-					this.setVal(best);
-					throw e;
 				}
+				this.setVal(best);
 			} else {
 				double best = Double.POSITIVE_INFINITY;
-				try {
 					for(Action action : this.getAllActions()) {
 						Node child;
 						if(this.getChildren().containsKey(action))
 							child = this.getChildren().get(action);
 						else child = this.tryAndAdd(action);
 						if(child != null) {
-							child.alphaBeta(depth-1, alpha, beta);
+							try {
+								child.alphaBeta(depth-1, alpha, beta);
+							} catch(TimeOutException e) {
+									best = Math.min(best, child.getVal());
+									if(!Double.isNaN(best))
+										this.setVal(best);
+									throw e;
+							}
 							best = Math.min(best, child.getVal());
 							beta = Math.min(beta, best);
 							if(beta <= alpha)
@@ -313,10 +324,6 @@ public class BrainAlphaBeta implements Brain {
 						}
 					}
 					this.setVal(best);
-				} catch(TimeOutException e) {
-					this.setVal(best);
-					throw e;
-				}
 			}
 		}
 		

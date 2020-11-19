@@ -23,6 +23,5 @@ public class Test {
 		System.out.println(heuristic2.evaluate(state));
 		System.out.println(children.get(0).evaluate(state));
 		System.out.println(children.get(1).evaluate(state));
-
 	}
 }

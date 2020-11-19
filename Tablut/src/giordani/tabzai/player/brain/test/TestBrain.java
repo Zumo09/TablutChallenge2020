@@ -13,7 +13,7 @@ import it.unibo.ai.didattica.competition.tablut.domain.StateTablut;
 public class TestBrain {
 
 	public static void main(String[] args) throws IOException {
-		BrainAlphaBeta brain = new BrainAlphaBeta(30, 1);
+		BrainAlphaBeta brain = new BrainAlphaBeta(30);
 		System.out.println("Inizio");
 		State s = new StateTablut();
 		s.setTurn(Turn.WHITE);
