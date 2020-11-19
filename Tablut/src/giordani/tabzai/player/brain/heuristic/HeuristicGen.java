@@ -27,6 +27,8 @@ public class HeuristicGen implements Heuristic {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	public static final String EXT = ".heg";
+	
 	private Map<String, Double> params;
 	private Map<String, ToDoubleFunction<State>> paramFun;
 	private Random rnd;
@@ -246,7 +248,7 @@ public class HeuristicGen implements Heuristic {
 	
 	@Override
 	public void save(String name) {
-		Path p = Paths.get(Heuristic.PATH + File.separator + name + Heuristic.EXT);
+		Path p = Paths.get(Heuristic.PATH + File.separator + name + EXT);
 		String path = p.toAbsolutePath().toString();
 		new File(Heuristic.PATH).mkdirs();
 		try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(path))){
@@ -262,7 +264,7 @@ public class HeuristicGen implements Heuristic {
 	}
 
 	public static Heuristic load(String filename) {
-		Path p = Paths.get(Heuristic.PATH + File.separator + filename + Heuristic.EXT);
+		Path p = Paths.get(Heuristic.PATH + File.separator + filename + EXT);
 		String path = p.toAbsolutePath().toString();
 		try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(path))) {
 			@SuppressWarnings("unchecked")

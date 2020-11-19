@@ -14,15 +14,20 @@ public class Matrix implements Serializable{
 	private int[] shape;
 
 	public Matrix(int rows, int cols, int ch) {
-		this(new double[rows][cols][ch]);
+		this.matrix = new double[rows][cols][ch];
+		this.shape = new int[] {
+				this.matrix.length,
+				this.matrix[0].length,
+				this.matrix[0][0].length
+			};
 	}
 	
 	public Matrix(double[][][] matrix) {
-		this.matrix = matrix;
+		this.matrix = matrix.clone();
 		this.shape = new int[] {
-				matrix.length,
-				matrix[0].length,
-				matrix[0][0].length
+				this.matrix.length,
+				this.matrix[0].length,
+				this.matrix[0][0].length
 			};
 	}
 	
@@ -106,6 +111,10 @@ public class Matrix implements Serializable{
 				for(int k=0; k<matrix.getShape(2); k++)
 					matrix.set(i, j, k, rnd.nextGaussian());
 		return matrix;
+	}
+
+	public Matrix copy() {
+		return new Matrix(this.matrix);
 	}
 
 }

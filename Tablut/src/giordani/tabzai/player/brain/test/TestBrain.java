@@ -4,12 +4,13 @@ import java.io.IOException;
 
 import giordani.tabzai.player.brain.BrainAlphaBeta;
 import giordani.tabzai.player.brain.BrainAlphaBeta.Node;
+import giordani.tabzai.player.brain.heuristic.Heuristic;
 import it.unibo.ai.didattica.competition.tablut.domain.Action;
 import it.unibo.ai.didattica.competition.tablut.domain.State;
 import it.unibo.ai.didattica.competition.tablut.domain.State.Turn;
 import it.unibo.ai.didattica.competition.tablut.domain.StateTablut;
 
-public class Test {
+public class TestBrain {
 
 	public static void main(String[] args) throws IOException {
 		BrainAlphaBeta brain = new BrainAlphaBeta(30, 1);
@@ -31,9 +32,13 @@ public class Test {
 			tree = tree.getChildren().get(tree.getBestAction());
 		}
 		
+		/*
+		brain.getHeuristic().save("paperino");
+		
 		System.out.println("Inizio 2?");
 		System.in.read();
 		
+		brain.setHeuristic(Heuristic.of("paperino"));
 		// s = brain.getRoot().getChildren().get(a).getState();
 		start = System.currentTimeMillis();
 		a = brain.getAction(s);
@@ -49,7 +54,7 @@ public class Test {
 		while(! tree.getChildren().isEmpty()) {
 			System.out.println(cont++ + System.lineSeparator() + tree);
 			tree = tree.getChildren().get(tree.getBestAction());
-		}
+		}*/
 	}
 
 }

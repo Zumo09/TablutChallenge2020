@@ -16,8 +16,6 @@ import it.unibo.ai.didattica.competition.tablut.domain.State;
  */
 public interface Heuristic extends Serializable {
 	public final String PATH = "heuristic";
-	public final String BEST = "Kernel_149";
-	public final String EXT = ".her";
 	
 	public Heuristic copy();
 	public double evaluate(State state);
@@ -63,12 +61,12 @@ public interface Heuristic extends Serializable {
 	
 	/**
 	 * Return an heuristic from the file <filename>. if <filename> == "new" it will return a new Heuristic
-	 * @param name
+	 * @param filename. Name of the file to load. NO need to include the extension
 	 * @return
 	 */
 	public static Heuristic of(String filename) {
 		if(filename.equalsIgnoreCase("new"))
-			return new HeuristicGen();
-		return HeuristicGen.load(filename);
+			return new HeuristicNN(64, 32, 16);
+		return HeuristicNN.load(filename);
 	}
 }

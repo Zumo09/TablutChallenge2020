@@ -8,7 +8,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import giordani.tabzai.player.brain.heuristic.Heuristic;
+import giordani.tabzai.training.GameAshtonTablutNoLog;
 import it.unibo.ai.didattica.competition.tablut.domain.Action;
+import it.unibo.ai.didattica.competition.tablut.domain.Game;
+import it.unibo.ai.didattica.competition.tablut.domain.GameModernTablut;
+import it.unibo.ai.didattica.competition.tablut.domain.GameTablut;
 import it.unibo.ai.didattica.competition.tablut.domain.State;
 import it.unibo.ai.didattica.competition.tablut.domain.StateTablut;
 import it.unibo.ai.didattica.competition.tablut.domain.State.Pawn;
@@ -24,30 +28,75 @@ import it.unibo.ai.didattica.competition.tablut.exceptions.PawnException;
 import it.unibo.ai.didattica.competition.tablut.exceptions.StopException;
 import it.unibo.ai.didattica.competition.tablut.exceptions.ThroneException;
 
-public class BrainAlphaBeta extends BrainAbs {
+public class BrainAlphaBeta implements Brain {
 	private Heuristic heuristic;
 	private Node root;
-
+	private Game rules;
+	private int depth;
+	private long timeout;
+	private long stopTime;
+	
+	public BrainAlphaBeta(int timeout) {
+		this(timeout, 1);
+	}
+	
 	public BrainAlphaBeta(int timeout, int gametype) {
 		// Constructor for training phase
-		super(timeout, gametype);
+		this("new", timeout, gametype);
 		this.heuristic = Heuristic.of("new");
 		resetRoot();
 	}
-
-	public BrainAlphaBeta() {
-		this(60, 1);
-	}
 	
 	public BrainAlphaBeta(String filename, int timeout, int gametype) {
-		// The constructor for the runtime player
-		super(timeout, gametype);
 		this.heuristic = Heuristic.of(filename);
 		resetRoot();
+		this.resetDepth();
+		this.timeout = (long) ((0.75*timeout) * 1000);  // -1 not enough, it runs in server timeout
+		switch (gametype) {
+		case 1:
+			rules = new GameAshtonTablutNoLog(0, 0);
+			break;
+		case 2:
+			rules = new GameModernTablut();
+			break;
+		case 3:
+			rules = new GameTablut();
+			break;
+		case 4:
+			rules = new GameAshtonTablutNoLog(0, 0);
+			break;
+			
+		default:
+			System.out.println("Error in game selection");
+			System.exit(4);
+		}
+	}
+		
+	@Override
+	public Action getAction(State state) {
+		this.startTimer();
+		this.update(state);
+		this.resetDepth();
+		try{
+			while(true) {
+				this.incrementDepth();
+				this.getRoot().expandAlphaBeta(this.getDepth());
+			}
+		} catch(TimeOutException e) {}
+		return this.getRoot().getBestAction();
 	}
 	
-	public BrainAlphaBeta(String name) {
-		this(name, 60, 1);
+	private void startTimer() {
+		this.stopTime = System.currentTimeMillis() + this.timeout;
+	}	
+	
+	/**
+	 * Method to call to interrupt the search at the occurence of the timeout
+	 * @throws TimeOutException
+	 */
+	protected void checkTimeout() throws TimeOutException { 
+		if(this.stopTime < System.currentTimeMillis())
+			throw new TimeOutException();
 	}
 	
 	@Override
@@ -66,19 +115,18 @@ public class BrainAlphaBeta extends BrainAbs {
 		return "State evaluation : " + this.getRoot().getVal() + " [depth = " + this.getRoot().calcDepth() + "]";
 	}
 	
-	public Heuristic getHeuristic() { return heuristic;}
-	public void setHeuristic(Heuristic heuristic) { this.heuristic = heuristic;}
-	public Node getRoot() { return this.root;}
+	public Game getRules() 							{ return rules;					}
 	
-	private void setRoot(Node newRoot) { this.root = newRoot;}
+	public int getDepth() 							{ return this.depth;			}
+	public void resetDepth() 						{ this.depth = 2;				}
+	public void incrementDepth()					{ this.depth++;					}
 	
-	@Override
-	protected Action getBestAction() { return root.getBestAction();}
+	public Heuristic getHeuristic() 				{ return heuristic;				}
+	public void setHeuristic(Heuristic heuristic) 	{ this.heuristic = heuristic;	}
 	
-	@Override
-	protected void searchAction() throws TimeOutException {
-		this.getRoot().expandAlphaBeta(this.getDepth());					
-	}
+	public Node getRoot() 							{ return this.root;				}
+	private void setRoot(Node newRoot) 				{ this.root = newRoot;			}
+	
 	
 	@Override
 	public String toString() {

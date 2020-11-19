@@ -55,7 +55,7 @@ public class TrainingGeneticAlgorithm {
 	private String date;
 	private String tag;
 	
-	public TrainingGeneticAlgorithm(String tag, int population, int matches, int parents, int gameChosen, double mutationProb, double mutationScale) {
+	public TrainingGeneticAlgorithm(String tag, int population, int matches, int timeout, int parents, int gameChosen, double mutationProb, double mutationScale) {
 		if(population % 2 != 0 || population < 8)
 			population = Math.min(8, population + 1);
 		if(parents > population)
@@ -70,6 +70,8 @@ public class TrainingGeneticAlgorithm {
 			mutationProb = 0.99;
 		if(mutationScale<0)
 			mutationScale = 1;
+		if(timeout<0)
+			timeout = 1;
 		
 		String msg = 
 				"======================================\n" +
@@ -78,6 +80,7 @@ public class TrainingGeneticAlgorithm {
 				"\npopulation = " + population +
 				"\nparents = " + parents +
 				"\nmatches = " + matches + 
+				"\ntimeout = " + timeout +
 				"\nmutation probablitiy = " + mutationProb + 
 				"\nmutation scale = " + mutationScale + 
 				"\ngame rules = " + gameChosen +
@@ -91,7 +94,7 @@ public class TrainingGeneticAlgorithm {
 		this.mutationScale = mutationScale;
 		this.population = new ArrayList<>();
 		while(this.population.size()<population)
-			this.population.add(new BrainAlphaBeta());
+			this.population.add(new BrainAlphaBeta(timeout));
 		this.matches = matches;
 		this.gameChosen = gameChosen;
 		
@@ -133,15 +136,17 @@ public class TrainingGeneticAlgorithm {
 		int parents = 2;
 		double mutationProb = 0.5;
 		double mutationScale = 1;
+		int timeout = 10;
 		String tag = "Default";
 		
 		CommandLineParser parser = new DefaultParser();
 
 		Options options = new Options();
 		
-		options.addOption("t","tag", true, "String: tag to recognize the training");
+		options.addOption("n","name", true, "String: tag to recognize the training");
 		options.addOption("p","population", true, "integer: even number of population in each generation, min 4, default 100");
 		options.addOption("f","parents", true, "integer: even number of parents in each generation, min 4, default 100");
+		options.addOption("t", "timeout", true, "integer: timeout for the move search");
 		options.addOption("m", "match", true, "integer: number of match, default 100");
 		options.addOption("o","mutation_probability", true, "double: probabilty of changing a paramenter in the kernel (0<=x<=1)");
 		options.addOption("s", "mutation_scale", true, "double: scale of updating in kernel mutation");
@@ -204,6 +209,20 @@ public class TrainingGeneticAlgorithm {
 					System.exit(1);
 				}
 			}
+			if (cmd.hasOption("t")) {
+				try {
+					timeout = Integer.parseInt(cmd.getOptionValue("t"));
+					if(timeout < 1) {
+						System.out.println("At least 1 second");
+						formatter.printHelp("Genetic Training", options);
+						System.exit(1);
+					}
+				} catch (NumberFormatException e) {
+					System.out.println("Number format is not correct! (t)" + cmd.getOptionValue("t"));
+					formatter.printHelp("Genetic Training", options);
+					System.exit(1);
+				}
+			}
 			if(cmd.hasOption("r")) {
 				try{
 					gameChosen = Integer.parseInt(cmd.getOptionValue("r"));
@@ -241,8 +260,8 @@ public class TrainingGeneticAlgorithm {
 					System.exit(1);
 				}
 			}
-			if(cmd.hasOption("t")) {
-				tag = cmd.getOptionValue("t");
+			if(cmd.hasOption("n")) {
+				tag = cmd.getOptionValue("n");
 			}
 
 		} catch (ParseException exp) {
@@ -251,7 +270,7 @@ public class TrainingGeneticAlgorithm {
 		}
 		
 		TrainingGeneticAlgorithm trainer = new TrainingGeneticAlgorithm(tag, population, 
-				matches, parents, gameChosen, mutationProb, mutationScale);	
+				matches, timeout, parents, gameChosen, mutationProb, mutationScale);	
 				
 		trainer.train();
 	}
