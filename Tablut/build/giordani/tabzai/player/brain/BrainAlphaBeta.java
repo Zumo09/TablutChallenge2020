@@ -8,7 +8,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import giordani.tabzai.player.brain.heuristic.Heuristic;
+import giordani.tabzai.training.GameAshtonTablutNoLog;
 import it.unibo.ai.didattica.competition.tablut.domain.Action;
+import it.unibo.ai.didattica.competition.tablut.domain.Game;
+import it.unibo.ai.didattica.competition.tablut.domain.GameModernTablut;
+import it.unibo.ai.didattica.competition.tablut.domain.GameTablut;
 import it.unibo.ai.didattica.competition.tablut.domain.State;
 import it.unibo.ai.didattica.competition.tablut.domain.StateTablut;
 import it.unibo.ai.didattica.competition.tablut.domain.State.Pawn;
@@ -24,30 +28,75 @@ import it.unibo.ai.didattica.competition.tablut.exceptions.PawnException;
 import it.unibo.ai.didattica.competition.tablut.exceptions.StopException;
 import it.unibo.ai.didattica.competition.tablut.exceptions.ThroneException;
 
-public class BrainAlphaBeta extends BrainAbs {
-	private Heuristic kernel;
+public class BrainAlphaBeta implements Brain {
+	private Heuristic heuristic;
 	private Node root;
-
+	private Game rules;
+	private int depth;
+	private long timeout;
+	private long stopTime;
+	
+	public BrainAlphaBeta(int timeout) {
+		this(timeout, 1);
+	}
+	
 	public BrainAlphaBeta(int timeout, int gametype) {
 		// Constructor for training phase
-		super(timeout, gametype);
-		this.kernel = Heuristic.load("new");
-		resetRoot();
-	}
-
-	public BrainAlphaBeta() {
-		this(60, 1);
-	}
-	
-	public BrainAlphaBeta(String name, int timeout, int gametype) {
-		// The constructor for the runtime player
-		super(timeout, gametype);
-		this.kernel = Heuristic.load(name);
+		this("new", timeout, gametype);
+		this.heuristic = Heuristic.of("new");
 		resetRoot();
 	}
 	
-	public BrainAlphaBeta(String name) {
-		this(name, 60, 1);
+	public BrainAlphaBeta(String filename, int timeout, int gametype) {
+		this.heuristic = Heuristic.of(filename);
+		resetRoot();
+		this.resetDepth();
+		this.timeout = (long) ((0.9*timeout) * 1000);  // -1 not enough, it runs in server timeout
+		switch (gametype) {
+		case 1:
+			rules = new GameAshtonTablutNoLog(0, 0);
+			break;
+		case 2:
+			rules = new GameModernTablut();
+			break;
+		case 3:
+			rules = new GameTablut();
+			break;
+		case 4:
+			rules = new GameAshtonTablutNoLog(0, 0);
+			break;
+			
+		default:
+			System.out.println("Error in game selection");
+			System.exit(4);
+		}
+	}
+		
+	@Override
+	public Action getAction(State state) {
+		this.startTimer();
+		this.update(state);
+		this.resetDepth();
+		try{
+			while(true) {
+				this.incrementDepth();
+				this.getRoot().expandAlphaBeta(this.getDepth());
+			}
+		} catch(TimeOutException e) {}
+		return this.getRoot().getBestAction();
+	}
+	
+	private void startTimer() {
+		this.stopTime = System.currentTimeMillis() + this.timeout;
+	}	
+	
+	/**
+	 * Method to call to interrupt the search at the occurence of the timeout
+	 * @throws TimeOutException
+	 */
+	protected void checkTimeout() throws TimeOutException { 
+		if(this.stopTime < System.currentTimeMillis())
+			throw new TimeOutException();
 	}
 	
 	@Override
@@ -66,19 +115,18 @@ public class BrainAlphaBeta extends BrainAbs {
 		return "State evaluation : " + this.getRoot().getVal() + " [depth = " + this.getRoot().calcDepth() + "]";
 	}
 	
-	public Heuristic getHeuristic() { return kernel;}
-	public void setHeuristic(Heuristic kernel) { this.kernel = kernel;}
-	public Node getRoot() { return this.root;}
+	public Game getRules() 							{ return rules;					}
 	
-	private void setRoot(Node newRoot) { this.root = newRoot;}
+	public int getDepth() 							{ return this.depth;			}
+	public void resetDepth() 						{ this.depth = 0;				}
+	public void incrementDepth()					{ this.depth++;					}
 	
-	@Override
-	protected Action getBestAction() { return root.getBestAction();}
+	public Heuristic getHeuristic() 				{ return heuristic;				}
+	public void setHeuristic(Heuristic heuristic) 	{ this.heuristic = heuristic;	}
 	
-	@Override
-	protected void searchAction() throws TimeOutException {
-		this.getRoot().expandAlphaBeta(this.getDepth());					
-	}
+	public Node getRoot() 							{ return this.root;				}
+	private void setRoot(Node newRoot) 				{ this.root = newRoot;			}
+	
 	
 	@Override
 	public String toString() {
@@ -99,7 +147,7 @@ public class BrainAlphaBeta extends BrainAbs {
 	}
 	
 	/*
-	 * Private class Node use the methods of the brain to get the rules and the kernel
+	 * Private class Node use the methods of the brain to get the rules and the heuristic
 	 */
 	
 	public class Node {
@@ -170,9 +218,10 @@ public class BrainAlphaBeta extends BrainAbs {
 
 		public Action getBestAction() {
 			Action best = null;
+			double bestVal;
 			
 			if(this.getState().getTurn().equals(Turn.BLACK)) {
-				double bestVal = Double.POSITIVE_INFINITY;
+				bestVal = Double.POSITIVE_INFINITY;
 				for(Entry<Action, Node> e : this.getChildren().entrySet()) {
 					if(e.getValue().getVal() <= bestVal) {
 						best = e.getKey();
@@ -181,7 +230,7 @@ public class BrainAlphaBeta extends BrainAbs {
 				}
 			}
 			else {
-				double bestVal = Double.NEGATIVE_INFINITY;
+				bestVal = Double.NEGATIVE_INFINITY;
 				for(Entry<Action, Node> e : this.getChildren().entrySet()) {
 					if(e.getValue().getVal() >= bestVal) {
 						best = e.getKey();
@@ -193,10 +242,12 @@ public class BrainAlphaBeta extends BrainAbs {
 				try {
 					System.out.println("\n\n\n\n========== NO ACTION FOUND!! ============\n\n\n");
 					best = new Action("a1", "a1", this.getState().getTurn());
+					bestVal = Double.NaN;
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
+			this.setVal(bestVal);
 			return best;
 		}
 		
@@ -235,7 +286,14 @@ public class BrainAlphaBeta extends BrainAbs {
 						child = this.getChildren().get(action);
 					else child = this.tryAndAdd(action);
 					if(child != null) {
-						child.alphaBeta(depth-1, alpha, beta);
+						try {
+							child.alphaBeta(depth-1, alpha, beta);
+						} catch(TimeOutException e) {
+								best = Math.max(best, child.getVal());
+								if(!Double.isNaN(best))
+									this.setVal(best);
+								throw e;
+						}
 						best = Math.max(best, child.getVal());
 						alpha = Math.max(alpha, best);
 						if(beta <= alpha)
@@ -245,20 +303,27 @@ public class BrainAlphaBeta extends BrainAbs {
 				this.setVal(best);
 			} else {
 				double best = Double.POSITIVE_INFINITY;
-				for(Action action : this.getAllActions()) {
-					Node child;
-					if(this.getChildren().containsKey(action))
-						child = this.getChildren().get(action);
-					else child = this.tryAndAdd(action);
-					if(child != null) {
-						child.alphaBeta(depth-1, alpha, beta);
-						best = Math.min(best, child.getVal());
-						beta = Math.min(beta, best);
-						if(beta <= alpha)
-							break;
+					for(Action action : this.getAllActions()) {
+						Node child;
+						if(this.getChildren().containsKey(action))
+							child = this.getChildren().get(action);
+						else child = this.tryAndAdd(action);
+						if(child != null) {
+							try {
+								child.alphaBeta(depth-1, alpha, beta);
+							} catch(TimeOutException e) {
+									best = Math.min(best, child.getVal());
+									if(!Double.isNaN(best))
+										this.setVal(best);
+									throw e;
+							}
+							best = Math.min(best, child.getVal());
+							beta = Math.min(beta, best);
+							if(beta <= alpha)
+								break;
+						}
 					}
-				}
-				this.setVal(best);
+					this.setVal(best);
 			}
 		}
 		
@@ -282,7 +347,14 @@ public class BrainAlphaBeta extends BrainAbs {
 				return null;
 			}
 		}
-
+		
+		/**
+		 * Get all the possible action deriving from this node.state.
+		 * Excluded only those Action.to goes out of the box
+		 * The moves goes from the maximum movement of the pawns to the move of one case.
+		 * The main part of this method is executed only once for each node
+		 * @return
+		 */
 		private List<Action> getAllActions() {
 			if(this.allActions.isEmpty()) {
 				State state = this.getState();
@@ -308,6 +380,10 @@ public class BrainAlphaBeta extends BrainAbs {
 			return this.allActions;
 		}
 		
+		/**
+		 * Calculate the depth of the best path find during search
+		 * @return
+		 */
 		public int calcDepth() {
 			Node n = this;
 			int depth = 0;
