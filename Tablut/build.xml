@@ -105,58 +105,36 @@
         </java>
     </target>
 
-        <target name="white1">
+        <target name="white">
         <java classname="giordani.tabzai.player.TabZAI" fork="true">
             <classpath>
                 <pathelement location="lib/gson-2.2.2.jar"/>
 		        <pathelement location="lib/commons-cli-1.4.jar"/>
                 <pathelement location="build"/>
             </classpath>
-            <arg line="white W1 new 30 localhost"/>
+            <arg line="white localhost"/>
         </java>
     </target>
 
-    <target name="black1">
+    <target name="black">
         <java classname="giordani.tabzai.player.TabZAI" fork="true">
             <classpath>
                 <pathelement location="lib/gson-2.2.2.jar"/>
 		        <pathelement location="lib/commons-cli-1.4.jar"/>
                 <pathelement location="build"/>
             </classpath>
-            <arg line="black B1 new 30 localhost"/>
+            <arg line="black localhost"/>
         </java>
     </target>
 
-    <!--target name="white2">
-        <java classname="giordani.tabzai.player.TabZAI" fork="true">
-            <classpath>
-                <pathelement location="lib/gson-2.2.2.jar"/>
-		        <pathelement location="lib/commons-cli-1.4.jar"/>
-                <pathelement location="build"/>
-            </classpath>
-            <arg line="white W2 Train_20_49"/>
-        </java>
-    </target>
-
-    <target name="black2">
-        <java classname="giordani.tabzai.player.TabZAI" fork="true">
-            <classpath>
-                <pathelement location="lib/gson-2.2.2.jar"/>
-		        <pathelement location="lib/commons-cli-1.4.jar"/>
-                <pathelement location="build"/>
-            </classpath>
-            <arg line="black B2 Train_20_49"/>
-        </java>
-    </target-->
-
-    <target name="tabzai_training">
+    <target name="training">
         <java classname="giordani.tabzai.training.TrainingGeneticAlgorithm" fork="true">
             <classpath>
                 <pathelement location="lib/gson-2.2.2.jar"/>
 		        <pathelement location="lib/commons-cli-1.4.jar"/>
                 <pathelement location="build"/>
             </classpath>
-            <arg line="-t Train_1 -f 4 -p 16 -m 50 -d 2 -o 0.5 -s 1"/>
+            <arg line="-n Train_1 -f 4 -p 16 -t 1 -m 100 -o 0.5"/>
         </java>
     </target>
 
