@@ -134,7 +134,7 @@
 		        <pathelement location="lib/commons-cli-1.4.jar"/>
                 <pathelement location="build"/>
             </classpath>
-            <arg line="-n Train_1 -f 4 -p 16 -t 1 -m 100 -o 0.5"/>
+            <arg line="-n CNN_f2_p8_m100_o50_t2 -f 2 -p 8 -t 2 -m 100 -o 0.5"/>
         </java>
     </target>
 
