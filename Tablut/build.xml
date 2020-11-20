@@ -138,4 +138,15 @@
         </java>
     </target>
 
+    <target name="resume">
+        <java classname="giordani.tabzai.training.ResumingTraining" fork="true">
+            <classpath>
+                <pathelement location="lib/gson-2.2.2.jar"/>
+		        <pathelement location="lib/commons-cli-1.4.jar"/>
+                <pathelement location="build"/>
+            </classpath>
+            <arg line="CNN_f2_p8_m100_o50_t20_3 CNN_f2_p8_m100_o50_t21_3 -n CNN_f2_p8_m100_o50_t2 -f 2 -p 8 -t 2 -m 100 -o 0.5"/>
+        </java>
+    </target>
+
 </project>

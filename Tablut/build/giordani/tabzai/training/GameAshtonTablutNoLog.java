@@ -7,6 +7,7 @@ import java.util.List;
 import it.unibo.ai.didattica.competition.tablut.domain.Action;
 import it.unibo.ai.didattica.competition.tablut.domain.Game;
 import it.unibo.ai.didattica.competition.tablut.domain.State;
+import it.unibo.ai.didattica.competition.tablut.domain.State.Pawn;
 import it.unibo.ai.didattica.competition.tablut.domain.StateTablut;
 import it.unibo.ai.didattica.competition.tablut.exceptions.*;
 
@@ -316,8 +317,9 @@ public class GameAshtonTablutNoLog implements Game {
 				state.setTurn(State.Turn.WHITEWIN);
 			}
 		}
-		// TODO: implement the winning condition of the capture of the last
-		// black checker
+
+		if(state.getNumberOf(Pawn.BLACK) == 0)
+			state.setTurn(State.Turn.WHITEWIN);
 
 		this.movesWithutCapturing++;
 		return state;

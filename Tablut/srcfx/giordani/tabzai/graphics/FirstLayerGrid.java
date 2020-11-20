@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import giordani.tabzai.math.Layer;
+import giordani.tabzai.math.Matrix;
 import giordani.tabzai.player.brain.heuristic.HeuristicNN;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -24,6 +26,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 
 public class FirstLayerGrid extends BorderPane {
@@ -83,7 +86,7 @@ public class FirstLayerGrid extends BorderPane {
 			this.setCenter(charts.get(chooser.getSelectionModel().getSelectedItem()));
 		});
 		
-		ext = ".ker";
+		ext = HeuristicNN.EXT;
 	}
 	
 	private void print(ActionEvent e) {
@@ -103,7 +106,19 @@ public class FirstLayerGrid extends BorderPane {
 		chooser.setValue(list.get(0));
 	}
 
-	private Node getGraph(Map<Integer, HeuristicNN> map) {
+	private Node getGraph(HeuristicNN heuristic) {
+		Layer layer = heuristic.getLayer(0);
+		GridPane pane = new GridPane();
+		
+		int size = layer.getList().size();
+		
+		for(int i=0; i<size; i++)
+			pane.add(this.getMat(layer.get(i)), i%size, i/size);
+		
+		return null;
+	}
+
+	private Node getMat(Matrix matrix) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -119,7 +134,7 @@ public class FirstLayerGrid extends BorderPane {
 		}
 		
 		for(int g=0; g<gen; g++) {
-			var d = readData(g);
+			Optional<HeuristicNN> d = readData(g);
 			if(d.isPresent())
 				data.put(g, d.get());	
 		}

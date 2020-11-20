@@ -54,6 +54,68 @@ public class TrainingGeneticAlgorithm {
 	private String date;
 	private String tag;
 	
+	public TrainingGeneticAlgorithm(String tag, List<BrainAlphaBeta> population, int matches, int timeout, int parents, int gameChosen, double mutationProb) {
+		if(parents > population.size())
+			parents = population.size();
+		if(parents % 2 != 0 || parents < 2)
+			parents = Math.max(2, parents + 1);
+		if(matches<1)
+			matches = 1;
+		if(gameChosen<0 || gameChosen>4)
+			gameChosen = 4;
+		if(mutationProb < 0 || mutationProb >= 1)
+			mutationProb = 0.99;
+		if(timeout<0)
+			timeout = 1;
+		
+		String msg = 
+				"======================================\n" +
+				"          Resuming TRAINING\n" +
+				"======================================" + 
+				"\npopulation = " + population.size() +
+				"\nparents = " + parents +
+				"\nmatches = " + matches + 
+				"\ntimeout = " + timeout +
+				"\nmutation probablitiy = " + mutationProb + 
+				"\ngame rules = " + gameChosen +
+				"\n======================================\n";
+		
+		System.out.println(msg);
+		
+		this.tag = tag;
+		this.parents = parents;
+		this.mutationProb = mutationProb;
+		this.population = population;
+		this.matches = matches;
+		this.gameChosen = gameChosen;
+		
+		LocalDateTime ldt = LocalDateTime.now();
+		this.date = ldt.getMonthValue() + "_" + ldt.getDayOfMonth()
+					+ "_h" + ldt.getHour() + "_" + ldt.getMinute();
+		
+		String logs_folder = "Train_log";
+		Path p = Paths.get(logs_folder + File.separator + tag + "_" + date +".txt");
+		p = p.toAbsolutePath();
+		String sysLogName = p.toString();
+		loggSys = Logger.getLogger("SysLog");
+		try {
+			new File(logs_folder).mkdirs();
+			File systemLog = new File(sysLogName);
+			if (!systemLog.exists())
+				systemLog.createNewFile();
+			FileHandler fh = null;
+			fh = new FileHandler(sysLogName, true);
+			loggSys.addHandler(fh);
+			fh.setFormatter(new SimpleFormatter());
+			loggSys.setLevel(Level.FINE);
+			loggSys.fine(msg);
+		} catch (Exception e) {
+			System.out.println("ERRORE");
+			e.printStackTrace();
+			System.exit(1);
+		}
+	}
+	
 	public TrainingGeneticAlgorithm(String tag, int population, int matches, int timeout, int parents, int gameChosen, double mutationProb) {
 		if(population % 2 != 0 || population < 8)
 			population = Math.max(8, population + 1);
@@ -120,11 +182,7 @@ public class TrainingGeneticAlgorithm {
 		}
 	}
 	
-	public static void main(String[] args) {
-		
-		for(String arg : args)
-			System.out.println(arg);
-		
+	public static void main(String[] args) {		
 		int population = 8;
 		int matches = 2;
 		int gameChosen = 4;
@@ -438,14 +496,20 @@ public class TrainingGeneticAlgorithm {
 		}
 	}
 	
+	
+
 	public void train() {
+		this.train(0);
+	}
+	
+	public void train(int lastMatch) {
 		Heuristic par;
 		List<Heuristic> parents = new ArrayList<>();
 		
 		int matchCounter = 0;
 		long start = System.nanoTime();
 		
-		for(int m=0; m<this.matches; m++) {
+		for(int m=lastMatch; m<this.matches; m++) {
 			loggSys.fine("===================\nNew Tournament " + m);
 			System.out.println("===================\nNew Tournament " + m);
 			TournamentResult results = new TournamentResult();

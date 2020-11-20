@@ -24,7 +24,7 @@ public class HeuristicNN implements Heuristic {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private static final String EXT = ".hnn";
+	public static final String EXT = ".hnn";
 	
 	private List<Layer> layers;
 
