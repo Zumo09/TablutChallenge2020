@@ -127,10 +127,10 @@ public class HeuristicGen implements Heuristic {
 	}
 	
 	@Override
-	public HeuristicGen mutate(double mutationProb, double mutationScale) {
+	public HeuristicGen mutate(double mutationProb) {
 		for(String p : params.keySet()) {
 			if(getRandom().nextDouble() < mutationProb) {
-				double value = params.get(p) + mutationScale * 2 * (getRandom().nextDouble() - 0.5);
+				double value = params.get(p) + 2 * (getRandom().nextDouble() - 0.5);
 				params.put(p, value);
 			}
 		}

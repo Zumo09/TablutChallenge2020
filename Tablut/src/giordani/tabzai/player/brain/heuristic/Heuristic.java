@@ -16,11 +16,12 @@ import it.unibo.ai.didattica.competition.tablut.domain.State;
  */
 public interface Heuristic extends Serializable {
 	public final String PATH = "heuristic";
+	public final String BEST = "new";
 	
 	public Heuristic copy();
 	public double evaluate(State state);
 	public void save(String name);
-	public Heuristic mutate(double mutationProb, double mutationScale);
+	public Heuristic mutate(double mutationProb);
 	public List<Heuristic> crossover(Heuristic other);
 	
 	/**
@@ -34,7 +35,7 @@ public interface Heuristic extends Serializable {
 	 * @param mutationScale : the scale that multiply the random number that will be summed to the parameter to modify
 	 * @return A list of new Heuristic that must be put into the existing brains for the new Tournament
 	 */
-	public static List<Heuristic> nextGeneration(List<Heuristic> parents, int populationSize, double mutationProb, double mutationScale) {
+	public static List<Heuristic> nextGeneration(List<Heuristic> parents, int populationSize, double mutationProb) {
 		if(parents.size() % 2 != 0 || parents.size() < 2)
 			throw new IllegalArgumentException("Must be an even number of parents");
 				
@@ -51,7 +52,7 @@ public interface Heuristic extends Serializable {
 			
 			while(ret.size() < (i+2)/parents.size() * populationSize)
 				for(Heuristic child : children) {
-					ret.add(child.copy().mutate(mutationProb, mutationScale));
+					ret.add(child.copy().mutate(mutationProb));
 					if(ret.size() == populationSize) return ret;
 				}
 		}

@@ -49,15 +49,14 @@ public class TrainingGeneticAlgorithm {
 	private int matches;
 	private int parents;
 	private int gameChosen;
-	private double mutationScale;
 	private double mutationProb;
 	private Logger loggSys;
 	private String date;
 	private String tag;
 	
-	public TrainingGeneticAlgorithm(String tag, int population, int matches, int timeout, int parents, int gameChosen, double mutationProb, double mutationScale) {
+	public TrainingGeneticAlgorithm(String tag, int population, int matches, int timeout, int parents, int gameChosen, double mutationProb) {
 		if(population % 2 != 0 || population < 8)
-			population = Math.min(8, population + 1);
+			population = Math.max(8, population + 1);
 		if(parents > population)
 			parents = population;
 		if(parents % 2 != 0 || parents < 2)
@@ -68,8 +67,6 @@ public class TrainingGeneticAlgorithm {
 			gameChosen = 4;
 		if(mutationProb < 0 || mutationProb >= 1)
 			mutationProb = 0.99;
-		if(mutationScale<0)
-			mutationScale = 1;
 		if(timeout<0)
 			timeout = 1;
 		
@@ -82,7 +79,6 @@ public class TrainingGeneticAlgorithm {
 				"\nmatches = " + matches + 
 				"\ntimeout = " + timeout +
 				"\nmutation probablitiy = " + mutationProb + 
-				"\nmutation scale = " + mutationScale + 
 				"\ngame rules = " + gameChosen +
 				"\n======================================\n";
 		
@@ -91,7 +87,6 @@ public class TrainingGeneticAlgorithm {
 		this.tag = tag;
 		this.parents = parents;
 		this.mutationProb = mutationProb;
-		this.mutationScale = mutationScale;
 		this.population = new ArrayList<>();
 		while(this.population.size()<population)
 			this.population.add(new BrainAlphaBeta(timeout));
@@ -130,14 +125,13 @@ public class TrainingGeneticAlgorithm {
 		for(String arg : args)
 			System.out.println(arg);
 		
-		int population = 16;
-		int matches = 1;
+		int population = 8;
+		int matches = 2;
 		int gameChosen = 4;
 		int parents = 2;
 		double mutationProb = 0.5;
-		double mutationScale = 1;
-		int timeout = 10;
-		String tag = "Default";
+		int timeout = 1;
+		String tag = "Test";
 		
 		CommandLineParser parser = new DefaultParser();
 
@@ -149,7 +143,6 @@ public class TrainingGeneticAlgorithm {
 		options.addOption("t", "timeout", true, "integer: timeout for the move search");
 		options.addOption("m", "match", true, "integer: number of match, default 100");
 		options.addOption("o","mutation_probability", true, "double: probabilty of changing a paramenter in the kernel (0<=x<=1)");
-		options.addOption("s", "mutation_scale", true, "double: scale of updating in kernel mutation");
 		options.addOption("r","game_rules", true, "game rules must be an integer; 1 for Tablut, 2 for Modern, 3 for Brandub, 4 for Ashton; default: 4");
 		
 		HelpFormatter formatter = new HelpFormatter();
@@ -251,15 +244,6 @@ public class TrainingGeneticAlgorithm {
 					System.exit(1);
 				}
 			}
-			if(cmd.hasOption("s")) {
-				try{
-					mutationScale = Double.parseDouble(cmd.getOptionValue("s"));
-				}catch (NumberFormatException e){
-					System.out.println("The mutationScale format is not correct!" + cmd.getOptionValue("s"));
-					formatter.printHelp("Genetic Training", options);
-					System.exit(1);
-				}
-			}
 			if(cmd.hasOption("n")) {
 				tag = cmd.getOptionValue("n");
 			}
@@ -270,7 +254,7 @@ public class TrainingGeneticAlgorithm {
 		}
 		
 		TrainingGeneticAlgorithm trainer = new TrainingGeneticAlgorithm(tag, population, 
-				matches, timeout, parents, gameChosen, mutationProb, mutationScale);	
+				matches, timeout, parents, gameChosen, mutationProb);	
 				
 		trainer.train();
 	}
@@ -483,7 +467,7 @@ public class TrainingGeneticAlgorithm {
 				parents.add(par.copy());
 				loggSys.fine("Par1:\n" + par);
 			}
-			List<Heuristic> newGen = Heuristic.nextGeneration(parents, population.size(), this.mutationProb, this.mutationScale);
+			List<Heuristic> newGen = Heuristic.nextGeneration(parents, population.size(), this.mutationProb);
 			for(int i=0; i<population.size(); i++) {
 				population.get(i).setHeuristic(newGen.get(i));
 				population.get(i).resetRoot();
@@ -553,12 +537,12 @@ public class TrainingGeneticAlgorithm {
 //			System.out.println("=================\nMove " + moves + ". Turn: " + state.getTurn());
 			if(state.getTurn().equals(Turn.WHITE)) {
 				move = white.getAction(state.clone());
-//				System.out.println("White: " + white);
+				System.out.println("White: " + white.getInfo());
 				loggSys.fine("White:\n" + white.getInfo());
 			}
 			else if(state.getTurn().equals(Turn.BLACK)) {
 				move = black.getAction(state.clone());
-//				System.out.println("Black: " + black);
+				System.out.println("Black: " + black.getInfo());
 				loggSys.fine("Black:\n" + black.getInfo());
 			}
 			else {

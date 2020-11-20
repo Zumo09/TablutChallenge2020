@@ -118,7 +118,7 @@ public class BrainAlphaBeta implements Brain {
 	public Game getRules() 							{ return rules;					}
 	
 	public int getDepth() 							{ return this.depth;			}
-	public void resetDepth() 						{ this.depth = 2;				}
+	public void resetDepth() 						{ this.depth = 0;				}
 	public void incrementDepth()					{ this.depth++;					}
 	
 	public Heuristic getHeuristic() 				{ return heuristic;				}

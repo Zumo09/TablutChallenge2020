@@ -11,6 +11,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import giordani.tabzai.math.Layer;
 import giordani.tabzai.math.Matrix;
@@ -25,35 +26,35 @@ public class HeuristicNN implements Heuristic {
 	private static final long serialVersionUID = 1L;
 	private static final String EXT = ".hnn";
 	
-	private Layer l1, l2, l3, l4;
+	private List<Layer> layers;
 
 	public HeuristicNN(int k1, int k2, int k3) {
-		this.l1 = new Layer(k1, 3, 3, 1);
-		this.l2 = new Layer(k2, 3, 3, k1);
-		this.l3 = new Layer(k3, 3, 3, k2);
-		this.l4 = new Layer(1, 3, 3, k3);
+		this.layers = new ArrayList<>();
+		this.layers.add(new Layer(k1, 3, 3, 1));
+		this.layers.add(new Layer(k2, 3, 3, k1));
+		this.layers.add(new Layer(k3, 3, 3, k2));
+		this.layers.add(new Layer(1, 3, 3, k3));
 	}
 	
-	private HeuristicNN(Layer l1, Layer l2, Layer l3, Layer l4) {
-		this.l1 = l1.copy();
-		this.l2 = l2.copy();
-		this.l3 = l3.copy();
-		this.l4 = l4.copy();
+	private HeuristicNN(List<Layer> layers) {
+		this.layers = new ArrayList<>();
+		for(Layer l : layers)
+			this.layers.add(l.copy());
 	}
 
 	@Override
 	public Heuristic copy() {
-		return new HeuristicNN(this.l1, this.l2, this.l3, this.l4);
+		return new HeuristicNN(this.getLayers());
 	}
 
 	@Override
 	public double evaluate(State state) {
 		Matrix input = this.stateToMatrix(state);
 		
-		Matrix out = l4.convolution(
-						l3.convolution(
-						   l2.convolution(
-							  l1.convolution(input).tanh()
+		Matrix out = this.getLayer(3).convolution(
+						this.getLayer(2).convolution(
+							this.getLayer(1).convolution(
+								this.getLayer(0).convolution(input).tanh()
 								   		 ).tanh()
 						               ).tanh()
 									);
@@ -63,9 +64,19 @@ public class HeuristicNN implements Heuristic {
 	}
 	
 	@Override
-	public Heuristic mutate(double mutationProb, double mutationScale) {
-		// TODO Auto-generated method stub
-		return null;
+	public Heuristic mutate(double mutationProb) {
+		Random rnd = new Random();
+		
+		for(Layer l : this.getLayers())
+			for(Matrix m : l.getList())
+				for(int i=0; i<m.getShape(0); i++)
+					for(int j=0; j<m.getShape(1); j++)
+						for(int k=0; k<m.getShape(2); k++)
+							if(rnd.nextDouble() < mutationProb) {
+								double val = m.get(i, j, k) + rnd.nextGaussian();
+								m.set(i, j, k, val);
+							}
+		return this;
 	}
 
 	@Override
@@ -74,9 +85,17 @@ public class HeuristicNN implements Heuristic {
 			throw new IllegalArgumentException("Heuristic type mismatch");
 		HeuristicNN other = (HeuristicNN) otherParent;
 		List<Heuristic> ret = new ArrayList<>();
-		ret.add(new HeuristicNN(this.l1, other.l2, this.l3, other.l4));
-		ret.add(new HeuristicNN(other.l1, this.l2, other.l3, this.l4));
+		ret.add(new HeuristicNN(List.of(this.getLayer(0), other.getLayer(1), this.getLayer(2), other.getLayer(3))));
+		ret.add(new HeuristicNN(List.of(other.getLayer(0), this.getLayer(1), other.getLayer(2), this.getLayer(3))));
 		return ret;
+	}
+	
+	public List<Layer> getLayers() {
+		return this.layers;
+	}
+	
+	public Layer getLayer(int l) {
+		return this.layers.get(l);
 	}
 
 	private Matrix stateToMatrix(State state) {
