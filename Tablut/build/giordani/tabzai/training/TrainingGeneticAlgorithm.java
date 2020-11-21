@@ -601,13 +601,13 @@ public class TrainingGeneticAlgorithm {
 //			System.out.println("=================\nMove " + moves + ". Turn: " + state.getTurn());
 			if(state.getTurn().equals(Turn.WHITE)) {
 				move = white.getAction(state.clone());
-				System.out.println("White: " + white.getInfo());
-				loggSys.fine("White:\n" + white.getInfo());
+				System.out.println("White: " + white.getInfo() + move);
+				loggSys.fine("White:\n" + white.getInfo() + move);
 			}
 			else if(state.getTurn().equals(Turn.BLACK)) {
 				move = black.getAction(state.clone());
-				System.out.println("Black: " + black.getInfo());
-				loggSys.fine("Black:\n" + black.getInfo());
+				System.out.println("Black: " + black.getInfo() + move);
+				loggSys.fine("Black:\n" + black.getInfo() + move);
 			}
 			else {
 //				loggSys.fine("==================\nEndgame: " + state.getTurn());
