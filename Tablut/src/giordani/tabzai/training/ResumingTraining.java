@@ -164,12 +164,12 @@ public class ResumingTraining {
 		
 		int lastMatch = 0;
 		try{
-			lastMatch = Integer.parseInt(""+args[0].charAt(args.length - 1)) + 1;
+			lastMatch = Integer.parseInt(args[2]) + 1;
 		} catch (NumberFormatException e){
 			System.out.println("NAME NOT OK");
 			System.exit(1);
 		}
-				
+		System.out.println("Resuming from match " + lastMatch);
 		trainer.train(lastMatch);
 	}
 

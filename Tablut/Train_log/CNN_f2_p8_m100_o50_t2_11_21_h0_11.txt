@@ -1,0 +1,27 @@
+nov 21, 2020 12:11:54 AM giordani.tabzai.training.TrainingGeneticAlgorithm <init>
+FINE: ======================================
+          Resuming TRAINING
+======================================
+population = 8
+parents = 2
+matches = 100
+timeout = 2
+mutation probablitiy = 0.5
+game rules = 4
+======================================
+
+nov 21, 2020 12:11:54 AM giordani.tabzai.training.TrainingGeneticAlgorithm train
+FINE: ===================
+New Tournament 1
+nov 21, 2020 12:11:54 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: ==================
+Match 1_0_1
+nov 21, 2020 12:11:56 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : -1.9221527802689926 [depth = 2]
+nov 21, 2020 12:11:58 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -9.586798566615704 [depth = 3]
+nov 21, 2020 12:11:59 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 6.896615325925121 [depth = 3]
