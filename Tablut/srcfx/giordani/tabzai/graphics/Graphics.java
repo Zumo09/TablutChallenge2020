@@ -9,8 +9,8 @@ public class Graphics extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			MainPane root = new MainPane();
-			Scene scene = new Scene(root, 1000, 500);
+			FirstLayerGrid root = new FirstLayerGrid();
+			Scene scene = new Scene(root, 810, 840);
 			primaryStage.setScene(scene);
 			primaryStage.show();
 		} catch(Exception e) {

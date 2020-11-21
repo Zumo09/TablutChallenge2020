@@ -1,0 +1,642 @@
+nov 21, 2020 11:00:56 AM giordani.tabzai.training.TrainingGeneticAlgorithm <init>
+FINE: ======================================
+          Resuming TRAINING
+======================================
+population = 8
+parents = 2
+matches = 100
+timeout = 2
+mutation probablitiy = 0.5
+game rules = 4
+======================================
+
+nov 21, 2020 11:00:56 AM giordani.tabzai.training.TrainingGeneticAlgorithm train
+FINE: ===================
+New Tournament 12
+nov 21, 2020 11:00:56 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: ==================
+Match 12_0_1
+nov 21, 2020 11:00:58 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 21.966098014338552 [depth = 1]Turn: W Pawn from e6 to f6
+nov 21, 2020 11:01:00 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : 11.100404685297416 [depth = 3]Turn: B Pawn from e2 to i2
+nov 21, 2020 11:01:02 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 35.551527398017754 [depth = 3]Turn: W Pawn from e3 to a3
+nov 21, 2020 11:01:03 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : 3.0191068388085607 [depth = 3]Turn: B Pawn from b5 to b9
+nov 21, 2020 11:01:05 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 35.551527398017754 [depth = 1]Turn: W Pawn from e7 to e6
+nov 21, 2020 11:01:07 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : 3.0191068388085607 [depth = 3]Turn: B Pawn from h5 to h9
+nov 21, 2020 11:01:09 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 28.998573832520375 [depth = 2]Turn: W Pawn from a3 to h3
+nov 21, 2020 11:01:11 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -7.552150621449808 [depth = 3]Turn: B Pawn from e8 to a8
+nov 21, 2020 11:01:12 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 33.83050911099037 [depth = 3]Turn: W Pawn from h3 to b3
+nov 21, 2020 11:01:14 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -12.510095530699056 [depth = 3]Turn: B Pawn from d1 to d4
+nov 21, 2020 11:01:16 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 27.038514630621627 [depth = 3]Turn: W Pawn from b3 to g3
+nov 21, 2020 11:01:18 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -18.826198411034234 [depth = 3]Turn: B Pawn from a4 to a1
+nov 21, 2020 11:01:20 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 32.725895836994674 [depth = 3]Turn: W Pawn from g3 to a3
+nov 21, 2020 11:01:21 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -8.964732501067283 [depth = 3]Turn: B Pawn from e1 to b1
+nov 21, 2020 11:01:23 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 11.649757656717009 [depth = 3]Turn: W Pawn from g5 to g9
+nov 21, 2020 11:01:25 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -6.718068880747248 [depth = 2]Turn: B Pawn from b1 to b4
+nov 21, 2020 11:01:27 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : -0.5993648696142675 [depth = 3]Turn: W Pawn from a3 to i3
+nov 21, 2020 11:01:29 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -28.87822502680282 [depth = 3]Turn: B Pawn from f1 to b1
+nov 21, 2020 11:01:30 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 2.4350892488107148 [depth = 3]Turn: W Pawn from i3 to b3
+nov 21, 2020 11:01:32 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -9.098486252573101 [depth = 3]Turn: B Pawn from i2 to f2
+nov 21, 2020 11:01:34 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 30.015745352702513 [depth = 3]Turn: W Pawn from g9 to g1
+nov 21, 2020 11:01:36 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -9.098486252573101 [depth = 3]Turn: B Pawn from i4 to f4
+nov 21, 2020 11:01:38 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 27.19508070729751 [depth = 3]Turn: W Pawn from g1 to g9
+nov 21, 2020 11:01:39 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -9.098486252573101 [depth = 3]Turn: B Pawn from i5 to i1
+nov 21, 2020 11:01:41 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 27.19508070729751 [depth = 3]Turn: W Pawn from g9 to g2
+nov 21, 2020 11:01:43 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -12.012849507159052 [depth = 3]Turn: B Pawn from a5 to a2
+nov 21, 2020 11:01:45 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 26.5297984437131 [depth = 3]Turn: W Pawn from g2 to g7
+nov 21, 2020 11:01:47 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -12.012849507159052 [depth = 3]Turn: B Pawn from i6 to i2
+nov 21, 2020 11:01:48 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 24.352622199111952 [depth = 3]Turn: W Pawn from g7 to g1
+nov 21, 2020 11:01:50 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -16.222372568629126 [depth = 3]Turn: B Pawn from a2 to d2
+nov 21, 2020 11:01:52 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 9.287944447288535 [depth = 3]Turn: W Pawn from b3 to h3
+nov 21, 2020 11:01:54 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -32.94177292045411 [depth = 3]Turn: B Pawn from b1 to b4
+nov 21, 2020 11:01:56 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 4.589218308381667 [depth = 3]Turn: W Pawn from h3 to b3
+nov 21, 2020 11:01:57 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -19.316292471715933 [depth = 3]Turn: B Pawn from d2 to a2
+nov 21, 2020 11:01:59 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 18.943561884863968 [depth = 3]Turn: W Pawn from g1 to g7
+nov 21, 2020 11:02:01 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -19.646124855051138 [depth = 3]Turn: B Pawn from a6 to d6
+nov 21, 2020 11:02:03 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 31.760687320672847 [depth = 3]Turn: W Pawn from b3 to f3
+nov 21, 2020 11:02:05 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -36.08411102295847 [depth = 3]Turn: B Pawn from a8 to d8
+nov 21, 2020 11:02:06 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 16.791017170117975 [depth = 3]Turn: W Pawn from g7 to g2
+nov 21, 2020 11:02:08 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -39.01849127645884 [depth = 3]Turn: B Pawn from a2 to d2
+nov 21, 2020 11:02:10 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 5.384224500133559 [depth = 3]Turn: W Pawn from f3 to b3
+nov 21, 2020 11:02:12 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -42.61634909036565 [depth = 3]Turn: B Pawn from d8 to a8
+nov 21, 2020 11:02:14 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 4.589218308381667 [depth = 3]Turn: W Pawn from g2 to g9
+nov 21, 2020 11:02:15 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -19.646124855051138 [depth = 3]Turn: B Pawn from d2 to a2
+nov 21, 2020 11:02:17 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 12.724618294864252 [depth = 3]Turn: W Pawn from g9 to g3
+nov 21, 2020 11:02:19 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -25.3796172830753 [depth = 3]Turn: B Pawn from d4 to g4
+nov 21, 2020 11:02:21 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 20.076111974408875 [depth = 3]Turn: W Pawn from c5 to c2
+nov 21, 2020 11:02:23 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -29.980383765319946 [depth = 3]Turn: B Pawn from g4 to b4
+nov 21, 2020 11:02:24 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : -0.5239821220518579 [depth = 2]Turn: W Pawn from e5 to c5
+nov 21, 2020 11:02:26 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -17.73025283386159 [depth = 3]Turn: B Pawn from i2 to f2
+nov 21, 2020 11:02:28 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 28.456658268596865 [depth = 3]Turn: W Pawn from g3 to g8
+nov 21, 2020 11:02:30 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -6.976941038810715 [depth = 3]Turn: B Pawn from d6 to d2
+nov 21, 2020 11:02:32 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 36.484541502415134 [depth = 3]Turn: W Pawn from g8 to g3
+nov 21, 2020 11:02:33 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -6.976941038810715 [depth = 3]Turn: B Pawn from d2 to d7
+nov 21, 2020 11:02:35 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 28.456658268596865 [depth = 3]Turn: W Pawn from g3 to g9
+nov 21, 2020 11:02:37 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -6.976941038810715 [depth = 3]Turn: B Pawn from d7 to i7
+nov 21, 2020 11:02:39 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 28.456658268596865 [depth = 3]Turn: W Pawn from g9 to g1
+nov 21, 2020 11:02:41 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -6.976941038810715 [depth = 3]Turn: B Pawn from d9 to d2
+nov 21, 2020 11:02:43 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 34.37402597557729 [depth = 3]Turn: W Pawn from g1 to g7
+nov 21, 2020 11:02:44 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -6.976941038810715 [depth = 3]Turn: B Pawn from d2 to d7
+nov 21, 2020 11:02:46 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 28.456658268596865 [depth = 3]Turn: W Pawn from g7 to g1
+nov 21, 2020 11:02:48 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -6.976941038810715 [depth = 3]Turn: B Pawn from d7 to d2
+nov 21, 2020 11:02:48 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: ==================
+Match 12_0_2
+nov 21, 2020 11:02:50 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 16.54193020333101 [depth = 2]Turn: W Pawn from e3 to i3
+nov 21, 2020 11:02:52 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : 3.258332444465118 [depth = 3]Turn: B Pawn from e2 to a2
+nov 21, 2020 11:02:53 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 43.6238925801522 [depth = 3]Turn: W Pawn from i3 to b3
+nov 21, 2020 11:02:55 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : 3.258332444465118 [depth = 2]Turn: B Pawn from b5 to b9
+nov 21, 2020 11:02:57 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 17.078417160989773 [depth = 2]Turn: W Pawn from b3 to i3
+nov 21, 2020 11:02:59 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -3.877361888143968 [depth = 3]Turn: B Pawn from e8 to a8
+nov 21, 2020 11:03:01 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 41.25763370130381 [depth = 2]Turn: W Pawn from i3 to a3
+nov 21, 2020 11:03:02 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : 5.4236700858922475 [depth = 3]Turn: B Pawn from h5 to h9
+nov 21, 2020 11:03:04 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 21.99982029316894 [depth = 2]Turn: W Pawn from a3 to f3
+nov 21, 2020 11:03:06 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -18.501265402403188 [depth = 3]Turn: B Pawn from a4 to d4
+nov 21, 2020 11:03:08 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 3.683555898059379 [depth = 3]Turn: W Pawn from f3 to a3
+nov 21, 2020 11:03:10 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : 2.923393337858245 [depth = 2]Turn: B Pawn from d1 to a1
+nov 21, 2020 11:03:11 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : -2.034408472198815 [depth = 2]Turn: W Pawn from a3 to i3
+nov 21, 2020 11:03:13 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -22.521189255511896 [depth = 2]Turn: B Pawn from f1 to i1
+nov 21, 2020 11:03:15 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 6.648029594021522 [depth = 3]Turn: W Pawn from i3 to a3
+nov 21, 2020 11:03:17 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -41.896650198373294 [depth = 3]Turn: B Pawn from e1 to b1
+nov 21, 2020 11:03:19 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 22.233050182232624 [depth = 3]Turn: W Pawn from a3 to i3
+nov 21, 2020 11:03:20 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -22.521189255511896 [depth = 3]Turn: B Pawn from i6 to f6
+nov 21, 2020 11:03:22 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 12.662349285110079 [depth = 3]Turn: W Pawn from i3 to b3
+nov 21, 2020 11:03:24 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -41.896650198373294 [depth = 3]Turn: B Pawn from i5 to i8
+nov 21, 2020 11:03:26 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 22.233050182232624 [depth = 3]Turn: W Pawn from b3 to g3
+nov 21, 2020 11:03:28 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -22.521189255511896 [depth = 3]Turn: B Pawn from i4 to f4
+nov 21, 2020 11:03:29 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 9.555321230266705 [depth = 3]Turn: W Pawn from c5 to c9
+nov 21, 2020 11:03:31 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -19.50173050513381 [depth = 3]Turn: B Pawn from b1 to b4
+nov 21, 2020 11:03:33 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 4.612710052031282 [depth = 3]Turn: W Pawn from c9 to c2
+nov 21, 2020 11:03:35 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -18.804683751662704 [depth = 3]Turn: B Pawn from a8 to d8
+nov 21, 2020 11:03:37 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 30.624404467426302 [depth = 3]Turn: W Pawn from g3 to a3
+nov 21, 2020 11:03:38 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -9.761428146863699 [depth = 3]Turn: B Pawn from b4 to b1
+nov 21, 2020 11:03:40 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 15.301827691704778 [depth = 3]Turn: W Pawn from c2 to c8
+nov 21, 2020 11:03:42 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -16.82866182706799 [depth = 3]Turn: B Pawn from b1 to b4
+nov 21, 2020 11:03:44 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 3.0814815622954566 [depth = 3]Turn: W Pawn from a3 to h3
+nov 21, 2020 11:03:46 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -32.96676828721013 [depth = 3]Turn: B Pawn from a2 to d2
+nov 21, 2020 11:03:47 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 10.367076379502107 [depth = 3]Turn: W Pawn from h3 to a3
+nov 21, 2020 11:03:49 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -30.586134173960602 [depth = 3]Turn: B Pawn from d2 to a2
+nov 21, 2020 11:03:51 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 3.0814815622954566 [depth = 3]Turn: W Pawn from c8 to c3
+nov 21, 2020 11:03:53 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -30.101979020137133 [depth = 3]Turn: B Pawn from a6 to a9
+nov 21, 2020 11:03:55 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 1.357676501960154 [depth = 3]Turn: W Pawn from c3 to c7
+nov 21, 2020 11:03:56 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -28.48721681855213 [depth = 3]Turn: B Pawn from i8 to f8
+nov 21, 2020 11:03:58 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 4.275019024593798 [depth = 3]Turn: W Pawn from e7 to i7
+nov 21, 2020 11:04:00 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -23.985387483155737 [depth = 3]Turn: B Pawn from a2 to d2
+nov 21, 2020 11:04:02 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 5.850307135912518 [depth = 3]Turn: W Pawn from c7 to c1
+nov 21, 2020 11:04:04 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -37.09425681168254 [depth = 3]Turn: B Pawn from d2 to a2
+nov 21, 2020 11:04:05 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 1.357676501960154 [depth = 3]Turn: W Pawn from c1 to c7
+nov 21, 2020 11:04:05 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: ==================
+Match 12_0_3
+nov 21, 2020 11:04:07 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 16.339060479788465 [depth = 2]Turn: W Pawn from e3 to i3
+nov 21, 2020 11:04:09 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : 32.68492684089126 [depth = 2]Turn: B Pawn from b5 to b6
+nov 21, 2020 11:04:11 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 39.77024428773553 [depth = 3]Turn: W Pawn from i3 to b3
+nov 21, 2020 11:04:13 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -13.911332994352184 [depth = 3]Turn: B Pawn from e2 to i2
+nov 21, 2020 11:04:14 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 34.05467386605843 [depth = 3]Turn: W Pawn from b3 to i3
+nov 21, 2020 11:04:16 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -12.744666872733776 [depth = 3]Turn: B Pawn from h5 to h1
+nov 21, 2020 11:04:18 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 39.77024428773553 [depth = 3]Turn: W Pawn from i3 to b3
+nov 21, 2020 11:04:20 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -14.508153032082463 [depth = 3]Turn: B Pawn from d1 to a1
+nov 21, 2020 11:04:22 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 28.931717103175856 [depth = 3]Turn: W Pawn from b3 to f3
+nov 21, 2020 11:04:23 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -15.47758258861987 [depth = 3]Turn: B Pawn from e8 to i8
+nov 21, 2020 11:04:25 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 36.23650686471023 [depth = 3]Turn: W Pawn from f3 to a3
+nov 21, 2020 11:04:27 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -9.691541492097135 [depth = 3]Turn: B Pawn from e1 to b1
+nov 21, 2020 11:04:29 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 33.8721444728497 [depth = 2]Turn: W Pawn from a3 to e3
+nov 21, 2020 11:04:31 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -13.631680825348404 [depth = 3]Turn: B Pawn from b1 to b4
+nov 21, 2020 11:04:32 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 21.542215292598033 [depth = 3]Turn: W Pawn from e3 to i3
+nov 21, 2020 11:04:34 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -50.632790814163144 [depth = 3]Turn: B Pawn from f1 to f4
+nov 21, 2020 11:04:36 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 35.82374068459596 [depth = 3]Turn: W Pawn from i3 to a3
+nov 21, 2020 11:04:38 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -20.933201381949186 [depth = 3]Turn: B Pawn from h1 to h4
+nov 21, 2020 11:04:40 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 21.542215292598033 [depth = 2]Turn: W Pawn from a3 to i3
+nov 21, 2020 11:04:41 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -13.631680825348404 [depth = 3]Turn: B Pawn from i2 to f2
+nov 21, 2020 11:04:43 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 35.82374068459596 [depth = 3]Turn: W Pawn from i3 to a3
+nov 21, 2020 11:04:45 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -20.933201381949186 [depth = 3]Turn: B Pawn from f2 to i2
+nov 21, 2020 11:04:45 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: ==================
+Match 12_0_4
+nov 21, 2020 11:04:47 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 21.966098014338552 [depth = 2]Turn: W Pawn from e3 to i3
+nov 21, 2020 11:04:49 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : 3.258332444465118 [depth = 3]Turn: B Pawn from e2 to a2
+nov 21, 2020 11:04:50 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 43.6238925801522 [depth = 3]Turn: W Pawn from i3 to b3
+nov 21, 2020 11:04:52 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : 3.258332444465118 [depth = 2]Turn: B Pawn from b5 to b9
+nov 21, 2020 11:04:54 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 17.078417160989773 [depth = 2]Turn: W Pawn from b3 to i3
+nov 21, 2020 11:04:56 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -3.877361888143968 [depth = 3]Turn: B Pawn from e8 to a8
+nov 21, 2020 11:04:58 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 17.078417160989773 [depth = 1]Turn: W Pawn from e7 to d7
+nov 21, 2020 11:04:59 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -3.877361888143968 [depth = 3]Turn: B Pawn from h5 to h1
+nov 21, 2020 11:05:01 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 17.078417160989773 [depth = 2]Turn: W Pawn from d7 to d6
+nov 21, 2020 11:05:03 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -18.501265402403188 [depth = 3]Turn: B Pawn from a4 to d4
+nov 21, 2020 11:05:05 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 3.683555898059379 [depth = 3]Turn: W Pawn from i3 to a3
+nov 21, 2020 11:05:07 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -12.105755798127435 [depth = 3]Turn: B Pawn from d1 to a1
+nov 21, 2020 11:05:08 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 12.471095822603965 [depth = 3]Turn: W Pawn from a3 to i3
+nov 21, 2020 11:05:10 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -22.708452796880326 [depth = 3]Turn: B Pawn from e1 to c1
+nov 21, 2020 11:05:12 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 1.6717985332706646 [depth = 3]Turn: W Pawn from i3 to a3
+nov 21, 2020 11:05:14 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -22.521189255511896 [depth = 3]Turn: B Pawn from f1 to f4
+nov 21, 2020 11:05:16 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 9.014888381268296 [depth = 2]Turn: W Pawn from c5 to c9
+nov 21, 2020 11:05:17 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -31.74342510900843 [depth = 3]Turn: B Pawn from c1 to c6
+nov 21, 2020 11:05:19 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : -5.21221958112463 [depth = 2]Turn: W Pawn from a3 to f3
+nov 21, 2020 11:05:21 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -40.03285766179924 [depth = 2]Turn: B Pawn from i4 to e4
+nov 21, 2020 11:05:23 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : -15.450331927235142 [depth = 3]Turn: W Pawn from f3 to a3
+nov 21, 2020 11:05:25 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -31.74342510900843 [depth = 3]Turn: B Pawn from i5 to i1
+nov 21, 2020 11:05:26 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : -3.7057647201466297 [depth = 2]Turn: W Pawn from a3 to f3
+nov 21, 2020 11:05:28 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -40.03285766179924 [depth = 2]Turn: B Pawn from e4 to h4
+nov 21, 2020 11:05:30 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : -15.450331927235142 [depth = 3]Turn: W Pawn from f3 to a3
+nov 21, 2020 11:05:32 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -26.40389141418631 [depth = 3]Turn: B Pawn from c6 to c1
+nov 21, 2020 11:05:34 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : -2.3499731597218263 [depth = 3]Turn: W Pawn from a3 to h3
+nov 21, 2020 11:05:35 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -45.31371183913004 [depth = 3]Turn: B Pawn from c1 to c5
+nov 21, 2020 11:05:37 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : -1.8241453223681083 [depth = 3]Turn: W Pawn from h3 to a3
+nov 21, 2020 11:05:39 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -37.234894077509914 [depth = 3]Turn: B Pawn from d4 to h4
+nov 21, 2020 11:05:41 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : -6.9561885725760115 [depth = 2]Turn: W Pawn from a3 to g3
+nov 21, 2020 11:05:43 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -45.31371183913004 [depth = 3]Turn: B Pawn from h4 to d4
+nov 21, 2020 11:05:44 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : -1.8241453223681083 [depth = 3]Turn: W Pawn from g3 to a3
+nov 21, 2020 11:05:44 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: ==================
+Match 12_0_5
+nov 21, 2020 11:05:46 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 28.998573832520375 [depth = 2]Turn: W Pawn from e3 to i3
+nov 21, 2020 11:05:48 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : 32.68492684089126 [depth = 2]Turn: B Pawn from b5 to b6
+nov 21, 2020 11:05:50 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 38.69580127579302 [depth = 3]Turn: W Pawn from i3 to a3
+nov 21, 2020 11:05:52 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -7.979692134074706 [depth = 3]Turn: B Pawn from e2 to i2
+nov 21, 2020 11:05:53 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 63.513011917474635 [depth = 1]Turn: W Pawn from f5 to f6
+nov 21, 2020 11:05:55 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -7.979692134074706 [depth = 3]Turn: B Pawn from h5 to h9
+nov 21, 2020 11:05:57 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 63.513011917474635 [depth = 2]Turn: W Pawn from f6 to g6
+nov 21, 2020 11:05:59 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -7.979692134074706 [depth = 3]Turn: B Pawn from f9 to f2
+nov 21, 2020 11:06:01 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 59.767048624430984 [depth = 2]Turn: W Pawn from a3 to i3
+nov 21, 2020 11:06:02 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -12.744666872733776 [depth = 3]Turn: B Pawn from f2 to f6
+nov 21, 2020 11:06:04 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 59.767048624430984 [depth = 3]Turn: W Pawn from i3 to d3
+nov 21, 2020 11:06:06 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -12.744666872733776 [depth = 3]Turn: B Pawn from f6 to f2
+nov 21, 2020 11:06:08 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 34.05467386605843 [depth = 3]Turn: W Pawn from d3 to h3
+nov 21, 2020 11:06:10 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -12.744666872733776 [depth = 3]Turn: B Pawn from f2 to f8
+nov 21, 2020 11:06:11 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 39.77024428773553 [depth = 3]Turn: W Pawn from h3 to b3
+nov 21, 2020 11:06:13 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -13.911332994352184 [depth = 3]Turn: B Pawn from f1 to f7
+nov 21, 2020 11:06:15 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 59.767048624430984 [depth = 3]Turn: W Pawn from b3 to f3
+nov 21, 2020 11:06:17 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -15.47758258861987 [depth = 3]Turn: B Pawn from d1 to a1
+nov 21, 2020 11:06:19 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 36.23650686471023 [depth = 3]Turn: W Pawn from f3 to a3
+nov 21, 2020 11:06:21 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -13.342430201220724 [depth = 3]Turn: B Pawn from f7 to f2
+nov 21, 2020 11:06:22 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 41.75816002830731 [depth = 2]Turn: W Pawn from a3 to i3
+nov 21, 2020 11:06:24 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -15.47758258861987 [depth = 3]Turn: B Pawn from f8 to f3
+nov 21, 2020 11:06:26 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 28.931717103175856 [depth = 3]Turn: W Pawn from e7 to i7
+nov 21, 2020 11:06:28 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -15.47758258861987 [depth = 3]Turn: B Pawn from f3 to f8
+nov 21, 2020 11:06:30 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 36.23650686471023 [depth = 3]Turn: W Pawn from i3 to a3
+nov 21, 2020 11:06:31 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -13.342430201220724 [depth = 3]Turn: B Pawn from f2 to f7
+nov 21, 2020 11:06:33 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 27.366342136083908 [depth = 3]Turn: W Pawn from a3 to i3
+nov 21, 2020 11:06:35 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -5.285235864316318 [depth = 3]Turn: B Pawn from f7 to a7
+nov 21, 2020 11:06:37 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 40.347609156409995 [depth = 3]Turn: W Pawn from i3 to a3
+nov 21, 2020 11:06:39 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -13.342430201220724 [depth = 3]Turn: B Pawn from a7 to h7
+nov 21, 2020 11:06:40 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 41.75816002830731 [depth = 3]Turn: W Pawn from a3 to h3
+nov 21, 2020 11:06:42 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -5.285235864316318 [depth = 3]Turn: B Pawn from h7 to a7
+nov 21, 2020 11:06:44 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 40.347609156409995 [depth = 3]Turn: W Pawn from h3 to a3
+nov 21, 2020 11:06:44 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: ==================
+Match 12_0_6
+nov 21, 2020 11:06:46 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 20.672593524575714 [depth = 2]Turn: W Pawn from e3 to i3
+nov 21, 2020 11:06:48 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : 3.258332444465118 [depth = 3]Turn: B Pawn from e2 to a2
+nov 21, 2020 11:06:49 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 43.6238925801522 [depth = 3]Turn: W Pawn from i3 to b3
+nov 21, 2020 11:06:51 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : 36.76389247046128 [depth = 2]Turn: B Pawn from b5 to b9
+nov 21, 2020 11:06:53 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 17.078417160989773 [depth = 2]Turn: W Pawn from b3 to i3
+nov 21, 2020 11:06:55 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -3.877361888143968 [depth = 3]Turn: B Pawn from e8 to a8
+nov 21, 2020 11:06:57 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 17.078417160989773 [depth = 1]Turn: W Pawn from e7 to f7
+nov 21, 2020 11:06:58 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : -3.877361888143968 [depth = 3]Turn: B Pawn from h5 to h9
+nov 21, 2020 11:07:00 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: White:
+State evaluation : 45.1166789818772 [depth = 2]Turn: W Pawn from i3 to a3
+nov 21, 2020 11:07:02 AM giordani.tabzai.training.TrainingGeneticAlgorithm match
+FINE: Black:
+State evaluation : 37.569222769650565 [depth = 2]Turn: B Pawn from a2 to b2
