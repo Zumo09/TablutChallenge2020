@@ -34,8 +34,9 @@ public class FirstLayerGrid extends BorderPane {
 	private TextField sep;
 	private TextField game;
 	private TextField out;
-	private ComboBox<Integer> chooser;
-	private Map<Integer, Node> charts;
+	private ComboBox<Integer> genChooser;
+	private ComboBox<Integer> parChooser;
+	private Map<Integer, Map<Integer, Node>> charts;
 	private String ext;
 	
 	public FirstLayerGrid() {
@@ -45,15 +46,15 @@ public class FirstLayerGrid extends BorderPane {
 		sep = new TextField();
 		game = new TextField();
 		out = new TextField();
-		chooser = new ComboBox<>();
+		genChooser = new ComboBox<>();
+		parChooser = new ComboBox<>();
 		charts = new HashMap<>();
 		
 		folder.setText("heuristic");
 		name.setText("CNN_f2_p8_m100_o50_t2");
-		par.setText("0");
-		par.setEditable(false);
+		par.setText("2");
 		sep.setText("_");
-		game.setText("22");
+		game.setText("44");
 		
 		
 		folder.setPrefColumnCount(7);
@@ -78,33 +79,68 @@ public class FirstLayerGrid extends BorderPane {
 		hb.getChildren().add(game);
 		hb.getChildren().add(b);
 		hb.getChildren().add(out);
-		hb.getChildren().add(chooser);
+		hb.getChildren().add(parChooser);
+		hb.getChildren().add(genChooser);
 		this.setBottom(hb);
-		chooser.setOnAction(e -> {
-			this.setCenter(charts.get(chooser.getSelectionModel().getSelectedItem()));
-		});
+		parChooser.setOnAction(this::select);
+		genChooser.setOnAction(this::select);
 		
 		ext = HeuristicNN.EXT;
 		
 		print(null);
-		this.setCenter(charts.get(0));
+		this.setCenter(charts.get(0).get(0));
+	}
+	
+	private void select(ActionEvent e) {
+		int par = this.parChooser.getValue();
+		int gen = this.genChooser.getValue();
+		out.setText(folder.getText() + File.separator + name.getText() + par + sep.getText() + gen + ext);
+		this.setCenter(charts.get(par).get(gen));
 	}
 	
 	private void print(ActionEvent e) {
 		charts.clear();
-		ObservableList<Integer> list = FXCollections.observableArrayList();
-		
-		out.setText(folder.getText() + File.separator + name.getText() + par.getText() + sep.getText() + game.getText() + ext);
-		
-		Map<Integer, HeuristicNN> data = readAll();
-
-		for(Integer key : data.keySet()) {
-			charts.put(key, this.getGraph(data.get(key)));
-			list.add(key);
+		ObservableList<Integer> listGen = FXCollections.observableArrayList();
+		ObservableList<Integer> listPar = FXCollections.observableArrayList();
+				
+		int par = 0;
+		try{
+			par = Integer.parseInt(this.par.getText());
+		} catch(NumberFormatException e2) {
+			e2.printStackTrace();
+			System.exit(1);
 		}
 		
-		chooser.setItems(list);
-		chooser.setValue(list.get(0));
+		int gen = 0;
+		try{
+			gen = Integer.parseInt(game.getText());
+		} catch(NumberFormatException e1) {
+			e1.printStackTrace();
+			System.exit(1);
+		}
+		
+		for(int p=0; p<par; p++) {
+			Map<Integer, Node> data = new HashMap<>();
+			for(int g=0; g<gen; g++) {
+				Optional<HeuristicNN> d = readData(p, g);
+				if(d.isPresent())
+					data.put(g, this.getGraph(d.get()));	
+			}
+			this.charts.put(p, data);
+		}
+		
+
+		for(int p=0; p<par; p++)
+			listPar.add(p);
+		for(int g=0; g<gen; g++)
+			listGen.add(g);
+		
+		parChooser.setItems(listPar);
+		parChooser.setValue(listPar.get(0));
+		genChooser.setItems(listGen);
+		genChooser.setValue(listGen.get(0));
+		
+		out.setText(folder.getText() + File.separator + name.getText() + par + sep.getText() + gen + ext);
 	}
 
 	private Node getGraph(HeuristicNN heuristic) {
@@ -124,28 +160,9 @@ public class FirstLayerGrid extends BorderPane {
 		
 		return pane;
 	}
-
-	private Map<Integer, HeuristicNN> readAll() {
-		Map<Integer, HeuristicNN> data = new HashMap<>();
-		int gen = 0;
-		try{
-			gen = Integer.parseInt(game.getText());
-		} catch(NumberFormatException e) {
-			e.printStackTrace();
-			System.exit(1);
-		}
-		
-		for(int g=0; g<gen; g++) {
-			Optional<HeuristicNN> d = readData(g);
-			if(d.isPresent())
-				data.put(g, d.get());	
-		}
-		return data;
-	}
-
-	private Optional<HeuristicNN> readData(int g) {
-		Path p = Paths.get(folder.getText() + File.separator + name.getText() + 0 + sep.getText() + g + ext);
-		String path = p.toAbsolutePath().toString();
+	private Optional<HeuristicNN> readData(int p, int g) {
+		Path pt = Paths.get(folder.getText() + File.separator + name.getText() + p + sep.getText() + g + ext);
+		String path = pt.toAbsolutePath().toString();
 		try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(path))) {
 			return Optional.of((HeuristicNN) ois.readObject());
 		} catch (IOException | ClassNotFoundException e) {

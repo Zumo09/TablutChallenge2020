@@ -145,7 +145,7 @@
 		        <pathelement location="lib/commons-cli-1.4.jar"/>
                 <pathelement location="build"/>
             </classpath>
-            <arg line="CNN_f2_p8_m100_o50_t20_21 CNN_f2_p8_m100_o50_t21_21 21 -n CNN_f2_p8_m100_o50_t2 -f 2 -p 8 -t 2 -m 100 -o 0.5"/>
+            <arg line="CNN_f2_p8_m100_o50_t20_59 CNN_f2_p8_m100_o50_t21_58 59 -n CNN_f2_p8_m100_o50_t2 -f 2 -p 8 -t 2 -m 100 -o 0.5"/>
         </java>
     </target>
 

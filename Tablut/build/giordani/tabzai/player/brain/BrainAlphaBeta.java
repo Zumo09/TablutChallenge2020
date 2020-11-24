@@ -387,10 +387,13 @@ public class BrainAlphaBeta implements Brain {
 		public int calcDepth() {
 			Node n = this;
 			int depth = 0;
-			while(!n.isLeaf()) {
-				n = n.getChildren().get(n.getBestAction());
-				depth++;
-			}
+			try {
+				while(!n.isLeaf()) {
+					n = n.getChildren().get(n.getBestAction());
+					depth++;
+				}
+			} catch (NullPointerException e) {}
+			
 			return depth;
 		}
 
