@@ -16,7 +16,7 @@ import it.unibo.ai.didattica.competition.tablut.domain.State;
  */
 public interface Heuristic extends Serializable {
 	public final String PATH = "heuristic";
-	public final String BEST = "new";
+	public final String BEST = "CNN_f2_p8_m100_o50_t20_99";
 	
 	public Heuristic copy();
 	public double evaluate(State state);

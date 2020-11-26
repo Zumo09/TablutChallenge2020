@@ -274,11 +274,26 @@ public class BrainAlphaBeta implements Brain {
 		private void alphaBeta(int depth, double alpha, double beta) throws TimeOutException {
 			// This check if the timeout occurred, the exception stops the loop of increasing depth in the BrainAbs method
 			checkTimeout();
+			
+			Turn turn = this.getState().getTurn();
+			if(turn.equals(Turn.DRAW)) {
+				this.setVal(0);
+				return;
+			}
+			if(turn.equals(Turn.BLACKWIN)){
+				this.setVal(Double.NEGATIVE_INFINITY);
+				return;
+			}
+			if(turn.equals(Turn.WHITEWIN)){
+				this.setVal(Double.POSITIVE_INFINITY);
+				return;
+			}
+			
 			// If the maximum depth is reached or the node is terminal
-			if(depth == 0 || this.isTerminal())
+			if(depth == 0)
 				this.setVal(getHeuristic().evaluate(this.getState()));
 			
-			else if(this.getState().getTurn().equals(Turn.WHITE)) {
+			else if(turn.equals(Turn.WHITE)) {
 				double best = Double.NEGATIVE_INFINITY;
 				for(Action action : this.getAllActions()) {
 					Node child;
@@ -325,13 +340,6 @@ public class BrainAlphaBeta implements Brain {
 					}
 					this.setVal(best);
 			}
-		}
-		
-		private boolean isTerminal() {
-			Turn turn = this.getState().getTurn();
-			return turn.equals(Turn.DRAW) ||
-					turn.equals(Turn.BLACKWIN) ||
-					turn.equals(Turn.WHITEWIN);
 		}
 
 		private Node tryAndAdd(Action action) {

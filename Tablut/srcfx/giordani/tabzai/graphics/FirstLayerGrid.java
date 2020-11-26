@@ -54,7 +54,7 @@ public class FirstLayerGrid extends BorderPane {
 		name.setText("CNN_f2_p8_m100_o50_t2");
 		par.setText("2");
 		sep.setText("_");
-		game.setText("44");
+		game.setText("78");
 		
 		
 		folder.setPrefColumnCount(7);
@@ -82,13 +82,15 @@ public class FirstLayerGrid extends BorderPane {
 		hb.getChildren().add(parChooser);
 		hb.getChildren().add(genChooser);
 		this.setBottom(hb);
-		parChooser.setOnAction(this::select);
-		genChooser.setOnAction(this::select);
 		
 		ext = HeuristicNN.EXT;
 		
 		print(null);
 		this.setCenter(charts.get(0).get(0));
+		
+
+		parChooser.setOnAction(this::select);
+		genChooser.setOnAction(this::select);
 	}
 	
 	private void select(ActionEvent e) {
