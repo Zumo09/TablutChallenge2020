@@ -105,7 +105,7 @@
         </java>
     </target>
 
-        <target name="white">
+    <target name="white_local">
         <java classname="giordani.tabzai.player.TabZAI" fork="true">
             <classpath>
                 <pathelement location="lib/gson-2.2.2.jar"/>
@@ -116,7 +116,7 @@
         </java>
     </target>
 
-    <target name="black">
+    <target name="black_local">
         <java classname="giordani.tabzai.player.TabZAI" fork="true">
             <classpath>
                 <pathelement location="lib/gson-2.2.2.jar"/>
@@ -124,6 +124,30 @@
                 <pathelement location="build"/>
             </classpath>
             <arg line="black localhost"/>
+        </java>
+    </target>
+
+    <target name="white">
+        <java classname="giordani.tabzai.player.TabZAI" fork="true">
+            <classpath>
+                <pathelement location="lib/gson-2.2.2.jar"/>
+		        <pathelement location="lib/commons-cli-1.4.jar"/>
+                <pathelement location="build"/>
+            </classpath>
+            <arg value="white"/>
+            <arg value="${ipAdd}"/>
+        </java>
+    </target>
+
+    <target name="black">
+        <java classname="giordani.tabzai.player.TabZAI" fork="true">
+            <classpath>
+                <pathelement location="lib/gson-2.2.2.jar"/>
+		        <pathelement location="lib/commons-cli-1.4.jar"/>
+                <pathelement location="build"/>
+            </classpath>
+            <arg value="black"/>
+            <arg value="${ipAdd}"/>
         </java>
     </target>
 
