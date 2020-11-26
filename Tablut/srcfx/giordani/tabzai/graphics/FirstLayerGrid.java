@@ -54,7 +54,7 @@ public class FirstLayerGrid extends BorderPane {
 		name.setText("CNN_f2_p8_m100_o50_t2");
 		par.setText("2");
 		sep.setText("_");
-		game.setText("78");
+		game.setText("100");
 		
 		
 		folder.setPrefColumnCount(7);
