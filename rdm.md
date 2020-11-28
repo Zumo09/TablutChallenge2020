@@ -14,7 +14,7 @@ sudo apt install ant -y
 Now, clone the project repository:
 
 ```
-git clone https://github.com/AGalassi/TablutCompetition.git
+git clone https://github.com/Zumo09/TablutChallenge2020.git
 ```
 
 ## Run the Server without Eclipse
