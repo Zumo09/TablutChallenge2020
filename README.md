@@ -2,6 +2,22 @@
 
 player for the Tablut Challenge 2020 - Fundamentals of Artificial Intelligence - Unibo
 
+## Installation on Ubuntu/Debian 
+
+From console, run these commands to install JDK 8 e ANT:
+
+```
+sudo apt update
+sudo apt install openjdk-8-jdk -y
+sudo apt install ant -y
+```
+
+Now, clone the project repository:
+
+```
+git clone https://github.com/Zumo09/TablutChallenge2020.git
+```
+
 ## How to run
 
 To run the player use these command line in the folder ./Tablut/
@@ -18,4 +34,4 @@ ex:
 ant white -DipAdd localhost
 ```
 
-further installation instruction in the file rdm.md
+further usage instruction in the file rdm.md
