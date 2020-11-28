@@ -4,7 +4,7 @@ player for the Tablut Challenge 2020 - Fundamentals of Artificial Intelligence -
 
 ## Installation on Ubuntu/Debian 
 
-From console, run these commands to install JDK 8 e ANT:
+From console, run these commands to install JDK 8 and ANT:
 
 ```
 sudo apt update
