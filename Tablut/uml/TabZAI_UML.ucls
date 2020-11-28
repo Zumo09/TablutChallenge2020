@@ -3,7 +3,7 @@
   realizations="true" associations="true" dependencies="false" nesting-relationships="true" router="FAN">  
   <class id="1" language="java" name="giordani.tabzai.player.TabZAI" project="Tablut2020" 
     file="/Tablut2020/src/giordani/tabzai/player/TabZAI.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="187" y="119"/>    
+    <position height="-1" width="-1" x="556" y="150"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -12,142 +12,137 @@
   </class>  
   <interface id="2" language="java" name="giordani.tabzai.player.brain.Brain" project="Tablut2020" 
     file="/Tablut2020/src/giordani/tabzai/player/brain/Brain.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="544" y="126"/>    
+    <position height="-1" width="-1" x="962" y="156"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </interface>  
-  <class id="3" language="java" name="giordani.tabzai.player.brain.BrainAbs" project="Tablut2020" 
-    file="/Tablut2020/src/giordani/tabzai/player/brain/BrainAbs.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="544" y="472"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="4" language="java" name="giordani.tabzai.player.brain.BrainAlphaBeta" project="Tablut2020" 
+  <class id="3" language="java" name="giordani.tabzai.player.brain.BrainAlphaBeta" project="Tablut2020" 
     file="/Tablut2020/src/giordani/tabzai/player/brain/BrainAlphaBeta.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1047" y="854"/>    
+    <position height="-1" width="-1" x="962" y="570"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="5" language="java" name="giordani.tabzai.player.brain.BrainAlphaBeta.Node" project="Tablut2020" 
+  <class id="4" language="java" name="giordani.tabzai.player.brain.BrainAlphaBeta.Node" project="Tablut2020" 
     file="/Tablut2020/src/giordani/tabzai/player/brain/BrainAlphaBeta.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="634" y="1023"/>    
+    <position height="-1" width="-1" x="970" y="1220"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <interface id="6" language="java" name="giordani.tabzai.player.brain.heuristic.Heuristic" project="Tablut2020" 
+  <interface id="5" language="java" name="giordani.tabzai.player.brain.heuristic.Heuristic" project="Tablut2020" 
     file="/Tablut2020/src/giordani/tabzai/player/brain/heuristic/Heuristic.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1053" y="337"/>    
+    <position height="-1" width="-1" x="441" y="569"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </interface>  
-  <class id="7" language="java" name="giordani.tabzai.player.brain.heuristic.HeuristicGen" project="Tablut2020" 
-    file="/Tablut2020/src/giordani/tabzai/player/brain/heuristic/HeuristicGen.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1548" y="333"/>    
+  <class id="6" language="java" name="giordani.tabzai.player.brain.heuristic.HeuristicNN" project="Tablut2020" 
+    file="/Tablut2020/src/giordani/tabzai/player/brain/heuristic/HeuristicNN.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="436" y="1105"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="8" language="java" name="giordani.tabzai.training.TrainingGeneticAlgorithm" project="Tablut2020" 
+  <class id="7" language="java" name="giordani.tabzai.training.TrainingGeneticAlgorithm" project="Tablut2020" 
     file="/Tablut2020/src/giordani/tabzai/training/TrainingGeneticAlgorithm.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1566" y="887"/>    
+    <position height="-1" width="-1" x="1588" y="574"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="9" language="java" name="giordani.tabzai.training.TrainingGeneticAlgorithm.Standing" project="Tablut2020" 
+  <class id="8" language="java" name="giordani.tabzai.training.TrainingGeneticAlgorithm.Standing" project="Tablut2020" 
     file="/Tablut2020/src/giordani/tabzai/training/TrainingGeneticAlgorithm.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="2010" y="871"/>    
+    <position height="-1" width="-1" x="1430" y="930"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="10" language="java" name="giordani.tabzai.training.TrainingGeneticAlgorithm.TournamentResult" 
+  <class id="9" language="java" name="giordani.tabzai.training.TrainingGeneticAlgorithm.TournamentResult" 
     project="Tablut2020" file="/Tablut2020/src/giordani/tabzai/training/TrainingGeneticAlgorithm.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1967" y="454"/>    
+    <position height="-1" width="-1" x="1695" y="940"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <association id="11">    
-    <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="12" name="population"/>      
-      <multiplicity id="13" minimum="0" maximum="2147483647"/>    
+  <association id="10">    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="11" name="root"/>      
+      <multiplicity id="12" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="4" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <nesting id="14">    
-    <end type="SOURCE" refId="8"/>    
-    <end type="TARGET" refId="10"/>  
+  <association id="13">    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="14" name="population"/>      
+      <multiplicity id="15" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="3" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <nesting id="16">    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="8"/>  
   </nesting>  
-  <association id="15">    
-    <end type="SOURCE" refId="4" navigable="false">      
-      <attribute id="16" name="root"/>      
-      <multiplicity id="17" minimum="0" maximum="1"/>    
+  <realization id="17">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="2"/>  
+  </realization>  
+  <realization id="18">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="5"/>  
+  </realization>  
+  <nesting id="19">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="4"/>  
+  </nesting>  
+  <association id="20">    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="21" name="heuristic"/>      
+      <multiplicity id="22" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="5" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <realization id="18">    
-    <end type="SOURCE" refId="7"/>    
-    <end type="TARGET" refId="6"/>  
-  </realization>  
-  <nesting id="19">    
-    <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="5"/>  
-  </nesting>  
-  <association id="20">    
-    <end type="SOURCE" refId="4" navigable="false">      
-      <attribute id="21" name="heuristic"/>      
-      <multiplicity id="22" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="6" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <nesting id="23">    
-    <end type="SOURCE" refId="8"/>    
-    <end type="TARGET" refId="9"/>  
-  </nesting>  
-  <association id="24">    
+  <association id="23">    
     <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="25" name="brain"/>      
-      <multiplicity id="26" minimum="0" maximum="1"/>    
+      <attribute id="24" name="brain"/>      
+      <multiplicity id="25" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="2" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <generalization id="27">    
-    <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="3"/>  
-  </generalization>  
-  <realization id="28">    
-    <end type="SOURCE" refId="3"/>    
-    <end type="TARGET" refId="2"/>  
-  </realization>  
+  <association id="26">    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="27" name="children"/>      
+      <multiplicity id="28" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <nesting id="29">    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="9"/>  
+  </nesting>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
     sort-features="false" accessors="true" visibility="true">    
     <attributes public="true" package="true" protected="true" private="true" static="true"/>    
