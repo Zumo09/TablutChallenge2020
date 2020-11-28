@@ -1,3 +1,9 @@
+# TabZAI
+
+player for the Tablut Challenge 2020 - Fundamentals of Artificial Intelligence - Unibo
+
+## How to run
+
 To run the player use these command line in the folder ./Tablut/
 
 ```
