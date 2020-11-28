@@ -17,3 +17,5 @@ ex:
 ```
 ant white -DipAdd localhost
 ```
+
+further installation instruction in the file rdm.md
