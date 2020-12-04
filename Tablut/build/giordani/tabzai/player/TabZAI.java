@@ -85,10 +85,11 @@ public class TabZAI extends TablutClient {
 	}
 
 	public static void main(String[] args) throws UnknownHostException, IOException {
-		if (args.length < 2) {
+		if (args.length < 3) {
 			System.out.println("Too few arguments:");
 			System.out.println("You must specify which player you are (WHITE or BLACK)");
 			System.out.println("You must specify the ipAddress");
+			System.out.println("You must specify the timeout");
 			System.exit(-1);
 		}
 		
@@ -99,9 +100,18 @@ public class TabZAI extends TablutClient {
 			System.exit(-1);
 		}
 		
+		int timeout = 60;
+		
+		try {
+			timeout = Integer.parseInt(args[2].trim());
+		} catch(NumberFormatException e) {
+			e.printStackTrace();
+			System.exit(-1);
+		}
+		
 		System.out.println("GLHF");
 		
-		TablutClient client = new TabZAI(player, "TabZAI", Heuristic.BEST, 60, args[1], 1);
+		TablutClient client = new TabZAI(player, "TabZAI", Heuristic.BEST, timeout, args[1].trim(), 1);
 		
 		client.run();
 		

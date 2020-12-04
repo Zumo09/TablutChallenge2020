@@ -23,15 +23,15 @@ git clone https://github.com/Zumo09/TablutChallenge2020.git
 To run the player use these command line in the folder ./Tablut/
 
 ```
-ant *player* -DipAdd *ipAddress*
+ant *player* -DipAdd *ipAddress* -Dtime *timeout*
 ```
   
-where **player** could be black or white, whereas **ip address** is the server ip address
+where **player** could be black or white, whereas **ip address** is the server ip address and **timeout** is the timeout for the move selection (seconds)
 
 ex:
 
 ```
-ant white -DipAdd localhost
+ant white -DipAdd localhost -Dtime 60
 ```
 
 further usage instruction in the file rdm.md

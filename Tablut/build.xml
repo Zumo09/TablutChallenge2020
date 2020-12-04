@@ -112,7 +112,7 @@
 		        <pathelement location="lib/commons-cli-1.4.jar"/>
                 <pathelement location="build"/>
             </classpath>
-            <arg line="white localhost"/>
+            <arg line="white localhost 60"/>
         </java>
     </target>
 
@@ -123,7 +123,7 @@
 		        <pathelement location="lib/commons-cli-1.4.jar"/>
                 <pathelement location="build"/>
             </classpath>
-            <arg line="black localhost"/>
+            <arg line="black localhost 60"/>
         </java>
     </target>
 
@@ -136,6 +136,7 @@
             </classpath>
             <arg value="white"/>
             <arg value="${ipAdd}"/>
+            <arg value="${time}"/>
         </java>
     </target>
 
@@ -148,6 +149,7 @@
             </classpath>
             <arg value="black"/>
             <arg value="${ipAdd}"/>
+            <arg value="${time}"/>
         </java>
     </target>
 
